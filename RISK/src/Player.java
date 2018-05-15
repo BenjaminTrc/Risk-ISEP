@@ -3,7 +3,7 @@ public class Player {
 
 	// ***** Attributs *****
 	
-	private int nb_player;
+	private int player_nb;
 	//private String name;
 	
 	
@@ -18,12 +18,12 @@ public class Player {
 	
 	// ***** Getters / Setters *****
 	
-	public int getNbPlayer() {
-		return this.nb_player;
+	public int getPlayerNb() {
+		return this.player_nb;
 	}
 	
-	public void setNbPlayer(int Nb) {
-		this.nb_player = Nb;
+	public void setPlayerNb(int Nb) {
+		this.player_nb = Nb;
 	}
 	
 }
