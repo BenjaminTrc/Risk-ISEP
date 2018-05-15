@@ -4,13 +4,16 @@ public class Player {
 	// ***** Attributs *****
 	
 	private int player_nb;
-	//private String name;
+	private String player_name;
+	private int player_color;
+	
 	
 	
 	// ***** Constructeurs *****
 	
 	public Player(int number) {
 		this.player_nb = number;
+		
 	}
 	
 	// ***** Methodes *****
@@ -26,4 +29,19 @@ public class Player {
 		this.player_nb = Nb;
 	}
 	
+	public String getPlayerName() {
+		return this.player_name;
+	}
+	
+	public void setPlayerName(String n) {
+		this.player_name = n;
+	}
+	
+	public int getPlayerColor() {
+		return this.player_color;
+	}
+	
+	public void setPlayerName(int col) {
+		this.player_color = col;
+	}
 }
