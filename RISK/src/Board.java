@@ -19,4 +19,12 @@ public class Board {
 			liste_joueurs.add(new Player(i));
 		}
 	}
+	
+	// ***** Methodes *****
+	
+	
+	
+	// ***** Getters / Setters *****
+	
+	
 }

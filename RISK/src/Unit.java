@@ -8,7 +8,7 @@ public class Unit {
 	private int power; // puissance de l'unité
 	private int ATT_priority;
 	private int DEF_priority;
-	private int movement;
+	private int movement; // points de mouvement de l'unité
 	
 	// ***** Constructeurs *****
 	

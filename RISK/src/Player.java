@@ -41,7 +41,7 @@ public class Player {
 		return this.player_color;
 	}
 	
-	public void setPlayerName(int col) {
+	public void setPlayerColor(int col) {
 		this.player_color = col;
 	}
 }
