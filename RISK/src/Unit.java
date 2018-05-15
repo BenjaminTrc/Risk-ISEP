@@ -13,6 +13,9 @@ public class Unit {
 	// ***** Constructeurs *****
 	
 	
+	// ***** Methodes *****
+	
+	
 	// ***** Getters / Setters *****
 	
 	public int getType() {
@@ -62,8 +65,5 @@ public class Unit {
 	public void setMove(int m) {
 		this.movement = m;
 	}
-	
-	
-	// ***** Methodes *****
-	
+		
 }

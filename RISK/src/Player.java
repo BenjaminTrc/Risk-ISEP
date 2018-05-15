@@ -11,6 +11,9 @@ public class Player {
 		
 	}
 	
+	// ***** Methodes *****
+	
+	
 	// ***** Getters / Setters *****
 	
 	public int getNbPlayer() {
@@ -20,8 +23,5 @@ public class Player {
 	public void setNbPlayer(int Nb) {
 		this.nb_player = Nb;
 	}
-	
-	// ***** Methodes *****
-	
 	
 }
