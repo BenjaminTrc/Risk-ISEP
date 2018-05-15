@@ -4,6 +4,8 @@ public class Player {
 	// ***** Attributs *****
 	
 	private int nb_player;
+	//private String name;
+	
 	
 	// ***** Constructeurs *****
 	
