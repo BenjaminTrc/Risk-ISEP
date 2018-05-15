@@ -5,7 +5,7 @@ public class Player {
 	
 	private int player_nb;
 	private String player_name;
-	private int player_color;
+	private int player_color; // une couleur associée à chaque joueur
 	
 	
 	
