@@ -9,8 +9,8 @@ public class Player {
 	
 	// ***** Constructeurs *****
 	
-	public Player() {
-		
+	public Player(int number) {
+		this.player_nb = number;
 	}
 	
 	// ***** Methodes *****
