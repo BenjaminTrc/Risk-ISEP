@@ -3,10 +3,8 @@ import edu.princeton.cs.introcs.StdDraw;
 public class Main {
 
 	public static void main(String[] args) {
+		System.out.println("Test 123");
 		show_first_page();
-
-		
-		
 		
 	}
 	
@@ -15,6 +13,7 @@ public class Main {
 		boolean play_game = false;
 		int width = 1227;
 		int height = 628;
+		double posX, posY;
 		
 		StdDraw.setCanvasSize(width,height);
 		StdDraw.setXscale(0,width);
@@ -24,9 +23,22 @@ public class Main {
 		
 		StdDraw.picture(width/2, height/2, "risk_first_page.png");
 		
-		/*while (!play_game) { // tant que le joueur n'a pas cliqué sur le bouton "jouer", on reste sur la toute première page
-			
-		}*/
+		while (!play_game) { // tant que le joueur n'a pas cliqué sur le bouton "jouer", on reste sur la toute première page
+			if (StdDraw.isMousePressed()) {
+				posX = StdDraw.mouseX();
+				posY = StdDraw.mouseY();
+				System.out.println("Position X : " + posX + " +++ Position Y : " + posY);
+				StdDraw.pause(250);
+				
+				/*
+				if (posX > ### && posX < ### && posY > ### && posY < ###) {
+					play_game = true;
+				}
+				*/
+				
+			}
+		}
+		
 	}
 
 }
