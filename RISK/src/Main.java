@@ -32,11 +32,11 @@ public class Main {
 				System.out.println("Position X : " + posX + " +++ Position Y : " + posY);
 				StdDraw.pause(250);
 				
-				/*
-				if (posX > ### && posX < ### && posY > ### && posY < ###) {
+				
+				if (posX > 440 && posX < 786 && posY > 175 && posY < 333) {
 					play_game = true;
 				}
-				*/
+				
 				
 			}
 		}
