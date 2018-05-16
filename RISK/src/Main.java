@@ -1,12 +1,32 @@
+import edu.princeton.cs.introcs.StdDraw;
 
 public class Main {
 
 	public static void main(String[] args) {
-		System.out.println("Bienvenue");
+		show_first_page();
 
 		
-		//gne
 		
+		
+	}
+	
+	// cette fonction permet d'afficher la première "page" lorsqu'on executera le jeu
+	public static void show_first_page() {
+		boolean play_game = false;
+		int width = 1227;
+		int height = 628;
+		
+		StdDraw.setCanvasSize(width,height);
+		StdDraw.setXscale(0,width);
+		StdDraw.setYscale(0,height);
+		StdDraw.clear(StdDraw.WHITE);
+		StdDraw.show();
+		
+		StdDraw.picture(width/2, height/2, "risk_first_page.png");
+		
+		/*while (!play_game) { // tant que le joueur n'a pas cliqué sur le bouton "jouer", on reste sur la toute première page
+			
+		}*/
 	}
 
 }
