@@ -5,6 +5,8 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Test 123");
 		show_first_page();
+		configuration();
+		launch_game();
 		
 	}
 	
@@ -38,7 +40,15 @@ public class Main {
 				
 			}
 		}
-		
+	}
+	
+	
+	public static void configuration() {
+		System.out.println("La configuration a été lancée");
+	}
+	
+	public static void launch_game() {
+		System.out.println("Le jeu est en train d'être lancé");
 	}
 
 }
