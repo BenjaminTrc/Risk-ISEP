@@ -4,8 +4,9 @@ public class Territory {
 
 	// ***** Attributs *****
 	
+	private int territory_id;
 	private String territory_name;
-	private ArrayList<Territory> liste_territoire_voisins = new ArrayList<>(); 
+	private ArrayList<Territory> neighbour_list = new ArrayList<>(); 
 	
 		
 	// ***** Constructeurs *****
@@ -14,7 +15,9 @@ public class Territory {
 		
 	// ***** Methodes *****
 	
-	
+	public void addNeighbour(Territory T) {
+		neighbour_list.add(T);
+	}
 		
 	// ***** Getters / Setters *****
 	
@@ -24,5 +27,13 @@ public class Territory {
 		
 	public void setTerritoryName(String n) {
 		this.territory_name = n;
+	}
+	
+	public int getTerritoryId() {
+		return this.territory_id;
+	}
+	
+	public void setTerritoryId(int id) {
+		this.territory_id = id;
 	}
 }
