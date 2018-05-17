@@ -21,8 +21,9 @@ public class Board {
 		this.map_number = map;
 		this.nbr_players = nbr_players;
 		this.nbr_AI = nbr_AI;
+		String name = "";
 		
-		int [] used_colors = [];
+		int [] used_colors = new int[6];
 		
 		for (int i=1; i<=nbr_players; i++) {
 			int color = 0;
@@ -30,7 +31,7 @@ public class Board {
 				
 				System.out.println("Joueur " + i);
 				System.out.println("Nom de joueur : ");  //temporaire en attendant la mise en place graphique
-				String name = scan.nextLine();
+				name = scan.nextLine();
 				scan.nextLine();
 				
 				System.out.println("Couleur : ");
@@ -39,26 +40,26 @@ public class Board {
 				
 			}
 			else {
-				String name = "Computer " + (i-nbr_AI+) + "";
+				name = "Computer " + (i-nbr_AI+1) + "";
 				boolean unique_color = false;
 				while (unique_color = false) {
 					color = (int) (Math.random()*6+1);
 					int compteur = 0;
 					for (int k=0; k<i; k++) {
-						if (used_colors[i] = color) {
+						if (used_colors[i] == color) {
 							break;
 						}
 						else {
 							compteur+=1;
 						}
 					}
-					if (compteur=i-1) {
+					if (compteur==i-1) {
 						unique_color = true;
 					}
 				}
 			}
-			used_colors.add(color);
-			players_list.add(new Player(i), name, color);
+			used_colors[i] = color;
+			players_list.add(new Player(i, name, color));
 		}
 	}
 	
