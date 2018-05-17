@@ -1,4 +1,4 @@
-	
+
 public class Player {
 
 	// ***** Attributs *****
@@ -11,8 +11,10 @@ public class Player {
 	
 	// ***** Constructeurs *****
 	
-	public Player(int number) {
+	public Player(int number, String name, int color) {
 		this.player_nb = number;
+		this.player_name = name;
+		this.player_color = color;
 		
 	}
 	
