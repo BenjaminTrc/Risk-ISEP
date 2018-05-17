@@ -53,7 +53,7 @@ public class Board {
 						}
 					}
 					if (compteur=i-1) {
-						unique_color )= true;
+						unique_color = true;
 					}
 				}
 			}
