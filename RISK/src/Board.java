@@ -6,7 +6,7 @@ public class Board {
 	
 	// ***** Attributs *****
 	
-	private int map_number; //Choix de la carte
+	private int map_number; // Choix de la carte
 	private int nbr_players;
 	private int nbr_AI;
 	private ArrayList<Player> players_list = new ArrayList();
@@ -30,7 +30,7 @@ public class Board {
 			if (i<=nbr_players-nbr_AI) {
 				
 				System.out.println("Joueur " + i);
-				System.out.println("Nom de joueur : ");  //temporaire en attendant la mise en place graphique
+				System.out.println("Nom de joueur : ");  // temporaire en attendant la mise en place graphique
 				name = scan.nextLine();
 				scan.nextLine();
 				
@@ -69,5 +69,12 @@ public class Board {
 	
 	// ***** Getters / Setters *****
 	
+	public int getNbPlayers() {
+		return this.nbr_players;
+	}
+	
+	public void setNbPlayers(int nb) {
+		this.nbr_players = nb;
+	}
 	
 }
