@@ -6,6 +6,7 @@ public class Player {
 	private int player_nb;
 	private String player_name;
 	private int player_color; // une couleur associée à chaque joueur
+	private Mission player_mission;
 	
 	
 	
@@ -16,6 +17,7 @@ public class Player {
 		this.player_name = name;
 		this.player_color = color;
 		
+		player_mission = new Mission(player_nb, game.getNbPlayers()); //game = nom du board
 	}
 	
 	// ***** Methodes *****

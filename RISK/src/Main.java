@@ -2,6 +2,7 @@ import edu.princeton.cs.introcs.StdDraw;
 
 public class Main {
 
+	
 	public static void main(String[] args) {
 		System.out.println("La première page est en train d'être chargée");
 		show_first_page();
@@ -230,5 +231,7 @@ public class Main {
 		}
 		
 	}
+	
+
 
 }

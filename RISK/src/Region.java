@@ -35,5 +35,8 @@ public class Region {
 		this.region_id = id;
 	}
 	
+	public ArrayList<Territory> getTerritoryList() {
+		return this.territory_list;
+	}
 	
 }
