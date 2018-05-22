@@ -57,6 +57,8 @@ public class Mission {
 	public void choseMission(int nb_players) {
 		switch(nb_players) {
 		
+		//On a donné un numéro à chaque mission possible, le nombre de joueurs indique 
+		//quelles missions sont possibles et on change donc les missions obtenues
 		
 			case 2:		
 				mission_nb = (int) (Math.random()*4+1);

@@ -24,7 +24,7 @@ public class Main {
 		StdDraw.clear(StdDraw.WHITE);
 		StdDraw.show();
 		
-		StdDraw.picture(width/2, height/2, "risk_first_page.png");
+		StdDraw.picture(width/2, height/2, "./src/ressources/risk_first_page.png");
 		
 		while (!play_game) { // tant que le joueur n'a pas cliqué sur le bouton "jouer", on reste sur la toute première page
 			if (StdDraw.isMousePressed()) {
@@ -55,7 +55,7 @@ public class Main {
 		int nb_players = 2; // par défaut, on a 2 joueurs
 		boolean IA = false; // par défaut, on ne joue pas contre l'IA
 		
-		StdDraw.picture(width/2, height/2, "risk_configuration.png");
+		StdDraw.picture(width/2, height/2, "./src/ressources/risk_configuration.png");
 		StdDraw.setPenRadius(0.01);
 		StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
 		
