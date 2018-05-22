@@ -66,7 +66,7 @@ public class Board {
 	
 	// ***** Methodes *****
 	
-public boolean verifyMission(Mission mission) {
+	public boolean verifyMission(Mission mission) {
 		
 		switch(mission.getMissionNb()) {
 			case 1:
@@ -180,6 +180,148 @@ public boolean verifyMission(Mission mission) {
 		}
 		
 		return mission.getMissionComplete();
+	}
+	
+	public static int returnTerritoryID(double posX, double posY) {
+		// AMERIQUE DU NORD
+		if (posX > 67 && posX < 99 && posY > 537 && posY < 569) {
+			return 101;
+		}
+		if (posX > 126 && posX < 158 && posY > 493 && posY < 525) {
+			return 102;
+		}
+		if (posX > 113 && posX < 149 && posY > 346 && posY < 382) {
+			return 103;
+		}
+		if (posX > 200 && posX < 238 && posY > 407 && posY < 445) {
+			return 104;
+		}
+		if (posX > 418 && posX < 456 && posY > 567 && posY < 605) {
+			return 105;
+		}
+		if (posX > 162 && posX < 194 && posY > 544 && posY < 576) {
+			return 106;
+		}
+		if (posX > 220 && posX < 252 && posY > 490 && posY < 522) {
+			return 107;
+		}
+		if (posX > 303 && posX < 335 && posY > 493 && posY < 525) {
+			return 108;
+		}
+		if (posX > 111 && posX < 149 && posY > 432 && posY < 470) {
+			return 109;
+		}
+		
+		// AMERIQUE DU SUD
+		if (posX > 280 && posX < 316 && posY > 102 && posY < 138) {
+			return 201;
+		}
+		if (posX > 322 && posX < 360 && posY > 191 && posY < 229) {
+			return 202;
+		}
+		if (posX > 266 && posX < 294 && posY > 183 && posY < 211) {
+			return 203;
+		}
+		if (posX > 249 && posX < 281 && posY > 281 && posY < 313) {
+			return 204;
+		}
+		
+		// EUROPE
+		if (posX > 497 && posX < 529 && posY > 477 && posY < 509) {
+			return 301;
+		}
+		if (posX > 475 && posX < 507 && posY > 516 && posY < 548) {
+			return 302;
+		}
+		if (posX > 591 && posX < 621 && posY > 484 && posY < 514) {
+			return 303;
+		}
+		if (posX > 598 && posX < 628 && posY > 528 && posY < 558) {
+			return 304;
+		}
+		if (posX > 625 && posX < 655 && posY > 442 && posY < 472) {
+			return 305;
+		}
+		if (posX > 673 && posX < 711 && posY > 492 && posY < 530) {
+			return 306;
+		}
+		if (posX > 545 && posX < 577 && posY > 445 && posY < 477) {
+			return 307;
+		}
+		
+		// AFRIQUE
+		if (posX > 627 && posX < 663 && posY > 244 && posY < 280) {
+			return 401;
+		}
+		if (posX > 707 && posX < 745 && posY > 271 && posY < 309) {
+			return 402;
+		}
+		if (posX > 635 && posX < 667 && posY > 369 && posY < 401) {
+			return 403;
+		}
+		if (posX > 753 && posX < 789 && posY > 149 && posY < 185) {
+			return 404;
+		}
+		if (posX > 530 && posX < 568 && posY > 329 && posY < 367) {
+			return 405;
+		}
+		if (posX > 626 && posX < 664 && posY > 158 && posY < 196) {
+			return 406;
+		}
+		
+		// ASIE
+		if (posX > 784 && posX < 822 && posY > 446 && posY < 484) {
+			return 501;
+		}
+		if (posX > 948 && posX < 984 && posY > 395 && posY < 431) {
+			return 502;
+		}
+		if (posX > 861 && posX < 899 && posY > 351 && posY < 389) {
+			return 503;
+		}
+		if (posX > 935 && posX < 965 && posY > 493 && posY < 523) {
+			return 504;
+		}
+		if (posX > 1107 && posX < 1143 && posY > 413 && posY < 449) {
+			return 505;
+		}
+		if (posX > 1059 && posX < 1095 && posY > 518 && posY < 554) {
+			return 506;
+		}
+		if (posX > 710 && posX < 742 && posY > 399 && posY < 431) {
+			return 507;
+		}
+		if (posX > 948 && posX < 980 && posY > 446 && posY < 478) {
+			return 508;
+		}
+		if (posX > 964 && posX < 996 && posY > 313 && posY < 345) {
+			return 509;
+		}
+		if (posX > 849 && posX < 887 && posY > 538 && posY < 576) {
+			return 510;
+		}
+		if (posX > 776 && posX < 810 && posY > 519 && posY < 553) {
+			return 511;
+		}
+		if (posX > 945 && posX < 983 && posY > 538 && posY < 576) {
+			return 512;
+		}
+		
+		// OCEANIE
+		if (posX > 1130 && posX < 1166 && posY > 128 && posY < 164) {
+			return 601;
+		}
+		if (posX > 1002 && posX < 1034 && posY > 243 && posY < 275) {
+			return 602;
+		}
+		if (posX > 1134 && posX < 1166 && posY > 243 && posY < 275) {
+			return 603;
+		}
+		if (posX > 1030 && posX < 1068 && posY > 122 && posY < 160) {
+			return 604;
+		}
+				
+		return 0;
 	}
 	
 	
