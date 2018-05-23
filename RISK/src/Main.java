@@ -4,6 +4,23 @@ public class Main {
 
 	
 	public static void main(String[] args) {
+		Board Plateautest = new Board(1,2,0);
+		Region North_America = new Region(1, "North America");
+		Region South_America = new Region(2, "South America");
+		Region Europe = new Region(3, "Europe");
+		Region Africa = new Region(4, "Africa");
+		Region Asia = new Region(5, "Asia");
+		Region Australia = new Region(6, "Australia");
+		
+		Plateautest.addRegion(North_America);
+		Plateautest.addRegion(South_America);
+		Plateautest.addRegion(Europe);
+		Plateautest.addRegion(Africa);
+		Plateautest.addRegion(Asia);
+		Plateautest.addRegion(Australia);
+		
+		Plateautest.printRegions();
+		
 		System.out.println("La première page est en train d'être chargée");
 		show_first_page();
 		configuration();

@@ -11,6 +11,11 @@ public class Territory {
 		
 	// ***** Constructeurs *****
 		
+	public Territory(int id, String name) {
+		this.neighbour_list = new ArrayList<>();
+		this.territory_id = id;
+		this.territory_name = name;		
+	}
 	
 		
 	// ***** Methodes *****

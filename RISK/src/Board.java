@@ -66,6 +66,17 @@ public class Board {
 	
 	// ***** Methodes *****
 	
+	public void addRegion(Region R) {
+		regions_list.add(R);
+	}
+	
+	public void printRegions() {
+		int i = 1;
+		for (Region R : regions_list){
+			System.out.println(R.getRegionId() + " " + R.getRegionName());
+		}
+	}
+	
 	public boolean verifyMission(Mission mission) {
 		
 		switch(mission.getMissionNb()) {

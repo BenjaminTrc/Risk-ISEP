@@ -10,12 +10,21 @@ public class Region {
 	
 	// ***** Constructeurs *****
 	
+	public Region(int id, String name) {
+		this.territory_list = new ArrayList<>();
+		this.region_id = id;
+		this.region_name = name;		
+	}
 	
 	// ***** Methodes *****
 	
 	public void addTerritory(Territory T) {
 		territory_list.add(T);
 	}
+	
+	public List<Territory> getTerritories() {
+        return this.territory_list;
+    }
 	
 	// ***** Getters / Setters *****
 	
