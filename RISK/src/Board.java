@@ -11,6 +11,8 @@ public class Board {
 	private int nbr_AI;
 	private ArrayList<Player> players_list = new ArrayList<Player>();
 	private ArrayList<Region> regions_list = new ArrayList<Region>();
+	private int territories = 0;
+	private int nb_regions = 0;
 	
 	
 	// ***** Constructeurs *****
@@ -79,44 +81,61 @@ public class Board {
 	
 	public boolean verifyMission(Mission mission) {
 		
+		//Les conditions de victoire dépendent du type de mission
 		switch(mission.getMissionNb()) {
+		
+		//Les 4 premières missions dépendent juste d'un nombre de territoires
 			case 1:
 			case 2:
 			case 3:
 			case 4:
-				int territories = 0;
+				territories = 0;
+				//On parcourt les regions de la carte
 				for (Region r : regions_list) {
 					ArrayList<Territory> territories_list = r.getTerritoryList();
+					//On parcourt les territoires de chaque région
 					for (Territory t : territories_list) {
+						//On compte le territoire s'il appartient au joueur
 						if (t.getOwner() == mission.getPlayerNb()) {
 							territories+=1;
 						}
 					}
 				}
+				//Si le nombre de territoires décrit par la mission est atteint, le joueur gagne la partie
 				if (territories >= mission.getNbTerritories()) {
 					mission.setMissionComplete(true);
 				}
 				break;
 				
+				
+			//Controler 18 territoires avec au moins 2 unités
 			case 5:
+				territories = 0;
+				//On parcourt les regions de la carte
 				for (Region r : regions_list) {
 					ArrayList<Territory> territories_list = r.getTerritoryList();
+					//On parcourt les territoires de chaque région
 					for (Territory t : territories_list) {
 						
-						//DEUX FONCTIONS A CREER DANS TERRITORY
-						if (t.getOwner() == mission.getPlayerNb() && t.getUnits()) {
+						//Si le joueur controle le territoire avec au moins deux unités, il est comptabilisé
+						if (t.getOwner() == mission.getPlayerNb() && t.getNbUnits()>=2) {
 							territories+=1;
 						}
 					}
 				}
+				//Si le nombre de territoires est atteint, le joueur gagne la partie
 				if (territories >= mission.getNbTerritories()) {
 					mission.setMissionComplete(true);
 				}
 				break;
 				
+			//Détruire le joueur donné
 			case 6:
+				territories = 0;
+				//On parcourt les regions de la carte
 				for (Region r : regions_list) {
 					ArrayList<Territory> territories_list = r.getTerritoryList();
+					//On parcourt les territoires de chaque région
 					for (Territory t : territories_list) {
 						if (t.getOwner() == mission.getPlayerToDestroy()) {
 							territories+=1;
@@ -128,8 +147,10 @@ public class Board {
 				}
 				break;
 				
+			//Controler 3 regions avec au moins 18 territoires
 			case 7:
-				int nb_regions = 0;
+				territories = 0;
+				nb_regions = 0;
 				for (Region r : regions_list) {
 					ArrayList<Territory> territories_list = r.getTerritoryList();
 					int territories_region = 0;
@@ -148,11 +169,14 @@ public class Board {
 				}
 				break;
 				
+				
+			//Controler la plus grande région et un autre
 			case 8:
+				territories = 0;
 				int biggest_region = 0;
 				int record = 0;
 				int count = 0;
-				int nb_regions2 = 0;
+				nb_regions = 0;
 				for (Region r : regions_list) {
 					ArrayList<Territory> territories_list = r.getTerritoryList();
 					int max_territories = 0;
@@ -175,13 +199,13 @@ public class Board {
 					}
 					count+=1;
 				}
-				ArrayList<Territory> territories_region = regions_list[biggest_region].getTerritoryList();
+				ArrayList<Territory> territories_region = regions_list.get(biggest_region).getTerritoryList();
 				
 				territories = 0;
 				for (Territory t : territories_region) {
 					if (t.getOwner() == mission.getPlayerNb()) {
 						territories+=1;
-						if (nb_regions2>1) {
+						if (nb_regions>1) {
 							mission.setMissionComplete(true);
 						}
 					}
