@@ -6,7 +6,7 @@ public class Region {
 	
 	private int region_id;
 	private String region_name;
-	private ArrayList<Territory> territory_list = new ArrayList<>();
+	private ArrayList<Territory> territory_list = new ArrayList<Territory>();
 	
 	// ***** Constructeurs *****
 	
