@@ -82,8 +82,10 @@ public class Board {
 		}
 	}
 	
+	//Instanciation des régions, territoires et leurs terrritoires voisins
 	public void initialization() {
 			
+		//Amérique du Nord et ses territoires
 		Region North_America = new Region(1, "North America");
 		Territory Alaska = new Territory(101, "Alaska");
 		North_America.addTerritory(Alaska);
@@ -104,6 +106,7 @@ public class Board {
 		Territory Western_United_States = new Territory(109, "Western United States");
 		North_America.addTerritory(Western_United_States);
 		
+		//Amérique du Sud et ses territoires
 		Region South_America = new Region(2, "South America");
 		Territory Argentina = new Territory(201, "Argentina");
 		South_America.addTerritory(Argentina);
@@ -114,6 +117,7 @@ public class Board {
 		Territory Venezuela = new Territory(204, "Venezuela");
 		South_America.addTerritory(Venezuela);
 		
+		//Europe et ses territoires
 		Region Europe = new Region(3, "Europe");
 		Territory Great_Britain = new Territory(301, "Great Britain");
 		Europe.addTerritory(Great_Britain);
@@ -130,6 +134,7 @@ public class Board {
 		Territory Western_Europe = new Territory(307, "Western Europe");
 		Europe.addTerritory(Western_Europe);
 		
+		//Afrique et ses territoires
 		Region Africa = new Region(4, "Africa");
 		Territory Congo = new Territory(401, "Congo");
 		Africa.addTerritory(Congo);
@@ -144,6 +149,7 @@ public class Board {
 		Territory South_Africa = new Territory(406, "South Africa");
 		Africa.addTerritory(South_Africa);
 		
+		//Asie et ses territoires
 		Region Asia = new Region(5, "Asia");
 		Territory Afghanistan = new Territory(501, "Afghanistan");
 		Asia.addTerritory(Afghanistan);
@@ -170,6 +176,7 @@ public class Board {
 		Territory Yakutsk = new Territory(512, "Yakutsk");
 		Asia.addTerritory(Yakutsk);
 		
+		//Australie et ses territoires
 		Region Australia = new Region(6, "Australia");
 		Territory Eastern_Australia = new Territory(601, "Eastern Australia");
 		Australia.addTerritory(Eastern_Australia);
@@ -180,6 +187,7 @@ public class Board {
 		Territory Western_Australia = new Territory(604, "Western Australia");
 		Australia.addTerritory(Western_Australia);
 		
+		//Initialisation des voisins de chaque territoire
 		Alaska.addNeighbour(Alberta);
 		Alaska.addNeighbour(Northwest_Territory);
 		Alaska.addNeighbour(Kamchatka);
@@ -347,6 +355,7 @@ public class Board {
 		Western_Australia.addNeighbour(Indonesia);
 		Western_Australia.addNeighbour(New_Guinea);				
 		
+		//Ajout des régions au plateau
 		this.addRegion(North_America);
 		this.addRegion(South_America);
 		this.addRegion(Europe);
@@ -354,6 +363,7 @@ public class Board {
 		this.addRegion(Asia);
 		this.addRegion(Australia);
 		
+		//Affichage des régions et leurs territoires
 		this.printRegions();
 	}
 	
