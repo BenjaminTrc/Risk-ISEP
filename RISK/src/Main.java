@@ -3,6 +3,9 @@ import edu.princeton.cs.introcs.StdDraw;
 public class Main {
 
 	
+	public static int nb_players = 2;
+	public static boolean AI = false;
+	
 	public static void main(String[] args) {
 		
 		Board Plateautest = new Board(1,2,0);
@@ -56,8 +59,6 @@ public class Main {
 		int height = 628;
 		double posX;
 		double posY;
-		int nb_players = 2; // par défaut, on a 2 joueurs
-		boolean IA = false; // par défaut, on ne joue pas contre l'IA
 		
 		StdDraw.picture(width/2, height/2, "./src/ressources/risk_configuration.png");
 		StdDraw.setPenRadius(0.01);
