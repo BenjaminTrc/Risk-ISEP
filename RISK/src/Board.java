@@ -66,6 +66,9 @@ public class Board {
 			used_colors[i] = color;
 			players_list.add(new Player(i, name, color));
 		}
+
+		territoriesDistribution();
+		
 	}
 	
 	// ***** Methodes *****
