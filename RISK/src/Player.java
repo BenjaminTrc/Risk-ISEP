@@ -6,6 +6,7 @@ public class Player {
 	private int player_nb;
 	private String player_name;
 	private int player_color; // une couleur associée à chaque joueur
+	private int army_points; //points d'armée à utiliser pour recruter des unités
 	private Mission player_mission;
 	
 	
@@ -17,11 +18,29 @@ public class Player {
 		this.player_name = name;
 		this.player_color = color;
 		
-		player_mission = new Mission(player_nb, Plateautest.getNbPlayers()); //game = nom du board
+		//player_mission = new Mission(player_nb, Plateautest.getNbPlayers()); //game = nom du board
 	}
 	
 	// ***** Methodes *****
 	
+	//Réception des armée lors de l'initialisation de la partie, en fonction du nombre de joueurs
+	public void initArmyPoints(Board b) {
+		if (b.getNbPlayers() == 2) {
+			this.army_points = 40;
+		}
+		else if (b.getNbPlayers() == 3) {
+			this.army_points = 35;
+		}
+		else if (b.getNbPlayers() == 4) {
+			this.army_points = 30;
+		}
+		else if (b.getNbPlayers() == 5) {
+			this.army_points = 25;
+		}
+		else if (b.getNbPlayers() == 6) {
+			this.army_points = 20;
+		}
+	}
 	
 	// ***** Getters / Setters *****
 	
@@ -47,5 +66,13 @@ public class Player {
 	
 	public void setPlayerColor(int col) {
 		this.player_color = col;
+	}
+	
+	public int getArmyPoints() {
+		return this.army_points;
+	}
+	
+	public void setArmyPoints(int ap) {
+		this.army_points = ap;
 	}
 }
