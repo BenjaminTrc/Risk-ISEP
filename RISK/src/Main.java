@@ -111,13 +111,13 @@ public class Main {
 				// Si on clique sur "OUI"
 				if (posX > 400 && posX < 580 && posY > 190 && posY < 265) {
 					choice_IA(1);
-					IA = true;
+					AI = true;
 				}
 				
 				// Si on clique sur "NON"
 				if (posX > 655 && posX < 835 && posY > 190 && posY < 265) {
 					choice_IA(2);
-					IA = false;
+					AI = false;
 				}
 				
 				
