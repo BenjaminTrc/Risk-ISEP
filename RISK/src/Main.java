@@ -136,6 +136,7 @@ public class Main {
 	
 	public static void launch_game() {
 		System.out.println("Le jeu est en train d'être lancé");
+		Plateautest.play();
 	}
 	
 	
