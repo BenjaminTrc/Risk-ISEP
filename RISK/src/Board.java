@@ -76,6 +76,9 @@ public class Board {
 		int i = 1;
 		for (Region R : regions_list){
 			System.out.println(R.getRegionId() + " " + R.getRegionName());
+			for (Territory T : R.getTerritoryList()) {
+				System.out.println(T.getTerritoryId() + " " + T.getTerritoryName());
+			}
 		}
 	}
 	
