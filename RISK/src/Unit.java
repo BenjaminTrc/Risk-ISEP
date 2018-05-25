@@ -64,12 +64,20 @@ public class Unit {
 		this.cost = c;
 	}
 	
-	public int getPower() {
-		return this.power;
+	public int getMinPower() {
+		return this.min_power;
 	}
 	
-	public void setPower(int p) {
-		this.power = p;
+	public void setMinPower(int p) {
+		this.min_power = p;
+	}
+	
+	public int getMaxPower() {
+		return this.max_power;
+	}
+	
+	public void setMaxPower(int p) {
+		this.max_power = p;
 	}
 	
 	public int getATT() {
