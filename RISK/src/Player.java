@@ -17,7 +17,7 @@ public class Player {
 		this.player_name = name;
 		this.player_color = color;
 		
-		player_mission = new Mission(player_nb, game.getNbPlayers()); //game = nom du board
+		player_mission = new Mission(player_nb, Plateautest.getNbPlayers()); //game = nom du board
 	}
 	
 	// ***** Methodes *****
