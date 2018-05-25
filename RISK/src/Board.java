@@ -13,6 +13,8 @@ public class Board {
 	private ArrayList<Region> regions_list = new ArrayList<Region>();
 	private int territories = 0;
 	private int nb_regions = 0;
+	private boolean victory = false;
+	private int player_playing = 1;
 	
 	
 	// ***** Constructeurs *****
@@ -67,6 +69,52 @@ public class Board {
 	}
 	
 	// ***** Methodes *****
+	
+	
+	public void play() {
+		
+		// player_playing = 1;
+		
+		while (victory == false) {
+			
+		}
+	}
+	
+	/*
+	 * Distribue aléatoirement les territoires entre les joueurs au début de la partie
+	 */
+	public void territoriesDistribution() {
+		//On démarre par le joueur 1
+		player_playing = 1;
+		//On crée une liste qui contiendra tous les territoires
+		ArrayList<Territory> all_territories = new ArrayList<Territory>();
+		for (Region r : regions_list ) {
+			ArrayList<Territory> territories_list = r.getTerritoryList();
+			for (Territory t : territories_list) {
+				//On ajoute chaque territoire à cette liste
+				all_territories.add(t);
+			}
+		}
+		
+		//Tant qu'il reste des territoires à affecter
+		while (all_territories.size()>0) {
+			
+			//On détermine un territoire aléatoirement
+			int i = (int) (Math.random()*all_territories.size());
+			//On le donne au joueur
+			all_territories.get(i).setOwner(player_playing);
+			all_territories.remove(i);
+			
+			//Puis on passe au joueur suivant et on recommence
+			if (player_playing >= nbr_players) {
+				player_playing = 1;
+			}
+			else {
+				player_playing+=1;
+			}
+		}
+		
+	}
 	
 	public void addRegion(Region R) {
 		regions_list.add(R);
