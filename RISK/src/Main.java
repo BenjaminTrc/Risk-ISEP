@@ -4,16 +4,17 @@ public class Main {
 
 	
 	public static int nb_players = 2;
-	public static boolean AI = false;
+	public static int nb_AI = 0;
 	
 	public static void main(String[] args) {
-		
-		Board Plateautest = new Board(1,2,0);
-		Plateautest.initialization();
-		
+			
 		System.out.println("La première page est en train d'être chargée");
 		show_first_page();
 		configuration();
+		
+		//Board Plateautest = new Board(1,nb_players,nb_AI);
+		//Plateautest.initialization();
+		
 		launch_game();
 		
 	}
@@ -60,12 +61,12 @@ public class Main {
 		double posX;
 		double posY;
 		
-		StdDraw.picture(width/2, height/2, "./src/ressources/risk_configuration.png");
+		StdDraw.picture(width/2, height/2, "./src/ressources/risk_configuration_v3.png");
 		StdDraw.setPenRadius(0.01);
 		StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
 		
-		StdDraw.rectangle(358, 408, 50, 50); // par défaut, on encadre "2 joueurs"
-		StdDraw.rectangle(740, 233, 95, 45); // par défaut, on encadre "NON"
+		StdDraw.rectangle(513, 450, 38, 38); // par défaut, on encadre "2 joueurs"
+		StdDraw.rectangle(313, 271, 38, 38); // par défaut, on encadre "0 joueur" pour l'IA
 		
 		while (!launch_game) {
 			if (StdDraw.isMousePressed()) {
@@ -77,54 +78,105 @@ public class Main {
 				/* ---------- CHOIX DU NOMBRE DE JOUEURS ---------- */
 				
 				// 1ère bulle
-				if (posX > 323 && posX < 400 && posY > 367 && posY < 447) {
+				if (posX > 275 && posX < 351 && posY > 412 && posY < 488) {
+					choice_nb_players(0);
+					nb_players = 0;
+				}
+				
+				// 2ème bulle
+				if (posX > 375 && posX < 451 && posY > 412 && posY < 488) {
+					choice_nb_players(1);
+					nb_players = 1;
+				}
+				
+				// 3ème bulle
+				if (posX > 475 && posX < 551 && posY > 412 && posY < 488) {
 					choice_nb_players(2);
 					nb_players = 2;
 				}
 				
-				// 2ème bulle
-				if (posX > 446 && posX < 524 && posY > 367 && posY < 447) {
+				// 4ème bulle
+				if (posX > 575 && posX < 651 && posY > 412 && posY < 488) {
 					choice_nb_players(3);
 					nb_players = 3;
 				}
 				
-				// 3ème bulle
-				if (posX > 574 && posX < 652 && posY > 367 && posY < 447) {
+				// 5ème bulle
+				if (posX > 675 && posX < 751 && posY > 412 && posY < 488) {
 					choice_nb_players(4);
 					nb_players = 4;
 				}
 				
-				// 4ème bulle
-				if (posX > 702 && posX < 780 && posY > 367 && posY < 447) {
+				// 6ème bulle
+				if (posX > 775 && posX < 851 && posY > 412 && posY < 488) {
 					choice_nb_players(5);
 					nb_players = 5;
 				}
 				
-				// 5ème bulle
-				if (posX > 830 && posX < 908 && posY > 367 && posY < 447) {
+				// 7ème bulle
+				if (posX > 875 && posX < 951 && posY > 412 && posY < 488) {
 					choice_nb_players(6);
 					nb_players = 6;
 				}
 				
-				/* ---------- JOUER CONTRE L'IA ---------- */
+				/* ---------- CHOIX DU NOMBRE D'IA ---------- */
 				
-				// Si on clique sur "OUI"
-				if (posX > 400 && posX < 580 && posY > 190 && posY < 265) {
-					choice_IA(1);
-					AI = true;
+				// 1ème bulle
+				if (posX > 275 && posX < 351 && posY > 233 && posY < 309) {
+					choice_nb_AI(0);
+					nb_AI = 0;
 				}
 				
-				// Si on clique sur "NON"
-				if (posX > 655 && posX < 835 && posY > 190 && posY < 265) {
-					choice_IA(2);
-					AI = false;
+				// 2ème bulle
+				if (posX > 375 && posX < 451 && posY > 233 && posY < 309) {
+					choice_nb_AI(1);
+					nb_AI = 1;
+				}
+				
+				// 3ème bulle
+				if (posX > 475 && posX < 551 && posY > 233 && posY < 309) {
+					choice_nb_AI(2);
+					nb_AI = 2;
+				}
+				
+				// 4ème bulle
+				if (posX > 575 && posX < 651 && posY > 233 && posY < 309) {
+					choice_nb_AI(3);
+					nb_AI = 3;
+				}
+				
+				// 5ème bulle
+				if (posX > 675 && posX < 751 && posY > 233 && posY < 309) {
+					choice_nb_AI(4);
+					nb_AI = 4;
+				}
+				
+				// 6ème bulle
+				if (posX > 775 && posX < 851 && posY > 233 && posY < 309) {
+					choice_nb_AI(5);
+					nb_AI = 5;
+				}
+				
+				// 7ème bulle
+				if (posX > 875 && posX < 951 && posY > 233 && posY < 309) {
+					choice_nb_AI(6);
+					nb_AI = 6;
 				}
 				
 				
 				/* ---------- LANCER LA PARTIE ---------- */
 				
 				if (posX > 375 && posX < 853 && posY > 87 && posY < 167) { // S'il clique sur le bouton "Lancer la partie"
-					launch_game = true;
+					if ((nb_players + nb_AI) <= 6 && (nb_players + nb_AI) >= 2) { // on souhaite que le nombre de joueur total n'excède pas 6
+						launch_game = true;
+					}
+					else if ((nb_players + nb_AI) < 2) {
+						StdDraw.picture(619, 196, "./src/ressources/erreur2.png"); // message d'erreur si le nombre de joueurs est inférieur à 2
+					}
+					else {
+						StdDraw.picture(619, 196, "./src/ressources/erreur.png"); // message d'erreur si le nombre de joueurs est supérieur à 6
+					}
+					
 				}
 			
 			}
@@ -136,7 +188,7 @@ public class Main {
 	
 	public static void launch_game() {
 		System.out.println("Le jeu est en train d'être lancé");
-		Plateautest.play();
+		//Plateautest.play();
 	}
 	
 	
@@ -147,92 +199,220 @@ public class Main {
 	// on lui indique le nombre du joueur et il s'occupe de dessiner le contour bleu autour des bonnes coordonnées
 	public static void choice_nb_players(int nb) {
 		switch(nb) {
-			case 2:
+			case 0:
 				StdDraw.setPenRadius(0.01);
 				StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
-				StdDraw.rectangle(358, 408, 50, 50);
+				StdDraw.rectangle(313, 450, 38, 38);
 				
 				StdDraw.setPenColor(StdDraw.WHITE);
 				
-				StdDraw.rectangle(486, 408, 50, 50);
-				StdDraw.rectangle(614, 408, 50, 50);
-				StdDraw.rectangle(741, 408, 50, 50);
-				StdDraw.rectangle(870, 408, 50, 50);
+				StdDraw.rectangle(413, 450, 38, 38);
+				StdDraw.rectangle(513, 450, 38, 38);
+				StdDraw.rectangle(613, 450, 38, 38);
+				StdDraw.rectangle(713, 450, 38, 38);
+				StdDraw.rectangle(813, 450, 38, 38);
+				StdDraw.rectangle(913, 450, 38, 38);
+				break;
+				
+			case 1:
+				StdDraw.setPenRadius(0.01);
+				StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+				StdDraw.rectangle(413, 450, 38, 38);
+
+				StdDraw.setPenColor(StdDraw.WHITE);
+				
+				StdDraw.rectangle(313, 450, 38, 38);
+				StdDraw.rectangle(513, 450, 38, 38);
+				StdDraw.rectangle(613, 450, 38, 38);
+				StdDraw.rectangle(713, 450, 38, 38);
+				StdDraw.rectangle(813, 450, 38, 38);
+				StdDraw.rectangle(913, 450, 38, 38);
+				break;
+				
+				
+			case 2:
+				StdDraw.setPenRadius(0.01);
+				StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+				StdDraw.rectangle(513, 450, 38, 38);
+				
+				StdDraw.setPenColor(StdDraw.WHITE);
+				
+				StdDraw.rectangle(313, 450, 38, 38);
+				StdDraw.rectangle(413, 450, 38, 38);
+				StdDraw.rectangle(613, 450, 38, 38);
+				StdDraw.rectangle(713, 450, 38, 38);
+				StdDraw.rectangle(813, 450, 38, 38);
+				StdDraw.rectangle(913, 450, 38, 38);
 				break;
 			
 			case 3:
 				StdDraw.setPenRadius(0.01);
 				StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
-				StdDraw.rectangle(486, 408, 50, 50);
+				StdDraw.rectangle(613, 450, 38, 38);
 				
 				StdDraw.setPenColor(StdDraw.WHITE);
 				
-				StdDraw.rectangle(358, 408, 50, 50);
-				StdDraw.rectangle(614, 408, 50, 50);
-				StdDraw.rectangle(741, 408, 50, 50);
-				StdDraw.rectangle(870, 408, 50, 50);
+				StdDraw.rectangle(313, 450, 38, 38);
+				StdDraw.rectangle(413, 450, 38, 38);
+				StdDraw.rectangle(513, 450, 38, 38);
+				StdDraw.rectangle(713, 450, 38, 38);
+				StdDraw.rectangle(813, 450, 38, 38);
+				StdDraw.rectangle(913, 450, 38, 38);
 				break;
 				
 			case 4:
 				StdDraw.setPenRadius(0.01);
 				StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
-				StdDraw.rectangle(614, 408, 50, 50);
+				StdDraw.rectangle(713, 450, 38, 38);
 				
 				StdDraw.setPenColor(StdDraw.WHITE);
 				
-				StdDraw.rectangle(358, 408, 50, 50);
-				StdDraw.rectangle(486, 408, 50, 50);
-				StdDraw.rectangle(741, 408, 50, 50);
-				StdDraw.rectangle(870, 408, 50, 50);
+				StdDraw.rectangle(313, 450, 38, 38);
+				StdDraw.rectangle(413, 450, 38, 38);
+				StdDraw.rectangle(513, 450, 38, 38);
+				StdDraw.rectangle(613, 450, 38, 38);
+				StdDraw.rectangle(813, 450, 38, 38);
+				StdDraw.rectangle(913, 450, 38, 38);
 				break;
 				
 			case 5:
 				StdDraw.setPenRadius(0.01);
 				StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
-				StdDraw.rectangle(741, 408, 50, 50);
+				StdDraw.rectangle(813, 450, 38, 38);
 				
 				StdDraw.setPenColor(StdDraw.WHITE);
 				
-				StdDraw.rectangle(358, 408, 50, 50);
-				StdDraw.rectangle(486, 408, 50, 50);
-				StdDraw.rectangle(614, 408, 50, 50);
-				StdDraw.rectangle(870, 408, 50, 50);
+				StdDraw.rectangle(313, 450, 38, 38);
+				StdDraw.rectangle(413, 450, 38, 38);
+				StdDraw.rectangle(513, 450, 38, 38);
+				StdDraw.rectangle(613, 450, 38, 38);
+				StdDraw.rectangle(713, 450, 38, 38);
+				StdDraw.rectangle(913, 450, 38, 38);
 				break;
 				
 			case 6:
 				StdDraw.setPenRadius(0.01);
 				StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
-				StdDraw.rectangle(870, 408, 50, 50);
+				StdDraw.rectangle(913, 450, 38, 38);
 				
 				StdDraw.setPenColor(StdDraw.WHITE);
 				
-				StdDraw.rectangle(358, 408, 50, 50);
-				StdDraw.rectangle(486, 408, 50, 50);
-				StdDraw.rectangle(614, 408, 50, 50);
-				StdDraw.rectangle(741, 408, 50, 50);
+				StdDraw.rectangle(313, 450, 38, 38);
+				StdDraw.rectangle(413, 450, 38, 38);
+				StdDraw.rectangle(513, 450, 38, 38);
+				StdDraw.rectangle(613, 450, 38, 38);
+				StdDraw.rectangle(713, 450, 38, 38);
+				StdDraw.rectangle(813, 450, 38, 38);
 				break;
 		}
 	}
 	
 	// cette fonction gère l'affichage du contour bleu pour le choix du nombre de joueurs
-	public static void choice_IA(int choice) {
+	public static void choice_nb_AI(int choice) {
 		switch(choice) {
+			case 0:
+				StdDraw.setPenRadius(0.01);
+				StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+				StdDraw.rectangle(313, 271, 38, 38);
+				
+				StdDraw.setPenColor(StdDraw.WHITE);
+				
+				StdDraw.rectangle(413, 271, 38, 38);
+				StdDraw.rectangle(513, 271, 38, 38);
+				StdDraw.rectangle(613, 271, 38, 38);
+				StdDraw.rectangle(713, 271, 38, 38);
+				StdDraw.rectangle(813, 271, 38, 38);
+				StdDraw.rectangle(913, 271, 38, 38);
+				break;
+				
 			case 1:
 				StdDraw.setPenRadius(0.01);
 				StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
-				StdDraw.rectangle(486, 233, 95, 45);
+				StdDraw.rectangle(413, 271, 38, 38);
 				
 				StdDraw.setPenColor(StdDraw.WHITE);
-				StdDraw.rectangle(740, 233, 95, 45);
+				
+				StdDraw.rectangle(313, 271, 38, 38);
+				StdDraw.rectangle(513, 271, 38, 38);
+				StdDraw.rectangle(613, 271, 38, 38);
+				StdDraw.rectangle(713, 271, 38, 38);
+				StdDraw.rectangle(813, 271, 38, 38);
+				StdDraw.rectangle(913, 271, 38, 38);
 				break;
 				
 			case 2:
 				StdDraw.setPenRadius(0.01);
 				StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
-				StdDraw.rectangle(740, 233, 95, 45);
+				StdDraw.rectangle(513, 271, 38, 38);
 				
 				StdDraw.setPenColor(StdDraw.WHITE);
-				StdDraw.rectangle(486, 233, 95, 45);
+				
+				StdDraw.rectangle(313, 271, 38, 38);
+				StdDraw.rectangle(413, 271, 38, 38);
+				StdDraw.rectangle(613, 271, 38, 38);
+				StdDraw.rectangle(713, 271, 38, 38);
+				StdDraw.rectangle(813, 271, 38, 38);
+				StdDraw.rectangle(913, 271, 38, 38);
+				break;
+				
+			case 3:
+				StdDraw.setPenRadius(0.01);
+				StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+				StdDraw.rectangle(613, 271, 38, 38);
+				
+				StdDraw.setPenColor(StdDraw.WHITE);
+				
+				StdDraw.rectangle(313, 271, 38, 38);
+				StdDraw.rectangle(413, 271, 38, 38);
+				StdDraw.rectangle(513, 271, 38, 38);
+				StdDraw.rectangle(713, 271, 38, 38);
+				StdDraw.rectangle(813, 271, 38, 38);
+				StdDraw.rectangle(913, 271, 38, 38);
+				break;
+				
+			case 4:
+				StdDraw.setPenRadius(0.01);
+				StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+				StdDraw.rectangle(713, 271, 38, 38);
+				
+				StdDraw.setPenColor(StdDraw.WHITE);
+				
+				StdDraw.rectangle(313, 271, 38, 38);
+				StdDraw.rectangle(413, 271, 38, 38);
+				StdDraw.rectangle(513, 271, 38, 38);
+				StdDraw.rectangle(613, 271, 38, 38);
+				StdDraw.rectangle(813, 271, 38, 38);
+				StdDraw.rectangle(913, 271, 38, 38);
+				break;
+				
+			case 5:
+				StdDraw.setPenRadius(0.01);
+				StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+				StdDraw.rectangle(813, 271, 38, 38);
+				
+				StdDraw.setPenColor(StdDraw.WHITE);
+				
+				StdDraw.rectangle(313, 271, 38, 38);
+				StdDraw.rectangle(413, 271, 38, 38);
+				StdDraw.rectangle(513, 271, 38, 38);
+				StdDraw.rectangle(613, 271, 38, 38);
+				StdDraw.rectangle(713, 271, 38, 38);
+				StdDraw.rectangle(913, 271, 38, 38);
+				break;
+				
+			case 6:
+				StdDraw.setPenRadius(0.01);
+				StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+				StdDraw.rectangle(913, 271, 38, 38);
+				
+				StdDraw.setPenColor(StdDraw.WHITE);
+				
+				StdDraw.rectangle(313, 271, 38, 38);
+				StdDraw.rectangle(413, 271, 38, 38);
+				StdDraw.rectangle(513, 271, 38, 38);
+				StdDraw.rectangle(613, 271, 38, 38);
+				StdDraw.rectangle(713, 271, 38, 38);
+				StdDraw.rectangle(813, 271, 38, 38);
 				break;
 		}
 		
