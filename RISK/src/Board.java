@@ -13,6 +13,8 @@ public class Board {
 	private ArrayList<Region> regions_list = new ArrayList<Region>();
 	private int territories = 0;
 	private int nb_regions = 0;
+	private boolean victory = false;
+	private int player_playing = 1;
 	
 	
 	// ***** Constructeurs *****
@@ -64,9 +66,58 @@ public class Board {
 			used_colors[i] = color;
 			players_list.add(new Player(i, name, color));
 		}
+
+		territoriesDistribution();
+		
 	}
 	
 	// ***** Methodes *****
+	
+	
+	public void play() {
+		
+		// player_playing = 1;
+		
+		while (victory == false) {
+			
+		}
+	}
+	
+	/*
+	 * Distribue aléatoirement les territoires entre les joueurs au début de la partie
+	 */
+	public void territoriesDistribution() {
+		//On démarre par le joueur 1
+		player_playing = 1;
+		//On crée une liste qui contiendra tous les territoires
+		ArrayList<Territory> all_territories = new ArrayList<Territory>();
+		for (Region r : regions_list ) {
+			ArrayList<Territory> territories_list = r.getTerritoryList();
+			for (Territory t : territories_list) {
+				//On ajoute chaque territoire à cette liste
+				all_territories.add(t);
+			}
+		}
+		
+		//Tant qu'il reste des territoires à affecter
+		while (all_territories.size()>0) {
+			
+			//On détermine un territoire aléatoirement
+			int i = (int) (Math.random()*all_territories.size());
+			//On le donne au joueur
+			all_territories.get(i).setOwner(player_playing);
+			all_territories.remove(i);
+			
+			//Puis on passe au joueur suivant et on recommence
+			if (player_playing >= nbr_players) {
+				player_playing = 1;
+			}
+			else {
+				player_playing+=1;
+			}
+		}
+		
+	}
 	
 	public void addRegion(Region R) {
 		regions_list.add(R);
@@ -82,8 +133,10 @@ public class Board {
 		}
 	}
 	
+	//Instanciation des régions, territoires et leurs terrritoires voisins
 	public void initialization() {
 			
+		//Amérique du Nord et ses territoires
 		Region North_America = new Region(1, "North America");
 		Territory Alaska = new Territory(101, "Alaska");
 		North_America.addTerritory(Alaska);
@@ -104,6 +157,7 @@ public class Board {
 		Territory Western_United_States = new Territory(109, "Western United States");
 		North_America.addTerritory(Western_United_States);
 		
+		//Amérique du Sud et ses territoires
 		Region South_America = new Region(2, "South America");
 		Territory Argentina = new Territory(201, "Argentina");
 		South_America.addTerritory(Argentina);
@@ -114,6 +168,7 @@ public class Board {
 		Territory Venezuela = new Territory(204, "Venezuela");
 		South_America.addTerritory(Venezuela);
 		
+		//Europe et ses territoires
 		Region Europe = new Region(3, "Europe");
 		Territory Great_Britain = new Territory(301, "Great Britain");
 		Europe.addTerritory(Great_Britain);
@@ -130,6 +185,7 @@ public class Board {
 		Territory Western_Europe = new Territory(307, "Western Europe");
 		Europe.addTerritory(Western_Europe);
 		
+		//Afrique et ses territoires
 		Region Africa = new Region(4, "Africa");
 		Territory Congo = new Territory(401, "Congo");
 		Africa.addTerritory(Congo);
@@ -144,6 +200,7 @@ public class Board {
 		Territory South_Africa = new Territory(406, "South Africa");
 		Africa.addTerritory(South_Africa);
 		
+		//Asie et ses territoires
 		Region Asia = new Region(5, "Asia");
 		Territory Afghanistan = new Territory(501, "Afghanistan");
 		Asia.addTerritory(Afghanistan);
@@ -170,6 +227,7 @@ public class Board {
 		Territory Yakutsk = new Territory(512, "Yakutsk");
 		Asia.addTerritory(Yakutsk);
 		
+		//Australie et ses territoires
 		Region Australia = new Region(6, "Australia");
 		Territory Eastern_Australia = new Territory(601, "Eastern Australia");
 		Australia.addTerritory(Eastern_Australia);
@@ -179,7 +237,176 @@ public class Board {
 		Australia.addTerritory(New_Guinea);
 		Territory Western_Australia = new Territory(604, "Western Australia");
 		Australia.addTerritory(Western_Australia);
-
+		
+		//Initialisation des voisins de chaque territoire
+		Alaska.addNeighbour(Alberta);
+		Alaska.addNeighbour(Northwest_Territory);
+		Alaska.addNeighbour(Kamchatka);
+		Alberta.addNeighbour(Alaska);
+		Alberta.addNeighbour(Northwest_Territory);
+		Alberta.addNeighbour(Ontario);
+		Alberta.addNeighbour(Western_United_States);
+		Central_America.addNeighbour(Eastern_United_States);
+		Central_America.addNeighbour(Western_United_States);
+		Central_America.addNeighbour(Venezuela);
+		Eastern_United_States.addNeighbour(Central_America);
+		Eastern_United_States.addNeighbour(Ontario);
+		Eastern_United_States.addNeighbour(Quebec);
+		Eastern_United_States.addNeighbour(Western_United_States);
+		Greenland.addNeighbour(Northwest_Territory);
+		Greenland.addNeighbour(Ontario);
+		Greenland.addNeighbour(Quebec);
+		Greenland.addNeighbour(Iceland);
+		Northwest_Territory.addNeighbour(Alaska);
+		Northwest_Territory.addNeighbour(Alberta);
+		Northwest_Territory.addNeighbour(Greenland);
+		Northwest_Territory.addNeighbour(Ontario);
+		Ontario.addNeighbour(Alberta);
+		Ontario.addNeighbour(Eastern_United_States);
+		Ontario.addNeighbour(Greenland);
+		Ontario.addNeighbour(Northwest_Territory);
+		Ontario.addNeighbour(Quebec);
+		Ontario.addNeighbour(Western_United_States);
+		Quebec.addNeighbour(Eastern_United_States);
+		Quebec.addNeighbour(Greenland);
+		Quebec.addNeighbour(Ontario);
+		Western_United_States.addNeighbour(Alberta);
+		Western_United_States.addNeighbour(Central_America);
+		Western_United_States.addNeighbour(Eastern_United_States);
+		Western_United_States.addNeighbour(Ontario);
+		Argentina.addNeighbour(Brazil);
+		Argentina.addNeighbour(Peru);
+		Brazil.addNeighbour(Argentina);
+		Brazil.addNeighbour(Peru);
+		Brazil.addNeighbour(Venezuela);
+		Brazil.addNeighbour(North_Africa);
+		Peru.addNeighbour(Argentina);
+		Peru.addNeighbour(Brazil);
+		Peru.addNeighbour(Venezuela);
+		Venezuela.addNeighbour(Brazil);
+		Venezuela.addNeighbour(Peru);
+		Venezuela.addNeighbour(Central_America);
+		Great_Britain.addNeighbour(Iceland);
+		Great_Britain.addNeighbour(Northern_Europe);
+		Great_Britain.addNeighbour(Scandinavia);
+		Great_Britain.addNeighbour(Western_Europe);
+		Iceland.addNeighbour(Great_Britain);
+		Iceland.addNeighbour(Scandinavia);
+		Iceland.addNeighbour(Greenland);
+		Northern_Europe.addNeighbour(Great_Britain);
+		Northern_Europe.addNeighbour(Scandinavia);
+		Northern_Europe.addNeighbour(Southern_Europe);
+		Northern_Europe.addNeighbour(Ukraine);
+		Northern_Europe.addNeighbour(Western_Europe);
+		Scandinavia.addNeighbour(Great_Britain);
+		Scandinavia.addNeighbour(Iceland);
+		Scandinavia.addNeighbour(Northern_Europe);
+		Scandinavia.addNeighbour(Ukraine);
+		Southern_Europe.addNeighbour(Northern_Europe);
+		Southern_Europe.addNeighbour(Ukraine);
+		Southern_Europe.addNeighbour(Western_Europe);
+		Southern_Europe.addNeighbour(Egypt);
+		Southern_Europe.addNeighbour(North_Africa);
+		Southern_Europe.addNeighbour(Middle_East);
+		Ukraine.addNeighbour(Northern_Europe);
+		Ukraine.addNeighbour(Scandinavia);
+		Ukraine.addNeighbour(Southern_Europe);
+		Ukraine.addNeighbour(Afghanistan);
+		Ukraine.addNeighbour(Middle_East);
+		Ukraine.addNeighbour(Ural);
+		Western_Europe.addNeighbour(Great_Britain);
+		Western_Europe.addNeighbour(Northern_Europe);
+		Western_Europe.addNeighbour(Southern_Europe);
+		Western_Europe.addNeighbour(North_Africa);
+		Congo.addNeighbour(East_Africa);
+		Congo.addNeighbour(North_Africa);
+		Congo.addNeighbour(South_Africa);
+		East_Africa.addNeighbour(Congo);
+		East_Africa.addNeighbour(Egypt);
+		East_Africa.addNeighbour(Madagascar);
+		East_Africa.addNeighbour(North_Africa);
+		East_Africa.addNeighbour(South_Africa);
+		East_Africa.addNeighbour(Middle_East);
+		Egypt.addNeighbour(East_Africa);
+		Egypt.addNeighbour(North_Africa);
+		Egypt.addNeighbour(Southern_Europe);
+		Egypt.addNeighbour(Middle_East);
+		Madagascar.addNeighbour(East_Africa);
+		Madagascar.addNeighbour(South_Africa);
+		North_Africa.addNeighbour(Congo);
+		North_Africa.addNeighbour(East_Africa);
+		North_Africa.addNeighbour(Egypt);
+		North_Africa.addNeighbour(Brazil);
+		North_Africa.addNeighbour(Southern_Europe);
+		North_Africa.addNeighbour(Western_Europe);
+		South_Africa.addNeighbour(Congo);
+		South_Africa.addNeighbour(East_Africa);
+		South_Africa.addNeighbour(Madagascar);
+		Afghanistan.addNeighbour(China);
+		Afghanistan.addNeighbour(India);
+		Afghanistan.addNeighbour(Middle_East);
+		Afghanistan.addNeighbour(Ural);
+		Afghanistan.addNeighbour(Ukraine);
+		China.addNeighbour(Afghanistan);
+		China.addNeighbour(India);
+		China.addNeighbour(Mongolia);
+		China.addNeighbour(Siam);
+		China.addNeighbour(Siberia);
+		China.addNeighbour(Ural);
+		India.addNeighbour(Afghanistan);
+		India.addNeighbour(China);
+		India.addNeighbour(Middle_East);
+		India.addNeighbour(Siam);
+		Irkutsk.addNeighbour(Kamchatka);
+		Irkutsk.addNeighbour(Mongolia);
+		Irkutsk.addNeighbour(Siberia);
+		Irkutsk.addNeighbour(Yakutsk);
+		Japan.addNeighbour(Kamchatka);
+		Japan.addNeighbour(Mongolia);
+		Kamchatka.addNeighbour(Irkutsk);
+		Kamchatka.addNeighbour(Japan);
+		Kamchatka.addNeighbour(Mongolia);
+		Kamchatka.addNeighbour(Yakutsk);
+		Kamchatka.addNeighbour(Alaska);
+		Middle_East.addNeighbour(Afghanistan);
+		Middle_East.addNeighbour(India);
+		Middle_East.addNeighbour(Southern_Europe);
+		Middle_East.addNeighbour(Ukraine);
+		Middle_East.addNeighbour(East_Africa);
+		Middle_East.addNeighbour(Egypt);
+		Mongolia.addNeighbour(China);
+		Mongolia.addNeighbour(Irkutsk);
+		Mongolia.addNeighbour(Japan);
+		Mongolia.addNeighbour(Kamchatka);
+		Mongolia.addNeighbour(Siberia);
+		Siam.addNeighbour(China);
+		Siam.addNeighbour(India);
+		Siam.addNeighbour(Indonesia);
+		Siberia.addNeighbour(China);
+		Siberia.addNeighbour(Irkutsk);
+		Siberia.addNeighbour(Mongolia);
+		Siberia.addNeighbour(Ural);
+		Siberia.addNeighbour(Yakutsk);
+		Ural.addNeighbour(Afghanistan);
+		Ural.addNeighbour(China);
+		Ural.addNeighbour(Siberia);
+		Ural.addNeighbour(Ukraine);
+		Yakutsk.addNeighbour(Irkutsk);
+		Yakutsk.addNeighbour(Kamchatka);
+		Yakutsk.addNeighbour(Siberia);
+		Eastern_Australia.addNeighbour(New_Guinea);
+		Eastern_Australia.addNeighbour(Western_Australia);
+		Indonesia.addNeighbour(New_Guinea);
+		Indonesia.addNeighbour(Western_Australia);
+		Indonesia.addNeighbour(Siam);
+		New_Guinea.addNeighbour(Eastern_Australia);
+		New_Guinea.addNeighbour(Indonesia);
+		New_Guinea.addNeighbour(Western_Australia);
+		Western_Australia.addNeighbour(Eastern_Australia);
+		Western_Australia.addNeighbour(Indonesia);
+		Western_Australia.addNeighbour(New_Guinea);				
+		
+		//Ajout des régions au plateau
 		this.addRegion(North_America);
 		this.addRegion(South_America);
 		this.addRegion(Europe);
@@ -187,6 +414,7 @@ public class Board {
 		this.addRegion(Asia);
 		this.addRegion(Australia);
 		
+		//Affichage des régions et leurs territoires
 		this.printRegions();
 	}
 	
