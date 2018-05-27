@@ -8,6 +8,7 @@ public class Player {
 	private int player_color; // une couleur associée à chaque joueur
 	private int army_points; //points d'armée à utiliser pour recruter des unités
 	private Mission player_mission;
+	private int last_turn_territories_won;
 	
 	
 	
@@ -42,6 +43,10 @@ public class Player {
 		}
 	}
 	
+	public void addTerritory() {
+		this.last_turn_territories_won += 1;
+	}
+	
 	// ***** Getters / Setters *****
 	
 	public int getPlayerNb() {
@@ -74,5 +79,13 @@ public class Player {
 	
 	public void setArmyPoints(int ap) {
 		this.army_points = ap;
+	}
+	
+	public int getLastTurnTerritories() {
+		return last_turn_territories_won;
+	}
+	
+	public void setLastTurnTerritories(int territories_won) {
+		this.last_turn_territories_won = territories_won;
 	}
 }

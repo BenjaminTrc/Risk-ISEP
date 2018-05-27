@@ -78,9 +78,17 @@ public class Board {
 		
 		// player_playing = 1;
 		
-		while (victory == false) {
+		while (victory) {
 			
+			call_reinforcements();
 			
+			//FAIRE LA FONCTION DE PLACEMENT DES UNITES
+			
+			boolean end_turn = false;
+			
+			while (end_turn) {
+				
+			}
 		}
 	}
 	
@@ -118,9 +126,51 @@ public class Board {
 			}
 		}
 		
+		player_playing = 1;
+		
 	}
 	
-	public void battle(ArrayList<Unit> attack, ArrayList<Unit> defence) {
+	/*
+	 * Calcul les renforts pour le début du tour du joueur
+	 */
+	public void call_reinforcements() {
+		
+		int reinforcements = 0;
+		
+		//On calcule ses territoires ainsi que les régions possédées
+		territories = 0;
+		nb_regions = 0;
+		for (Region r : regions_list) {
+			ArrayList<Territory> territories_list = r.getTerritoryList();
+			int territories_region = 0;
+			for (Territory t : territories_list) {
+				if (t.getOwner() == player_playing) {
+					territories+=1;
+					territories_region+=1;
+				}
+			}
+			
+			//Ajout pour chaque région contrôlée de la moitié du nombre de territoires de cette région
+			if (territories_region == territories_list.size()) {
+				reinforcements += (territories_list.size())/2;
+			}
+		}
+		
+		//Ajout d'une armée pour chaque tranche de 3 territoires
+		reinforcements += territories/3;
+		
+		//50% de chance de gagner une armée pour chaque territoire gagné au tour précédent
+		int last_turn_territories = players_list.get(player_playing-1).getLastTurnTerritories();
+		
+		for (int i=0; i<last_turn_territories; i++) {
+			//L'ajout est de 0 ou 1 (50% de chance)
+			reinforcements += (int) (Math.random()*2);
+		}
+		
+		players_list.get(player_playing-1).setArmyPoints(reinforcements);
+	}
+	
+	public void battle(ArrayList<Unit> attack, ArrayList<Unit> defence, Territory territory_att, Territory territory_def) {
 		
 		//Listes des résultats de lancés de dés
 		int[] score_att = new int[attack.size()];
@@ -188,6 +238,17 @@ public class Board {
 		}
 		else {
 			attack.remove(second_att);
+		}
+		
+		territory_def.addUnits(defence);
+		
+		if (territory_def.getNbUnits() == 0) {
+			territory_def.setOwner(player_playing);
+			territory_def.addUnits(attack);
+			players_list.get(player_playing).addTerritory();
+		}
+		else {
+			territory_att.addUnits(attack);
 		}
 		
 	}
