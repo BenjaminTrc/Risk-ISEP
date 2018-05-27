@@ -12,7 +12,7 @@ public class Board {
 	private ArrayList<Player> players_list = new ArrayList<Player>();
 	private ArrayList<Region> regions_list = new ArrayList<Region>();
 	private int territories = 0;
-	private int nb_regions = 0;
+	private int nb_regions = 0;	
 	private boolean victory = false;
 	private int player_playing = 1;
 	
@@ -80,6 +80,7 @@ public class Board {
 		
 		while (victory == false) {
 			
+			
 		}
 	}
 	
@@ -115,6 +116,78 @@ public class Board {
 			else {
 				player_playing+=1;
 			}
+		}
+		
+	}
+	
+	public void battle(ArrayList<Unit> attack, ArrayList<Unit> defence) {
+		
+		//Listes des résultats de lancés de dés
+		int[] score_att = new int[attack.size()];
+		int[] score_def = new int[defence.size()];
+	
+		int higher_att = 0;
+		int second_att = 0;
+		int higher_def = 0;
+		int second_def = 0;
+		
+		/*
+		 * Puissance de l'attaque et détermination priorité des unités dans chaque camp
+		 */
+		for (int i=0; i<attack.size(); i++) {
+			score_att[i] = (int) (Math.random()*(attack.get(i).getMaxPower()-attack.get(i).getMinPower())+1);
+			
+			if (score_att[i] == score_att[higher_att]) {
+				if (attack.get(i).getATT()>attack.get(higher_att).getATT()) {
+					second_att = higher_att;
+					higher_att = i;
+				}
+			}
+			
+			else if (score_att[i] > score_att[higher_att]) {
+				second_att = higher_att;
+				higher_att = i;
+			}
+			else if(score_att[i]>score_att[second_att]) {
+				second_att = i;
+			}
+			
+			if (i<defence.size()) {
+				score_def[i] = (int) (Math.random()*(defence.get(i).getMaxPower()-defence.get(i).getMinPower())+1);
+				
+				if (score_def[i] == score_def[higher_def]) {
+					if (defence.get(i).getDEF()>defence.get(higher_def).getDEF()) {
+						second_def = higher_def;
+						higher_def = i;
+					}
+				}
+				
+				if (score_def[i] > score_def[higher_def]) {
+					second_def = higher_def;
+					higher_def = i;
+				}
+				else if(score_def[i]>score_def[second_def]) {
+					second_def = i;
+				}
+			}
+		}
+		
+		/*
+		 * Bataille entre les unités
+		 */
+		
+		if (score_att[higher_att] > score_def[higher_def]) {
+			defence.remove(higher_def);
+		}
+		else {
+			attack.remove(higher_att);
+		}
+		
+		if (score_att[second_att] > score_def[second_def]) {
+			defence.remove(second_def);
+		}
+		else {
+			attack.remove(second_att);
 		}
 		
 	}
