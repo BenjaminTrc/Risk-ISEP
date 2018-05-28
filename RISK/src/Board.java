@@ -1,4 +1,5 @@
 import java.util.*;
+import edu.princeton.cs.introcs.StdDraw;
 import java.util.Scanner;
 
 public class Board {
@@ -85,9 +86,48 @@ public class Board {
 			//FAIRE LA FONCTION DE PLACEMENT DES UNITES
 			
 			boolean end_turn = false;
+			Territory ally_territory;
+			Territory ennemy_territory;
+			Territory chosen_territory;
 			
 			while (end_turn) {
 				
+				//On détecte un clic
+				if (StdDraw.isMousePressed()) { 
+					
+					double x1 = StdDraw.mouseX();
+					double y1 = StdDraw.mouseY();
+					
+					//On attend la fin du clic
+					while (StdDraw.isMousePressed()) {
+					}
+					
+					//FONCTION POUR TERRITOIRE CORRESPONDANT AUX COORDONNEES (ET AUTRES FONCTIONNALITES)
+					// --> à remplacer par le territoire défini par la fonction
+					chosen_territory = regions_list.get(0).getTerritories().get(0);
+					
+					if (chosen_territory.getOwner() == player_playing) {
+						ally_territory = chosen_territory;
+					}
+					
+					/* Display du territoire dans le bandeau à droite + territoires adjacents avec
+					 * nom, couleur de l'owner et unités présentes
+					 */
+					
+					//If click sur les unités en haut ( + condition sur territoire allié selectionné)
+					//Fonction choix des unités (la même que pour le placement des renforts)
+					
+					//If liste des unités sélectionnées non vide, et que le territoire n'appartient pas au joueur
+					// -> battle()
+					
+					//If click sur la mission -> affichage
+					
+					//If click bouton end turn
+					
+					
+					
+
+				}
 			}
 		}
 	}
