@@ -9,14 +9,14 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		//System.out.println("La première page est en train d'être chargée");
-		//show_first_page();
-		//configuration();
+		System.out.println("La première page est en train d'être chargée");
+		show_first_page();
+		configuration();
 		
-		//Board Plateautest = new Board(1,nb_players,nb_AI);
-		//Plateautest.initialization();
+		Board Plateautest = new Board(1,nb_players,nb_AI);
+		Plateautest.initialization();
 		
-		//launch_game();
+		launch_game();
 		
 	}
 	
