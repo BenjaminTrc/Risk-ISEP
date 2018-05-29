@@ -16,6 +16,7 @@ public class Board {
 	private int nb_regions = 0;	
 	private boolean victory = false;
 	private int player_playing = 1;
+	private int game_phase = 0;
 	
 	
 	// ***** Constructeurs *****
@@ -129,7 +130,43 @@ public class Board {
 					//If click sur la mission -> affichage
 					
 					//If click bouton end turn
-					
+					if (x1<1542 && x1>1292 && y1<70 && y1>20) {
+						if (game_phase == 0) {
+							if (player_playing == nbr_players+nbr_AI) {
+								player_playing = 1; 
+								game_phase = 1;
+								drawButton(1);
+							}
+							else if (player_playing < nbr_players) {
+								player_playing += 1;
+							}
+							else {
+								player_playing +=1;
+								//FAIRE JOUER L'IA
+							}
+							
+						}
+						
+						else if (game_phase == 1) {
+							game_phase = 2;
+							drawButton(2);
+							
+						}
+						
+						else if (game_phase == 2) {
+							game_phase = 1;
+							drawButton(1);
+							if (player_playing == nbr_players + nbr_AI) {
+								player_playing = 1;
+							}
+							else if (player_playing < nbr_players) {
+								player_playing += 1;
+							}
+							else {
+								//FAIRE JOUER L'IA
+							}
+						}
+					}
 					
 					
 
@@ -302,18 +339,18 @@ public class Board {
 	public void drawButton(int phase) {
 		if (phase == 1) {
 			StdDraw.setPenColor(237,195,126);
-			StdDraw.filledRectangle(1414, 50, 150, 25);
+			StdDraw.filledRectangle(1417, 45, 125, 25);
 			StdDraw.setPenColor(0,0,0);
 			StdDraw.setPenRadius(0.01);
-			StdDraw.rectangle(1414, 50, 150, 25);
+			StdDraw.rectangle(1417, 45, 125, 25);
 
 		}
 		if (phase == 2) {
 			StdDraw.setPenColor(241,27,29);
-			StdDraw.filledRectangle(1414, 50, 150, 25);
+			StdDraw.filledRectangle(1417, 45, 125, 25);
 			StdDraw.setPenColor(0,0,0);
 			StdDraw.setPenRadius(0.01);
-			StdDraw.rectangle(1414, 50, 150, 25);
+			StdDraw.rectangle(1417, 45, 125, 25);
 		}
 	}
 	
