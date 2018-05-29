@@ -299,6 +299,24 @@ public class Board {
 		
 	}
 	
+	public void drawButton(int phase) {
+		if (phase == 1) {
+			StdDraw.setPenColor(237,195,126);
+			StdDraw.filledRectangle(1414, 50, 150, 25);
+			StdDraw.setPenColor(0,0,0);
+			StdDraw.setPenRadius(0.01);
+			StdDraw.rectangle(1414, 50, 150, 25);
+
+		}
+		if (phase == 2) {
+			StdDraw.setPenColor(241,27,29);
+			StdDraw.filledRectangle(1414, 50, 150, 25);
+			StdDraw.setPenColor(0,0,0);
+			StdDraw.setPenRadius(0.01);
+			StdDraw.rectangle(1414, 50, 150, 25);
+		}
+	}
+	
 	public void addRegion(Region R) {
 		regions_list.add(R);
 	}

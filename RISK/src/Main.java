@@ -16,7 +16,7 @@ public class Main {
 		Board Plateautest = new Board(1,nb_players,nb_AI);
 		Plateautest.initialization();
 		
-		launch_game();
+		launch_game(Plateautest);
 		
 	}
 	
@@ -187,7 +187,7 @@ public class Main {
 	
 	
 	
-	public static void launch_game() {
+	public static void launch_game(Board B) {
 		System.out.println("Le jeu est en train d'être lancé");
 		int extended_width = 1598;
 		int extended_height = 744;
@@ -199,6 +199,9 @@ public class Main {
 		StdDraw.show();
 		
 		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v4.png");
+		
+		B.drawButton(2);
+
 	}
 	
 	
