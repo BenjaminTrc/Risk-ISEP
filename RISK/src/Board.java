@@ -1,4 +1,5 @@
 import java.util.*;
+import java.awt.Font;
 import edu.princeton.cs.introcs.StdDraw;
 //import java.util.Scanner;
 
@@ -894,6 +895,45 @@ public class Board {
 		}
 				
 		return 0;
+	}
+	
+	public void print() {
+		System.out.println("Le jeu est en train d'être lancé");
+		int extended_width = 1598;
+		int extended_height = 744;
+		double posX, posY;
+		
+		
+		
+		StdDraw.setCanvasSize(extended_width,extended_height);
+		StdDraw.setXscale(0,extended_width);
+		StdDraw.setYscale(0,extended_height);
+		
+		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v4.png");
+		
+		Font font = new Font("MS Gothic", Font.PLAIN, 40);
+		StdDraw.setFont(font);
+		
+		StdDraw.setPenColor(StdDraw.BLUE);
+		StdDraw.filledRectangle(1418, 692, 180, 53);
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(1420, 685, "Joueur" + this.player_playing);
+		StdDraw.text(1420, 685, "Joueur" + this.player_playing);
+		StdDraw.text(1420, 685, "Joueur" + this.player_playing);
+		StdDraw.text(1420, 685, "Joueur" + this.player_playing);
+		StdDraw.show();
+				
+		while(true) {
+			if (StdDraw.isMousePressed()) {
+				posX = StdDraw.mouseX();
+				posY = StdDraw.mouseY();
+				System.out.println("Position X : " + posX + " +++ Position Y : " + posY);
+				StdDraw.pause(150);
+			}
+		}
+		
+		
+		//B.drawButton(2);
 	}
 	
 	
