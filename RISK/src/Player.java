@@ -1,3 +1,5 @@
+import edu.princeton.cs.introcs.StdDraw;
+
 
 public class Player {
 
@@ -45,6 +47,33 @@ public class Player {
 	
 	public void addTerritory() {
 		this.last_turn_territories_won += 1;
+	}
+	
+	public void changeColor() {
+		
+		if (player_color == 1) {
+			StdDraw.setPenColor(StdDraw.BLUE);
+		}
+		
+		if (player_color == 2) {
+			StdDraw.setPenColor(StdDraw.RED);
+		}
+		
+		if (player_color == 3) {
+			StdDraw.setPenColor(StdDraw.GREEN);
+		}
+		
+		if (player_color == 4) {
+			StdDraw.setPenColor(StdDraw.YELLOW);
+		}
+		
+		if (player_color == 5) {
+			StdDraw.setPenColor(51, 255, 238);
+		}
+		
+		if (player_color == 6) {
+			StdDraw.setPenColor(255, 184, 51);
+		}
 	}
 	
 	// ***** Getters / Setters *****
