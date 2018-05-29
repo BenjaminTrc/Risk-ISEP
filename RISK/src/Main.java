@@ -1,21 +1,42 @@
 import edu.princeton.cs.introcs.StdDraw;
+import java.awt.Font;
 
 public class Main {
 
 	
 	public static int nb_players = 2;
 	public static int nb_AI = 0;
+	public static int TAILLE = 100;
 	
 	public static void main(String[] args) {
 			
-		System.out.println("La première page est en train d'être chargée");
-		show_first_page();
-		configuration();
+		String messageVictoire = "Vainqueur: joueur ";
+		
+		StdDraw.setXscale(0.0,TAILLE);
+		StdDraw.setYscale(0.0,TAILLE);	
+		StdDraw.clear(StdDraw.WHITE);
+		StdDraw.setPenColor(StdDraw.BLACK);
+		   
+		StdDraw.text(TAILLE/2, TAILLE/2, messageVictoire);
+		StdDraw.pause(500);
+		
+		Font font = new Font("Arial", Font.PLAIN, 16);
+		StdDraw.setFont(font);
+
+		StdDraw.clear(StdDraw.WHITE);
+		StdDraw.text(TAILLE/2, TAILLE/2, messageVictoire);
+		StdDraw.pause(500);
+		
+		System.out.println(StdDraw.getFont());
+		
+		//System.out.println("La première page est en train d'être chargée");
+		//show_first_page();
+		//configuration();
 		
 		//Board Plateautest = new Board(1,nb_players,nb_AI);
 		//Plateautest.initialization();
 		
-		launch_game();
+		//launch_game();
 		
 	}
 	
