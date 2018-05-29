@@ -189,7 +189,16 @@ public class Main {
 	
 	public static void launch_game() {
 		System.out.println("Le jeu est en train d'être lancé");
-		//Plateautest.play();
+		int extended_width = 1598;
+		int extended_height = 744;
+		
+		StdDraw.setCanvasSize(extended_width,extended_height);
+		StdDraw.setXscale(0,extended_width);
+		StdDraw.setYscale(0,extended_height);
+		StdDraw.clear(StdDraw.WHITE);
+		StdDraw.show();
+		
+		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v4.png");
 	}
 	
 	
