@@ -25,6 +25,16 @@ public class Territory {
 	public void addNeighbour(Territory T) {
 		neighbour_list.add(T);
 	}
+	
+	public void addUnits(ArrayList<Unit> units) {
+		for (Unit u : units) {
+			this.units_list.add(u);
+		}
+	}
+	
+	public void addUnit(Unit unit) {
+		this.units_list.add(unit);
+	}
 		
 	// ***** Getters / Setters *****
 	
@@ -56,11 +66,12 @@ public class Territory {
 		return this.units_list;
 	}
 	
-	public void setUnits(Unit unit) {
-		this.units_list.add(unit);
+	public void setUnits(ArrayList<Unit> units) {
+		this.units_list = units;
 	}
 	
 	public int getNbUnits() {
 		return units_list.size();
 	}
+	
 }

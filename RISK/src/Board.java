@@ -1,4 +1,5 @@
 import java.util.*;
+import edu.princeton.cs.introcs.StdDraw;
 import java.util.Scanner;
 
 public class Board {
@@ -12,7 +13,7 @@ public class Board {
 	private ArrayList<Player> players_list = new ArrayList<Player>();
 	private ArrayList<Region> regions_list = new ArrayList<Region>();
 	private int territories = 0;
-	private int nb_regions = 0;
+	private int nb_regions = 0;	
 	private boolean victory = false;
 	private int player_playing = 1;
 	
@@ -78,8 +79,56 @@ public class Board {
 		
 		// player_playing = 1;
 		
-		while (victory == false) {
+		while (victory) {
 			
+			call_reinforcements();
+			
+			//FAIRE LA FONCTION DE PLACEMENT DES UNITES
+			
+			boolean end_turn = false;
+			Territory ally_territory;
+			Territory ennemy_territory;
+			Territory chosen_territory;
+			
+			while (end_turn) {
+				
+				//On détecte un clic
+				if (StdDraw.isMousePressed()) { 
+					
+					double x1 = StdDraw.mouseX();
+					double y1 = StdDraw.mouseY();
+					
+					//On attend la fin du clic
+					while (StdDraw.isMousePressed()) {
+					}
+					
+					//FONCTION POUR TERRITOIRE CORRESPONDANT AUX COORDONNEES (ET AUTRES FONCTIONNALITES)
+					// --> à remplacer par le territoire défini par la fonction
+					chosen_territory = regions_list.get(0).getTerritories().get(0);
+					
+					if (chosen_territory.getOwner() == player_playing) {
+						ally_territory = chosen_territory;
+					}
+					
+					/* Display du territoire dans le bandeau à droite + territoires adjacents avec
+					 * nom, couleur de l'owner et unités présentes
+					 */
+					
+					//If click sur les unités en haut ( + condition sur territoire allié selectionné)
+					//Fonction choix des unités (la même que pour le placement des renforts)
+					
+					//If liste des unités sélectionnées non vide, et que le territoire n'appartient pas au joueur
+					// -> battle()
+					
+					//If click sur la mission -> affichage
+					
+					//If click bouton end turn
+					
+					
+					
+
+				}
+			}
 		}
 	}
 	
@@ -115,6 +164,131 @@ public class Board {
 			else {
 				player_playing+=1;
 			}
+		}
+		
+		player_playing = 1;
+		
+	}
+	
+	/*
+	 * Calcul les renforts pour le début du tour du joueur
+	 */
+	public void call_reinforcements() {
+		
+		int reinforcements = 0;
+		
+		//On calcule ses territoires ainsi que les régions possédées
+		territories = 0;
+		nb_regions = 0;
+		for (Region r : regions_list) {
+			ArrayList<Territory> territories_list = r.getTerritoryList();
+			int territories_region = 0;
+			for (Territory t : territories_list) {
+				if (t.getOwner() == player_playing) {
+					territories+=1;
+					territories_region+=1;
+				}
+			}
+			
+			//Ajout pour chaque région contrôlée de la moitié du nombre de territoires de cette région
+			if (territories_region == territories_list.size()) {
+				reinforcements += (territories_list.size())/2;
+			}
+		}
+		
+		//Ajout d'une armée pour chaque tranche de 3 territoires
+		reinforcements += territories/3;
+		
+		//50% de chance de gagner une armée pour chaque territoire gagné au tour précédent
+		int last_turn_territories = players_list.get(player_playing-1).getLastTurnTerritories();
+		
+		for (int i=0; i<last_turn_territories; i++) {
+			//L'ajout est de 0 ou 1 (50% de chance)
+			reinforcements += (int) (Math.random()*2);
+		}
+		
+		players_list.get(player_playing-1).setArmyPoints(reinforcements);
+	}
+	
+	public void battle(ArrayList<Unit> attack, ArrayList<Unit> defence, Territory territory_att, Territory territory_def) {
+		
+		//Listes des résultats de lancés de dés
+		int[] score_att = new int[attack.size()];
+		int[] score_def = new int[defence.size()];
+	
+		int higher_att = 0;
+		int second_att = 0;
+		int higher_def = 0;
+		int second_def = 0;
+		
+		/*
+		 * Puissance de l'attaque et détermination priorité des unités dans chaque camp
+		 */
+		for (int i=0; i<attack.size(); i++) {
+			score_att[i] = (int) (Math.random()*(attack.get(i).getMaxPower()-attack.get(i).getMinPower())+1);
+			
+			if (score_att[i] == score_att[higher_att]) {
+				if (attack.get(i).getATT()>attack.get(higher_att).getATT()) {
+					second_att = higher_att;
+					higher_att = i;
+				}
+			}
+			
+			else if (score_att[i] > score_att[higher_att]) {
+				second_att = higher_att;
+				higher_att = i;
+			}
+			else if(score_att[i]>score_att[second_att]) {
+				second_att = i;
+			}
+			
+			if (i<defence.size()) {
+				score_def[i] = (int) (Math.random()*(defence.get(i).getMaxPower()-defence.get(i).getMinPower())+1);
+				
+				if (score_def[i] == score_def[higher_def]) {
+					if (defence.get(i).getDEF()>defence.get(higher_def).getDEF()) {
+						second_def = higher_def;
+						higher_def = i;
+					}
+				}
+				
+				if (score_def[i] > score_def[higher_def]) {
+					second_def = higher_def;
+					higher_def = i;
+				}
+				else if(score_def[i]>score_def[second_def]) {
+					second_def = i;
+				}
+			}
+		}
+		
+		/*
+		 * Bataille entre les unités
+		 */
+		
+		if (score_att[higher_att] > score_def[higher_def]) {
+			defence.remove(higher_def);
+		}
+		else {
+			attack.remove(higher_att);
+		}
+		
+		if (score_att[second_att] > score_def[second_def]) {
+			defence.remove(second_def);
+		}
+		else {
+			attack.remove(second_att);
+		}
+		
+		territory_def.addUnits(defence);
+		
+		if (territory_def.getNbUnits() == 0) {
+			territory_def.setOwner(player_playing);
+			territory_def.addUnits(attack);
+			players_list.get(player_playing).addTerritory();
+		}
+		else {
+			territory_att.addUnits(attack);
 		}
 		
 	}
