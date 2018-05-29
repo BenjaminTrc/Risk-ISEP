@@ -1,6 +1,6 @@
 import java.util.*;
 import edu.princeton.cs.introcs.StdDraw;
-import java.util.Scanner;
+//import java.util.Scanner;
 
 public class Board {
 
@@ -35,6 +35,10 @@ public class Board {
 			int color = 0;
 			if (i<=nbr_players-nbr_AI) {
 				
+				name = "Player " + (i) + "";
+				color = i;
+				
+				/*
 				System.out.println("Joueur " + i);
 				System.out.println("Nom de joueur : ");  // temporaire en attendant la mise en place graphique
 				name = scan.nextLine();
@@ -43,6 +47,7 @@ public class Board {
 				System.out.println("Couleur : ");
 				color = scan.nextInt();
 				scan.nextLine();
+				*/
 				
 			}
 			else {
