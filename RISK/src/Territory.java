@@ -24,8 +24,12 @@ public class Territory {
 	// ***** Methodes *****
 	
 	
+	public void drawCircle(Player P) {
+		
+	}
+	
 	// Cette fonction permet de récupérer les coordonnées d'une bulle de territoire à l'aide de son ID
-	public int[] getCoordonnees() {
+	public int[] getCoordinates() {
 		
 		// on dessine en fonction de l'ID fourni
 		switch(this.getTerritoryId()) {
