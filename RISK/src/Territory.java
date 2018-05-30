@@ -24,8 +24,9 @@ public class Territory {
 	// ***** Methodes *****
 	
 	
-	public void drawCircle(Player P) {
-		
+	public void drawCircle(int [] c) {
+		StdDraw.setPenRadius(0.004);
+		StdDraw.filledCircle(c[0], c[1], c[2]+3);
 	}
 	
 	// Cette fonction permet de récupérer les coordonnées d'une bulle de territoire à l'aide de son ID
@@ -75,7 +76,7 @@ public class Territory {
 				return tab201;
 			
 			case 202:
-				int[] tab202 = {341,210,17};
+				int[] tab202 = {340,211,19};
 				return tab202;
 				
 			case 203:
@@ -83,7 +84,7 @@ public class Territory {
 				return tab203;
 				
 			case 204:
-				int[] tab204 = {265,297,14};
+				int[] tab204 = {264,297,14};
 				return tab204;
 				
 			case 301:
@@ -107,7 +108,7 @@ public class Territory {
 				return tab305;
 				
 			case 306:
-				int[] tab306 = {692,511,17};
+				int[] tab306 = {693,512,18};
 				return tab306;
 				
 			case 307:
@@ -127,7 +128,7 @@ public class Territory {
 				return tab403;
 			
 			case 404:
-				int[] tab404 = {771,167,16};
+				int[] tab404 = {771,167,17};
 				return tab404;
 			
 			case 405:
@@ -135,7 +136,7 @@ public class Territory {
 				return tab405;
 			
 			case 406:
-				int[] tab406 = {645,177,17};
+				int[] tab406 = {646,176,19};
 				return tab406;
 				
 			case 501:
@@ -147,11 +148,11 @@ public class Territory {
 				return tab502;
 				
 			case 503:
-				int[] tab503 = {880,370,17};
+				int[] tab503 = {879,371,18};
 				return tab503;
 				
 			case 504:
-				int[] tab504 = {950,508,13};
+				int[] tab504 = {949,509,13};
 				return tab504;
 				
 			case 505:
@@ -159,7 +160,7 @@ public class Territory {
 				return tab505;
 		
 			case 506:
-				int[] tab506 = {1077,536,16};
+				int[] tab506 = {1077,537,16};
 				return tab506;
 			
 			case 507:
@@ -167,7 +168,7 @@ public class Territory {
 				return tab507;
 			
 			case 508:
-				int[] tab508 = {964,462,14};
+				int[] tab508 = {964,463,14};
 				return tab508;
 			
 			case 509:
@@ -179,7 +180,7 @@ public class Territory {
 				return tab510;
 			
 			case 511:
-				int[] tab511 = {793,536,15};
+				int[] tab511 = {792,537,15};
 				return tab511;
 			
 			case 512:
@@ -187,7 +188,7 @@ public class Territory {
 				return tab512;
 				
 			case 601:
-				int[] tab601 = {1148,146,16};
+				int[] tab601 = {1147,146,17};
 				return tab601;
 			
 			case 602:
@@ -199,7 +200,7 @@ public class Territory {
 				return tab603;
 			
 			case 604:
-				int[] tab604 = {1049,141,17};
+				int[] tab604 = {1049,141,19};
 				return tab604;
 				
 		}
@@ -253,8 +254,11 @@ public class Territory {
 		return this.owner;
 	}
 	
-	public void setOwner(int o) {
-		this.owner = o;
+	public void setOwner(Player P) {
+		this.owner = P.getPlayerNb();
+		int[] coordinates = getCoordinates();
+		P.changeColor();
+		drawCircle(coordinates);
 	}
 	
 	public ArrayList<Unit> getUnits() {

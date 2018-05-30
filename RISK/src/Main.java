@@ -18,6 +18,8 @@ public class Main {
 		Plateautest.initialization();
 		Plateautest.print();
 		
+		Plateautest.play();
+		
 		//launch_game(Plateautest);
 		
 	}
@@ -198,7 +200,6 @@ public class Main {
 		StdDraw.setXscale(0,extended_width);
 		StdDraw.setYscale(0,extended_height);
 		StdDraw.show();
-		
 		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v4.png");
 		
 		B.drawButton(1);

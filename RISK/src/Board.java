@@ -30,12 +30,14 @@ public class Board {
 		this.nbr_players = nbr_players;
 		this.nbr_AI = nbr_AI;
 		String name = "";
+		boolean unique_color = false;
 		
 		int [] used_colors = new int[6];
 		
-		for (int i=1; i<=nbr_players; i++) {
-			int color = 0;
-			if (i<=nbr_players-nbr_AI) {
+		int color = 0;
+		for (int i=1; i<=nbr_players+nbr_AI; i++) {
+			
+			if (i<=nbr_players) {
 				
 				name = "Player " + (i) + "";
 				color = i;
@@ -53,12 +55,14 @@ public class Board {
 				
 			}
 			else {
-				name = "Computer " + (i-nbr_AI+1) + "";
-				boolean unique_color = false;
+				System.out.println("test");
+				name = "Computer " + (i-nbr_players+1) + "";
+				unique_color = false;
+				int compteur = 0;
 				while (unique_color = false) {
 					color = (int) (Math.random()*6+1);
-					int compteur = 0;
-					for (int k=0; k<i; k++) {
+					compteur = 0;
+					for (int k=1; k<i; k++) {
 						if (used_colors[i] == color) {
 							break;
 						}
@@ -71,11 +75,11 @@ public class Board {
 					}
 				}
 			}
-			used_colors[i] = color;
+			used_colors[i-1] = color;
 			players_list.add(new Player(i, name, color));
 		}
 
-		territoriesDistribution();
+		
 		
 	}
 	
@@ -85,6 +89,7 @@ public class Board {
 	
 	public void play() {
 		
+		territoriesDistribution();
 		// player_playing = 1;
 		
 		Territory ally_territory;
@@ -215,23 +220,24 @@ public class Board {
 		}
 		
 		//Tant qu'il reste des territoires à affecter
+		int i;
 		while (all_territories.size()>0) {
 			
+			//System.out.println(all_territories.size());
 			//On détermine un territoire aléatoirement
-			int i = (int) (Math.random()*all_territories.size());
+			i = (int) (Math.random()*all_territories.size());
 			//On le donne au joueur
-			all_territories.get(i).setOwner(player_playing);
+			all_territories.get(i).setOwner(players_list.get(player_playing-1));
 			all_territories.remove(i);
 			
 			//Puis on passe au joueur suivant et on recommence
-			if (player_playing >= nbr_players) {
+			if (player_playing >= nbr_players+nbr_AI) {
 				player_playing = 1;
 			}
 			else {
 				player_playing+=1;
 			}
 		}
-		
 		player_playing = 1;
 		
 	}
@@ -349,9 +355,9 @@ public class Board {
 		territory_def.addUnits(defence);
 		
 		if (territory_def.getNbUnits() == 0) {
-			territory_def.setOwner(player_playing);
+			territory_def.setOwner(players_list.get(player_playing-1));
 			territory_def.addUnits(attack);
-			players_list.get(player_playing).addTerritory();
+			players_list.get(player_playing-1).addTerritory();
 		}
 		else {
 			territory_att.addUnits(attack);
@@ -365,6 +371,7 @@ public class Board {
 	
 	public void drawButton(int phase) {
 		if (phase == 1) {
+			System.out.println("bouton");
 			StdDraw.setPenColor(237,195,126);
 			StdDraw.filledRectangle(1417, 45, 125, 25);
 			StdDraw.setPenColor(0,0,0);
@@ -967,7 +974,6 @@ public class Board {
 		double posX, posY;
 		
 		
-		
 		StdDraw.setCanvasSize(extended_width,extended_height);
 		StdDraw.setXscale(0,extended_width);
 		StdDraw.setYscale(0,extended_height);
@@ -976,16 +982,20 @@ public class Board {
 		
 		Font font = new Font("MS Gothic", Font.PLAIN, 40);
 		StdDraw.setFont(font);
-		
-		StdDraw.setPenColor(StdDraw.BLUE);
+		players_list.get(player_playing-1).changeColor();
+		//StdDraw.setPenColor(StdDraw.BLUE);
 		StdDraw.filledRectangle(1418, 692, 180, 53);
 		StdDraw.setPenColor(StdDraw.BLACK);
 		StdDraw.text(1420, 685, "Joueur" + this.player_playing);
 		StdDraw.text(1420, 685, "Joueur" + this.player_playing);
 		StdDraw.text(1420, 685, "Joueur" + this.player_playing);
 		StdDraw.text(1420, 685, "Joueur" + this.player_playing);
+		drawButton(1);
 		StdDraw.show();
-				
+		
+		play();
+		
+		/*
 		while(true) {
 			if (StdDraw.isMousePressed()) {
 				posX = StdDraw.mouseX();
@@ -994,9 +1004,10 @@ public class Board {
 				StdDraw.pause(150);
 			}
 		}
+		*/
 		
 		
-		//B.drawButton(2);
+		
 	}
 	
 	
