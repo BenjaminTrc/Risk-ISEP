@@ -1,5 +1,6 @@
 import edu.princeton.cs.introcs.StdDraw;
 import java.awt.Font;
+import java.awt.event.MouseEvent;
 
 public class Main {
 

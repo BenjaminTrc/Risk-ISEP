@@ -87,18 +87,35 @@ public class Board {
 		
 		// player_playing = 1;
 		
+		Territory ally_territory;
+		Territory ennemy_territory;
+		Territory chosen_territory;
+		int unit_type = 1;
+		boolean AI_playing = false;
+		
+		if (nbr_players == 0) {
+			AI_playing = true;
+		}
+		
 		while (victory) {
+			
+			boolean end_turn = false;
 			
 			call_reinforcements();
 			
 			//FAIRE LA FONCTION DE PLACEMENT DES UNITES
 			
-			boolean end_turn = false;
-			Territory ally_territory;
-			Territory ennemy_territory;
-			Territory chosen_territory;
-			
 			while (end_turn) {
+			
+			//Click de la barre espace fait changer le type d'unité
+				if (game_phase != 2 && StdDraw.isKeyPressed(32)) {
+					if (unit_type == 3) {
+						unit_type = 1;
+					}
+					else {
+						unit_type += 1;
+					}
+				}
 				
 				//On détecte un clic
 				if (StdDraw.isMousePressed()) { 
@@ -109,6 +126,9 @@ public class Board {
 					//On attend la fin du clic
 					while (StdDraw.isMousePressed()) {
 					}
+					
+					double x2 = StdDraw.mouseX();
+					double y2 = StdDraw.mouseY();
 					
 					//FONCTION POUR TERRITOIRE CORRESPONDANT AUX COORDONNEES (ET AUTRES FONCTIONNALITES)
 					// --> à remplacer par le territoire défini par la fonction
@@ -130,9 +150,10 @@ public class Board {
 					
 					//If click sur la mission -> affichage
 					
-					//If click bouton end turn
-					if (x1<1542 && x1>1292 && y1<70 && y1>20) {
+					
+					if (x1<1542 && x1>1292 && y1<70 && y1>20 && Math.abs(x1-x2)<25 && Math.abs(y1-y2)<25) {
 						if (game_phase == 0) {
+							end_turn = true;
 							if (player_playing == nbr_players+nbr_AI) {
 								player_playing = 1; 
 								game_phase = 1;
@@ -143,7 +164,7 @@ public class Board {
 							}
 							else {
 								player_playing +=1;
-								//FAIRE JOUER L'IA
+								AI_playing = true;
 							}
 							
 						}
@@ -157,6 +178,7 @@ public class Board {
 						else if (game_phase == 2) {
 							game_phase = 1;
 							drawButton(1);
+							end_turn = true;
 							if (player_playing == nbr_players + nbr_AI) {
 								player_playing = 1;
 							}
@@ -164,7 +186,7 @@ public class Board {
 								player_playing += 1;
 							}
 							else {
-								//FAIRE JOUER L'IA
+								AI_playing = true;
 							}
 						}
 					}
@@ -334,6 +356,10 @@ public class Board {
 		else {
 			territory_att.addUnits(attack);
 		}
+		
+	}
+	
+	public void unitsPlacement(int armyPoints) {
 		
 	}
 	
