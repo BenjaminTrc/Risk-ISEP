@@ -15,10 +15,8 @@ public class Main {
 		configuration();
 		
 		Board Plateautest = new Board(1,nb_players,nb_AI);
-		Plateautest.initialization();
-		Plateautest.print();
-		
-		//launch_game(Plateautest);
+		Plateautest.initialization();		
+		launch_game(Plateautest);
 		
 	}
 	
