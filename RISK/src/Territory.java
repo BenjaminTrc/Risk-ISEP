@@ -21,6 +21,15 @@ public class Territory {
 	
 		
 	// ***** Methodes *****
+	public boolean canAttack(Territory T) {
+		for (Territory Neighbour : neighbour_list) {
+			if (T.getTerritoryId() == Neighbour.getTerritoryId()) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	
 	public void addNeighbour(Territory T) {
 		neighbour_list.add(T);
