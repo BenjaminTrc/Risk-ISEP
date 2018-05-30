@@ -967,6 +967,7 @@ public class Board {
 		return 0;
 	}
 	
+	
 	public void print() {
 		System.out.println("Le jeu est en train d'être lancé");
 		int extended_width = 1598;
