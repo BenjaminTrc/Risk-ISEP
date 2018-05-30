@@ -59,11 +59,12 @@ public class Board {
 				name = "Computer " + (i-nbr_players+1) + "";
 				unique_color = false;
 				int compteur = 0;
-				while (unique_color = false) {
+				while (!unique_color) {
 					color = (int) (Math.random()*6+1);
+					System.out.println(color);
 					compteur = 0;
 					for (int k=1; k<i; k++) {
-						if (used_colors[i] == color) {
+						if (used_colors[k-1] == color) {
 							break;
 						}
 						else {
