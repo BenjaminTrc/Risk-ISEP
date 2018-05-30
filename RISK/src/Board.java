@@ -108,7 +108,7 @@ public class Board {
 			boolean end_turn = false;
 			
 			call_reinforcements();
-			
+			drawUnit(1);
 			//FAIRE LA FONCTION DE PLACEMENT DES UNITES
 			
 			while (!end_turn) {
@@ -121,6 +121,8 @@ public class Board {
 					else {
 						unit_type += 1;
 					}
+					drawUnit(unit_type);
+					StdDraw.pause(200);
 				}
 				
 				//On détecte un clic
