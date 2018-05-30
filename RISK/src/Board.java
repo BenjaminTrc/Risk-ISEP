@@ -93,7 +93,7 @@ public class Board {
 		// player_playing = 1;
 		
 		Territory ally_territory;
-		Territory ennemy_territory;
+		Territory enemy_territory;
 		Territory chosen_territory;
 		int unit_type = 1;
 		boolean AI_playing = false;
@@ -102,7 +102,7 @@ public class Board {
 			AI_playing = true;
 		}
 		
-		while (victory) {
+		while (!victory) {
 			
 			boolean end_turn = false;
 			
@@ -110,7 +110,7 @@ public class Board {
 			
 			//FAIRE LA FONCTION DE PLACEMENT DES UNITES
 			
-			while (end_turn) {
+			while (!end_turn) {
 			
 			//Click de la barre espace fait changer le type d'unité
 				if (game_phase != 2 && StdDraw.isKeyPressed(32)) {
@@ -367,6 +367,34 @@ public class Board {
 	
 	public void unitsPlacement(int armyPoints) {
 		
+	}
+	
+	public void drawUnit(int type) {
+		switch(type) {
+			case 0:
+				StdDraw.picture(427, 693, "./src/ressources/soldat_noir.png");
+				StdDraw.picture(601, 693, "./src/ressources/cavalier_noir.png");
+				StdDraw.picture(791, 693, "./src/ressources/canon_noir.png");
+				break;
+				
+			case 1:
+				StdDraw.picture(427, 693, "./src/ressources/soldat_blanc.png");
+				StdDraw.picture(601, 693, "./src/ressources/cavalier_noir.png");
+				StdDraw.picture(791, 693, "./src/ressources/canon_noir.png");
+				break;
+				
+			case 2:
+				StdDraw.picture(427, 693, "./src/ressources/soldat_noir.png");
+				StdDraw.picture(601, 693, "./src/ressources/cavalier_blanc.png");
+				StdDraw.picture(791, 693, "./src/ressources/canon_noir.png");
+				break;
+				
+			case 3:
+				StdDraw.picture(427, 693, "./src/ressources/soldat_noir.png");
+				StdDraw.picture(601, 693, "./src/ressources/cavalier_noir.png");
+				StdDraw.picture(791, 693, "./src/ressources/canon_blanc.png");
+				break;
+		}
 	}
 	
 	public void drawButton(int phase) {
@@ -979,7 +1007,7 @@ public class Board {
 		StdDraw.setXscale(0,extended_width);
 		StdDraw.setYscale(0,extended_height);
 		
-		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v4.png");
+		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v5.png");
 		
 		Font font = new Font("MS Gothic", Font.PLAIN, 40);
 		StdDraw.setFont(font);
