@@ -1,4 +1,5 @@
 import java.util.*;
+import edu.princeton.cs.introcs.StdDraw;
 
 public class Territory {
 
@@ -21,6 +22,191 @@ public class Territory {
 	
 		
 	// ***** Methodes *****
+	
+	
+	public void drawCircle(Player P) {
+		
+	}
+	
+	// Cette fonction permet de récupérer les coordonnées d'une bulle de territoire à l'aide de son ID
+	public int[] getCoordinates() {
+		
+		// on dessine en fonction de l'ID fourni
+		switch(this.getTerritoryId()) {
+			case 101:
+				int[] tab101 = {83,553,14};
+				return tab101;
+			
+			case 102:
+				int[] tab102 = {142,509,14};
+				return tab102;
+
+				
+			case 103:
+				int[] tab103 = {131,364,16};
+				return tab103;
+				
+			case 104:
+				int[] tab104 = {219,426,17};
+				return tab104;
+				
+			case 105:
+				int[] tab105 = {437,586,17};
+				return tab105;
+				
+			case 106:
+				int[] tab106 = {178,560,14};
+				return tab106;
+				
+			case 107:
+				int[] tab107 = {236,506,14};
+				return tab107;
+				
+			case 108:
+				int[] tab108 = {319,509,14};
+				return tab108;
+								
+			case 109:
+				int[] tab109 = {130,451,17};
+				return tab109;
+				
+			case 201:
+				int[] tab201 = {298,120,16};
+				return tab201;
+			
+			case 202:
+				int[] tab202 = {341,210,17};
+				return tab202;
+				
+			case 203:
+				int[] tab203 = {280,197,12};
+				return tab203;
+				
+			case 204:
+				int[] tab204 = {265,297,14};
+				return tab204;
+				
+			case 301:
+				int[] tab301 = {513,493,14};
+				return tab301;
+			
+			case 302:
+				int[] tab302 = {491,532,14};
+				return tab302;
+				
+			case 303:
+				int[] tab303 = {606,499,13};
+				return tab303;
+				
+			case 304:
+				int[] tab304 = {613,543,13};
+				return tab304;
+				
+			case 305:
+				int[] tab305 = {640,457,13};
+				return tab305;
+				
+			case 306:
+				int[] tab306 = {692,511,17};
+				return tab306;
+				
+			case 307:
+				int[] tab307 = {561,461,14};
+				return tab307;
+			
+			case 401:
+				int[] tab401 = {645,262,16};
+				return tab401;
+			
+			case 402:
+				int[] tab402 = {726,290,17};
+				return tab402;
+			
+			case 403:
+				int[] tab403 = {651,385,14};
+				return tab403;
+			
+			case 404:
+				int[] tab404 = {771,167,16};
+				return tab404;
+			
+			case 405:
+				int[] tab405 = {549,348,17};
+				return tab405;
+			
+			case 406:
+				int[] tab406 = {645,177,17};
+				return tab406;
+				
+			case 501:
+				int[] tab501 = {803,465,17};
+				return tab501;
+				
+			case 502:
+				int[] tab502 = {966,413,16};
+				return tab502;
+				
+			case 503:
+				int[] tab503 = {880,370,17};
+				return tab503;
+				
+			case 504:
+				int[] tab504 = {950,508,13};
+				return tab504;
+				
+			case 505:
+				int[] tab505 = {1125,431,16};
+				return tab505;
+		
+			case 506:
+				int[] tab506 = {1077,536,16};
+				return tab506;
+			
+			case 507:
+				int[] tab507 = {726,415,14};
+				return tab507;
+			
+			case 508:
+				int[] tab508 = {964,462,14};
+				return tab508;
+			
+			case 509:
+				int[] tab509 = {980,329,14};
+				return tab509;
+				
+			case 510:
+				int[] tab510 = {868,557,17};
+				return tab510;
+			
+			case 511:
+				int[] tab511 = {793,536,15};
+				return tab511;
+			
+			case 512:
+				int[] tab512 = {964,557,17};
+				return tab512;
+				
+			case 601:
+				int[] tab601 = {1148,146,16};
+				return tab601;
+			
+			case 602:
+				int[] tab602 = {1018,259,14};
+				return tab602;
+				
+			case 603:
+				int[] tab603 = {1150,259,14};
+				return tab603;
+			
+			case 604:
+				int[] tab604 = {1049,141,17};
+				return tab604;
+				
+		}
+		int[] empty_tab = {0,0,0};
+		return empty_tab;
+	}
+	
 	public boolean canAttack(Territory T) {
 		for (Territory Neighbour : neighbour_list) {
 			if (T.getTerritoryId() == Neighbour.getTerritoryId()) {
@@ -67,8 +253,8 @@ public class Territory {
 		return this.owner;
 	}
 	
-	public void setOwner(int player) {
-		this.owner = player;
+	public void setOwner(int o) {
+		this.owner = o;
 	}
 	
 	public ArrayList<Unit> getUnits() {
