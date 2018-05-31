@@ -98,6 +98,7 @@ public class Board {
 		Territory chosen_territory;
 		int unit_type = 1;
 		boolean AI_playing = false;
+		int territory_id = 0;
 		
 		if (nbr_players == 0) {
 			AI_playing = true;
@@ -109,6 +110,7 @@ public class Board {
 			
 			call_reinforcements();
 			drawUnit(1);
+			unit_type = 1;
 			//FAIRE LA FONCTION DE PLACEMENT DES UNITES
 			
 			while (!end_turn) {
@@ -122,7 +124,7 @@ public class Board {
 						unit_type += 1;
 					}
 					drawUnit(unit_type);
-					StdDraw.pause(200);
+					StdDraw.pause(150);
 				}
 				
 				//On détecte un clic
@@ -138,13 +140,19 @@ public class Board {
 					double x2 = StdDraw.mouseX();
 					double y2 = StdDraw.mouseY();
 					
-					//FONCTION POUR TERRITOIRE CORRESPONDANT AUX COORDONNEES (ET AUTRES FONCTIONNALITES)
-					// --> à remplacer par le territoire défini par la fonction
-					chosen_territory = regions_list.get(0).getTerritories().get(0);
 					
-					if (chosen_territory.getOwner() == player_playing) {
-						ally_territory = chosen_territory;
+					territory_id = returnTerritoryID(x1, y1);
+					if (territory_id != 0) {
+						chosen_territory = giveTerritory(territory_id);
+						if (chosen_territory.getOwner() == player_playing) {
+							ally_territory = chosen_territory;
+						}
+						else {
+							enemy_territory = chosen_territory;
+						}
 					}
+					
+					
 					
 					/* Display du territoire dans le bandeau à droite + territoires adjacents avec
 					 * nom, couleur de l'owner et unités présentes
@@ -421,6 +429,19 @@ public class Board {
 	
 	public void addRegion(Region R) {
 		regions_list.add(R);
+	}
+	
+	public Territory giveTerritory(int id) {
+		for (Region r : regions_list ) {
+			ArrayList<Territory> territories_list = r.getTerritoryList();
+			for (Territory t : territories_list) {				
+				if (t.getTerritoryId() == id) {
+					return t;
+					}
+				}
+		}
+		return new Territory(0,"error");
+		
 	}
 	
 	public void printRegions() {
