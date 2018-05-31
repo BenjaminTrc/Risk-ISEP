@@ -208,6 +208,8 @@ public class Territory {
 		return empty_tab;
 	}
 	
+	// cette méthode prend en argument le territoire que l'on souhaite attaquer
+	// elle renvoie "true" si le territoire sélectionné est bien un territoire voisin
 	public boolean canAttack(Territory T) {
 		for (Territory Neighbour : neighbour_list) {
 			if (T.getTerritoryId() == Neighbour.getTerritoryId()) {
@@ -216,6 +218,15 @@ public class Territory {
 		}
 		
 		return false;
+	}
+	
+	// cette méthode permet de renvoyer le nombre d'unités présentes dans le territoire actuel
+	public int countUnits() {
+		int nb_units = 0;
+		for (Unit U : units_list) {
+			nb_units++;
+		}
+		return nb_units;
 	}
 	
 	public void addNeighbour(Territory T) {
