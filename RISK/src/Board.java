@@ -402,6 +402,7 @@ public class Board {
 	
 	public void drawButton(int phase) {
 		if (phase == 1) {
+			System.out.println("bouton");
 			StdDraw.setPenColor(237,195,126);
 			StdDraw.filledRectangle(1417, 45, 125, 25);
 			StdDraw.setPenColor(0,0,0);
@@ -714,7 +715,7 @@ public class Board {
 		this.addRegion(Australia);
 		
 		//Affichage des régions et leurs territoires
-		// this.printRegions();
+		this.printRegions();
 	}
 	
 	public boolean verifyMission(Mission mission) {
