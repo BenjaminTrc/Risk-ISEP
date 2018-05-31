@@ -16,10 +16,11 @@ public class Player {
 	
 	// ***** Constructeurs *****
 	
-	public Player(int number, String name, int color) {
+	public Player(int number, String name, int color, int players) {
 		this.player_nb = number;
 		this.player_name = name;
 		this.player_color = color;
+		initArmyPoints(players);
 		
 		//player_mission = new Mission(player_nb, Plateautest.getNbPlayers()); //game = nom du board
 	}
@@ -27,20 +28,20 @@ public class Player {
 	// ***** Methodes *****
 	
 	//Réception des armée lors de l'initialisation de la partie, en fonction du nombre de joueurs
-	public void initArmyPoints(Board b) {
-		if (b.getNbPlayers() == 2) {
+	public void initArmyPoints(int nb) {
+		if (nb == 2) {
 			this.army_points = 40;
 		}
-		else if (b.getNbPlayers() == 3) {
+		else if (nb == 3) {
 			this.army_points = 35;
 		}
-		else if (b.getNbPlayers() == 4) {
+		else if (nb == 4) {
 			this.army_points = 30;
 		}
-		else if (b.getNbPlayers() == 5) {
+		else if (nb == 5) {
 			this.army_points = 25;
 		}
-		else if (b.getNbPlayers() == 6) {
+		else if (nb == 6) {
 			this.army_points = 20;
 		}
 	}

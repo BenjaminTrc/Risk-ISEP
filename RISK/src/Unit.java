@@ -10,10 +10,13 @@ public class Unit {
 	private int ATT_priority;
 	private int DEF_priority;
 	private int movement; // points de mouvement de l'unité
+	private int this_turn_movement; // points pour le tour en cours
 	
 	// ***** Constructeurs *****
 	
-	public void Unit(int type) {
+
+
+	public Unit(int type) {
 		if (type == 1) {
 			this.type = type;
 			this.cost = 1;
@@ -101,6 +104,14 @@ public class Unit {
 	}
 	
 	public void setMove(int m) {
+		this.movement = m;
+	}
+	
+	public int getThisTurnMove() {
+		return this.movement;
+	}
+	
+	public void setThisTurnMove(int m) {
 		this.movement = m;
 	}
 		

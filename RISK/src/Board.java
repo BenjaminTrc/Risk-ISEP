@@ -77,7 +77,7 @@ public class Board {
 				}
 			}
 			used_colors[i-1] = color;
-			players_list.add(new Player(i, name, color));
+			players_list.add(new Player(i, name, color, nbr_players + nbr_AI));
 		}
 
 		
@@ -108,9 +108,11 @@ public class Board {
 			
 			boolean end_turn = false;
 			
-			call_reinforcements();
+			// call_reinforcements(); on l'appelle plutot juste après le changement de tour
+
 			drawUnit(1);
 			unit_type = 1;
+			Unit selected_unit;
 			//FAIRE LA FONCTION DE PLACEMENT DES UNITES
 			
 			while (!end_turn) {
@@ -146,17 +148,32 @@ public class Board {
 						chosen_territory = giveTerritory(territory_id);
 						if (chosen_territory.getOwner() == player_playing) {
 							ally_territory = chosen_territory;
+							
+							System.out.println("je suis gentil");
+							
+							selected_unit = new Unit(unit_type);
+							
+							if (game_phase != 2 && players_list.get(player_playing-1).getArmyPoints() >= selected_unit.getCost()) {
+								
+								ally_territory.addUnit(selected_unit);	
+								int points = players_list.get(player_playing-1).getArmyPoints();
+								players_list.get(player_playing-1).setArmyPoints(points - selected_unit.getCost());
+								System.out.println("unité ajoutée");
+								//On permet à l'utilisateur de changer le placement de son unité tant qu'il ne l'a pas validé
+								selected_unit.setThisTurnMove(999);
+							}
 						}
 						else {
 							enemy_territory = chosen_territory;
+							System.out.println("je suis méchant");
 						}
+						/* Display du territoire dans le bandeau à droite + territoires adjacents avec
+						 * nom, couleur de l'owner et unités présentes
+						 */
+						
 					}
 					
 					
-					
-					/* Display du territoire dans le bandeau à droite + territoires adjacents avec
-					 * nom, couleur de l'owner et unités présentes
-					 */
 					
 					//If click sur les unités en haut ( + condition sur territoire allié selectionné)
 					//Fonction choix des unités (la même que pour le placement des renforts)
@@ -169,25 +186,37 @@ public class Board {
 					
 					if (x1<1542 && x1>1292 && y1<70 && y1>20 && Math.abs(x1-x2)<25 && Math.abs(y1-y2)<25) {
 						if (game_phase == 0) {
-							end_turn = true;
-							if (player_playing == nbr_players+nbr_AI) {
-								player_playing = 1; 
-								game_phase = 1;
-								drawButton(1);
-							}
-							else if (player_playing < nbr_players) {
-								player_playing += 1;
+							end_turn = verifPlacement();
+							if (end_turn) {							
+								if (player_playing == nbr_players+nbr_AI) {
+									player_playing = 1;
+									game_phase = 1;
+									drawButton(1);
+									call_reinforcements();
+								}
+								else if (player_playing < nbr_players) {
+									player_playing += 1;
+								}
+								else {
+									player_playing +=1;
+									AI_playing = true;
+								}
 							}
 							else {
-								player_playing +=1;
-								AI_playing = true;
+								//AFFICHER UNE ERREUR
 							}
 							
 						}
 						
 						else if (game_phase == 1) {
-							game_phase = 2;
-							drawButton(2);
+							end_turn = verifPlacement();
+							if (end_turn) {	
+								game_phase = 2;
+								drawButton(2);
+							}
+							else {
+								//AFFICHER UNE ERREUR
+							}
 							
 						}
 						
@@ -202,8 +231,10 @@ public class Board {
 								player_playing += 1;
 							}
 							else {
+								player_playing +=1;
 								AI_playing = true;
 							}
+							call_reinforcements();
 						}
 					}
 					
@@ -291,6 +322,7 @@ public class Board {
 		}
 		
 		players_list.get(player_playing-1).setArmyPoints(reinforcements);
+		players_list.get(player_playing-1).setLastTurnTerritories(0);
 	}
 	
 	public void battle(ArrayList<Unit> attack, ArrayList<Unit> defence, Territory territory_att, Territory territory_def) {
@@ -376,9 +408,21 @@ public class Board {
 		
 	}
 	
-	public void unitsPlacement(int armyPoints) {
-		
+	
+	public boolean verifPlacement() {
+		for (Region r : regions_list) {
+			ArrayList<Territory> territories_list = r.getTerritoryList();
+			for (Territory t : territories_list) {
+				if (t.getOwner() == player_playing) {
+					if (t.getNbUnits() == 0) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
 	}
+
 	
 	public void drawUnit(int type) {
 		switch(type) {
@@ -410,7 +454,6 @@ public class Board {
 	
 	public void drawButton(int phase) {
 		if (phase == 1) {
-			System.out.println("bouton");
 			StdDraw.setPenColor(237,195,126);
 			StdDraw.filledRectangle(1417, 45, 125, 25);
 			StdDraw.setPenColor(0,0,0);
@@ -736,7 +779,7 @@ public class Board {
 		this.addRegion(Australia);
 		
 		//Affichage des régions et leurs territoires
-		this.printRegions();
+		//this.printRegions();
 	}
 	
 	public boolean verifyMission(Mission mission) {
