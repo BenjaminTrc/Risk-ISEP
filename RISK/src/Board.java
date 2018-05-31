@@ -122,6 +122,8 @@ public class Board {
 					if (unit_type == 3) {
 						unit_type = 1;
 					}
+					
+					//FAIRE FONCTION POUR GARANTIR QUON A AU MOINS 1 SOLDAT PAR TERRITOIRE
 					else {
 						unit_type += 1;
 					}
@@ -149,7 +151,6 @@ public class Board {
 						if (chosen_territory.getOwner() == player_playing) {
 							ally_territory = chosen_territory;
 							
-							System.out.println("je suis gentil");
 							
 							selected_unit = new Unit(unit_type);
 							
@@ -158,14 +159,12 @@ public class Board {
 								ally_territory.addUnit(selected_unit);	
 								int points = players_list.get(player_playing-1).getArmyPoints();
 								players_list.get(player_playing-1).setArmyPoints(points - selected_unit.getCost());
-								System.out.println("unité ajoutée");
 								//On permet à l'utilisateur de changer le placement de son unité tant qu'il ne l'a pas validé
 								selected_unit.setThisTurnMove(999);
 							}
 						}
 						else {
 							enemy_territory = chosen_territory;
-							System.out.println("je suis méchant");
 						}
 						/* Display du territoire dans le bandeau à droite + territoires adjacents avec
 						 * nom, couleur de l'owner et unités présentes
