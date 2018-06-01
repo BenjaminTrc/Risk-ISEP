@@ -103,6 +103,11 @@ public class Board {
 		int territory_id = 0;
 		int empty_territories;
 		int[] unit_costs = {1,3,7};
+		int points;
+		boolean army_selected = false;
+		ArrayList<Unit> ally_army;
+		ArrayList<Unit> enemy_army;
+		boolean territory_selected = false;
 		
 		if (nbr_players == 0) {
 			AI_playing = true;
@@ -137,16 +142,8 @@ public class Board {
 					
 					empty_territories = emptyTerritories();
 					
-					while (empty_territories > players_list.get(player_playing-1).getArmyPoints() - unit_costs[unit_type -1]+1) {
-						if (unit_type == 3) {
-							unit_type = 2;
-						}
-						else if (unit_type == 2) {
-							unit_type = 1;
-						}
-						else {
-							break;
-						}
+					if (empty_territories > players_list.get(player_playing-1).getArmyPoints() - unit_costs[unit_type -1]+1) {
+						unit_type = 1;
 					}
 					
 					drawUnit(unit_type);
@@ -179,16 +176,8 @@ public class Board {
 						
 						empty_territories = emptyTerritories();
 						
-						while (empty_territories > players_list.get(player_playing-1).getArmyPoints() - unit_costs[unit_type -1] +1) {
-							if (unit_type == 3) {
-								unit_type = 2;
-							}
-							else if(unit_type == 2) {
-								unit_type = 1;
-							}
-							else {
-								break;
-							}
+						if (empty_territories > players_list.get(player_playing-1).getArmyPoints() - unit_costs[unit_type -1] +1) {
+							unit_type = 1;
 						}
 						
 						drawUnit(unit_type);
@@ -199,30 +188,23 @@ public class Board {
 						chosen_territory = giveTerritory(territory_id);
 						if (chosen_territory.getOwner() == player_playing) {
 							ally_territory = chosen_territory;
-							
+							territory_selected = true;
 							
 							selected_unit = new Unit(unit_type);
 							
 							if (game_phase != 2 && players_list.get(player_playing-1).getArmyPoints() >= selected_unit.getCost()) {
 								empty_territories = emptyTerritories();
-								while (empty_territories > players_list.get(player_playing-1).getArmyPoints()-unit_costs[unit_type-1]+1) {
-									if (unit_type == 3) {
-										unit_type = 2;
-									}
-									else if(unit_type == 2) {
-										unit_type = 1;
-									}
-									else {
-										break;
-									}
+								if (empty_territories > players_list.get(player_playing-1).getArmyPoints()-unit_costs[unit_type-1]+1) {
+									unit_type = 1;
 									drawUnit(unit_type);
+									selected_unit = new Unit(unit_type);
 								}
 								
 								if (ally_territory.getNbUnits() == 0 || empty_territories < players_list.get(player_playing-1).getArmyPoints()-selected_unit.getCost()+1) {
 									ally_territory.addUnit(selected_unit);
 									System.out.println(ally_territory.getNbUnits());
 									ally_territory.setOwner(players_list.get(player_playing-1));
-									int points = players_list.get(player_playing-1).getArmyPoints();
+									points = players_list.get(player_playing-1).getArmyPoints();
 									players_list.get(player_playing-1).setArmyPoints(points - selected_unit.getCost());
 									//On permet à l'utilisateur de changer le placement de son unité tant qu'il ne l'a pas validé
 									selected_unit.setThisTurnMove(999);
@@ -231,6 +213,11 @@ public class Board {
 						}
 						else {
 							enemy_territory = chosen_territory;
+							
+							if (army_selected && game_phase == 2 && territory_selected) {
+								enemy_army = enemy_territory.determineDefence();
+								battle(ally_army, enemy_army, ally_territory, enemy_territory);
+							}
 						}
 						/* Display du territoire dans le bandeau à droite + territoires adjacents avec
 						 * nom, couleur de l'owner et unités présentes
@@ -277,6 +264,7 @@ public class Board {
 						else if (game_phase == 2) {
 							game_phase = 1;
 							drawButton(1);
+							territory_selected = false;
 							end_turn = true;
 							if (player_playing == nbr_players + nbr_AI) {
 								player_playing = 1;
@@ -291,6 +279,7 @@ public class Board {
 								AI_playing = true;
 							}
 							call_reinforcements();
+							drawTerritoryCount(nbTerritoriesFromPlayer());
 						}
 					}
 					
@@ -988,6 +977,22 @@ public class Board {
 		
 		//Affichage des régions et leurs territoires
 		//this.printRegions();
+	}
+	
+	public int nbTerritoriesFromPlayer() {
+		int territories_player = 0;
+		//On parcourt les regions de la carte
+		for (Region r : regions_list) {
+			ArrayList<Territory> territories_list = r.getTerritoryList();
+			//On parcourt les territoires de chaque région
+			for (Territory t : territories_list) {
+				//On compte le territoire s'il appartient au joueur
+				if (t.getOwner() == player_playing) {
+					territories_player+=1;
+				}
+			}
+		}
+		return territories_player;
 	}
 	
 	public boolean verifyMission(Mission mission) {
