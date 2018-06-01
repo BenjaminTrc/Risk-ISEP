@@ -174,7 +174,9 @@ public class Board {
 							
 							if (game_phase != 2 && players_list.get(player_playing-1).getArmyPoints() >= selected_unit.getCost()) {
 								
-								ally_territory.addUnit(selected_unit);	
+								ally_territory.addUnit(selected_unit);
+								System.out.println(ally_territory.getNbUnits());
+								ally_territory.setOwner(players_list.get(player_playing-1));
 								int points = players_list.get(player_playing-1).getArmyPoints();
 								players_list.get(player_playing-1).setArmyPoints(points - selected_unit.getCost());
 								//On permet à l'utilisateur de changer le placement de son unité tant qu'il ne l'a pas validé
