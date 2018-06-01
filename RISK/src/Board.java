@@ -612,12 +612,14 @@ public class Board {
 		StdDraw.text(885,687, ""+points/7);
 	}	
 	
-	// cette méthode permet d'afficher les informations sur un territoire en sélectionné
+	//Méthode permettant d'afficher les informations sur un territoire en sélectionné
 		public void drawTerritoryInformations(int territoryId) {
 			
 			//Territoire sélectionné			
 			Territory t = giveTerritory(territoryId);
-			int compteur = 565;
+			int compteur = 560;
+			String territory_name;
+			Player owner;
 					
 			Font font = new Font("Arial", Font.BOLD, 40);
 			StdDraw.setFont(font);
@@ -627,10 +629,10 @@ public class Board {
 			//Territoires voisins
 			Font font2 = new Font("Arial", Font.BOLD, 30);
 			StdDraw.setFont(font2);
-			for(Territory N : t.getNeighbourTerritories())
+			for(Territory T : t.getNeighbourTerritories())
 			{
-				players_list.get(N.getOwner()).changeColor();
-				StdDraw.text(1420,compteur, ""+N);
+				players_list.get(T.getOwner()).changeColor();
+				StdDraw.text(1420,compteur, ""+T.getTerritoryName());
 				compteur -= 35;
 			}
 
@@ -1260,11 +1262,11 @@ public class Board {
 		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v6.png");
 		
 		//Affichage des informations
-		this.drawTurn(game_turn);
-		this.drawName(players_list.get(player_playing-1).getPlayerName());
-		this.drawTerritoryCount(players_list.get(player_playing-1).getLastTurnTerritories());
-		this.drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
-		this.drawTerritoryInformations(302);
+		drawTurn(game_turn);
+		drawName(players_list.get(player_playing-1).getPlayerName());
+		drawTerritoryCount(players_list.get(player_playing-1).getLastTurnTerritories());
+		drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
+		drawTerritoryInformations(107);
 		
 		StdDraw.show();
 		
