@@ -101,6 +101,8 @@ public class Board {
 		int unit_type = 1;
 		boolean AI_playing = false;
 		int territory_id = 0;
+		int empty_territories;
+		int[] unit_costs = {1,3,7};
 		
 		if (nbr_players == 0) {
 			AI_playing = true;
@@ -131,6 +133,21 @@ public class Board {
 					else {
 						unit_type += 1;
 					}
+					
+					empty_territories = emptyTerritories();
+					
+					while (empty_territories > players_list.get(player_playing-1).getArmyPoints() - unit_costs[unit_type -1]+1) {
+						if (unit_type == 3) {
+							unit_type = 2;
+						}
+						else if (unit_type == 2) {
+							unit_type = 1;
+						}
+						else {
+							break;
+						}
+					}
+					
 					drawUnit(unit_type);
 					StdDraw.pause(150);
 				}
@@ -150,17 +167,30 @@ public class Board {
 					
 					if (x1<929 && x1>365 && y1<744 && y1>635) {
 						if (x1<542) {
-							drawUnit(1);
 							unit_type = 1;
 						}
 						else if (x1>735) {
-							drawUnit(3);
 							unit_type = 3;
 						}
 						else {
-							drawUnit(2);
-							unit_type = 3;
+							unit_type = 2;
 						}
+						
+						empty_territories = emptyTerritories();
+						
+						while (empty_territories > players_list.get(player_playing-1).getArmyPoints() - unit_costs[unit_type -1] +1) {
+							if (unit_type == 3) {
+								unit_type = 2;
+							}
+							else if(unit_type == 2) {
+								unit_type = 1;
+							}
+							else {
+								break;
+							}
+						}
+						
+						drawUnit(unit_type);
 					}
 					
 					territory_id = returnTerritoryID(x1, y1);
@@ -173,14 +203,29 @@ public class Board {
 							selected_unit = new Unit(unit_type);
 							
 							if (game_phase != 2 && players_list.get(player_playing-1).getArmyPoints() >= selected_unit.getCost()) {
+								empty_territories = emptyTerritories();
+								while (empty_territories > players_list.get(player_playing-1).getArmyPoints()-unit_costs[unit_type-1]+1) {
+									if (unit_type == 3) {
+										unit_type = 2;
+									}
+									else if(unit_type == 2) {
+										unit_type = 1;
+									}
+									else {
+										break;
+									}
+									drawUnit(unit_type);
+								}
 								
-								ally_territory.addUnit(selected_unit);
-								System.out.println(ally_territory.getNbUnits());
-								ally_territory.setOwner(players_list.get(player_playing-1));
-								int points = players_list.get(player_playing-1).getArmyPoints();
-								players_list.get(player_playing-1).setArmyPoints(points - selected_unit.getCost());
-								//On permet à l'utilisateur de changer le placement de son unité tant qu'il ne l'a pas validé
-								selected_unit.setThisTurnMove(999);
+								if (ally_territory.getNbUnits() == 0 || empty_territories < players_list.get(player_playing-1).getArmyPoints()-selected_unit.getCost()+1) {
+									ally_territory.addUnit(selected_unit);
+									System.out.println(ally_territory.getNbUnits());
+									ally_territory.setOwner(players_list.get(player_playing-1));
+									int points = players_list.get(player_playing-1).getArmyPoints();
+									players_list.get(player_playing-1).setArmyPoints(points - selected_unit.getCost());
+									//On permet à l'utilisateur de changer le placement de son unité tant qu'il ne l'a pas validé
+									selected_unit.setThisTurnMove(999);
+								}
 							}
 						}
 						else {
@@ -415,7 +460,7 @@ public class Board {
 	}
 	
 	
-	public int verifPlacement() {
+	public int emptyTerritories() {
 		int empty_territories = 0;
 		for (Region r : regions_list) {
 			ArrayList<Territory> territories_list = r.getTerritoryList();
