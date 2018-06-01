@@ -537,6 +537,30 @@ public class Board {
 		StdDraw.text(885,687, ""+points/7);
 	}	
 	
+	// cette méthode permet d'afficher les informations sur un territoire en sélectionné
+		public void drawTerritoryInformations(int territoryId) {
+			
+			//Territoire sélectionné			
+			Territory t = giveTerritory(territoryId);
+			int compteur = 565;
+					
+			Font font = new Font("Arial", Font.BOLD, 40);
+			StdDraw.setFont(font);
+			players_list.get(t.getOwner()).changeColor();
+			StdDraw.text(1420,600, ""+t.getTerritoryName());
+			
+			//Territoires voisins
+			Font font2 = new Font("Arial", Font.BOLD, 30);
+			StdDraw.setFont(font2);
+			for(Territory N : t.getNeighbourTerritories())
+			{
+				players_list.get(N.getOwner()).changeColor();
+				StdDraw.text(1420,compteur, ""+N);
+				compteur -= 35;
+			}
+
+		}	
+	
 	public void addRegion(Region R) {
 		regions_list.add(R);
 	}
@@ -1149,11 +1173,12 @@ public class Board {
 		this.drawName(players_list.get(player_playing-1).getPlayerName());
 		this.drawTerritoryCount(players_list.get(player_playing-1).getLastTurnTerritories());
 		this.drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
+		this.drawTerritoryInformations(302);
 		
 		drawButton(1);
 		StdDraw.show();
 		
-		play();
+		//play();
 		
 		
 		while(true) {
