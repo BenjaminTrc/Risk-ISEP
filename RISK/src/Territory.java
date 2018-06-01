@@ -26,7 +26,9 @@ public class Territory {
 	
 	public void drawCircle(int [] c) {
 		StdDraw.setPenRadius(0.004);
-		StdDraw.filledCircle(c[0], c[1], c[2]+3);
+		StdDraw.filledCircle(c[0], c[1], c[2]+5);
+		StdDraw.setPenColor();
+		StdDraw.circle(c[0], c[1], c[2]+5);
 	}
 	
 	// Cette fonction permet de récupérer les coordonnées d'une bulle de territoire à l'aide de son ID

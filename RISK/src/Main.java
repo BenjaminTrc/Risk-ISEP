@@ -197,7 +197,7 @@ public class Main {
 		StdDraw.setYscale(0,extended_height);
 		StdDraw.show();
 		
-		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v5.png");
+		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v6.png");
 		
 		B.drawButton(1);
 		
