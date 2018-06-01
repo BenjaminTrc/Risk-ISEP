@@ -200,8 +200,6 @@ public class Main {
 		
 		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v6.png");
 		
-		B.drawButton(1);
-		
 		B.play();
 
 	}
