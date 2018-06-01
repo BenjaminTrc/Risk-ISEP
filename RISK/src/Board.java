@@ -199,10 +199,10 @@ public class Board {
 								
 								if (ally_territory.getNbUnits() == 0 || empty_territories < players_list.get(player_playing-1).getArmyPoints()-selected_unit.getCost()+1) {
 									ally_territory.addUnit(selected_unit);
-									System.out.println(ally_territory.getNbUnits());
 									ally_territory.setOwner(players_list.get(player_playing-1));
 									points = players_list.get(player_playing-1).getArmyPoints();
 									players_list.get(player_playing-1).setArmyPoints(points - selected_unit.getCost());
+									drawPossibleUnits(nbArmyAvailable(players_list.get(player_playing-1).getArmyPoints(),selected_unit.getType()));
 									//On permet à l'utilisateur de changer le placement de son unité tant qu'il ne l'a pas validé
 									selected_unit.setThisTurnMove(999);
 								}
@@ -1006,6 +1006,22 @@ public class Board {
 		//this.printRegions();
 	}
 	
+	public int nbArmyAvailable(int army_points, int type_selected) {
+		switch(type_selected) {
+			case 1:
+				return army_points;
+				
+			case 2:
+				int nb_available = army_points/3;
+				return nb_available;
+				
+			case 3:
+				int nb_available_2 = army_points/7;
+				return nb_available_2;
+		}
+		return 0;
+	}
+	
 	public int nbTerritoriesFromPlayer() {
 		int territories_player = 0;
 		//On parcourt les regions de la carte
@@ -1183,6 +1199,7 @@ public class Board {
 		if (posX > 220 && posX < 252 && posY > 490 && posY < 522) {
 			return 107;
 		}
+		
 		if (posX > 303 && posX < 335 && posY > 493 && posY < 525) {
 			return 108;
 		}
