@@ -201,7 +201,7 @@ public class Board {
 									ally_territory.setOwner(players_list.get(player_playing-1));
 									points = players_list.get(player_playing-1).getArmyPoints();
 									players_list.get(player_playing-1).setArmyPoints(points - selected_unit.getCost());
-									drawPossibleUnits(nbArmyAvailable(players_list.get(player_playing-1).getArmyPoints(),selected_unit.getType()));
+									drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
 									//On permet à l'utilisateur de changer le placement de son unité tant qu'il ne l'a pas validé
 									selected_unit.setThisTurnMove(999);
 								}
@@ -1005,7 +1005,7 @@ public class Board {
 		//this.printRegions();
 	}
 	
-	public int nbArmyAvailable(int army_points, int type_selected) {
+	/*public int nbArmyAvailable(int army_points, int type_selected) {
 		switch(type_selected) {
 			case 1:
 				return army_points;
@@ -1019,7 +1019,7 @@ public class Board {
 				return nb_available_2;
 		}
 		return 0;
-	}
+	}*/
 	
 	public int nbTerritoriesFromPlayer() {
 		int territories_player = 0;
