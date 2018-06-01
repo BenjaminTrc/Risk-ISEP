@@ -105,6 +105,8 @@ public class Board {
 			AI_playing = true;
 		}
 		
+		Unit selected_unit;
+		
 		while (!victory) {
 			
 			boolean end_turn = false;
@@ -113,7 +115,7 @@ public class Board {
 
 			drawUnit(1);
 			unit_type = 1;
-			Unit selected_unit;
+			
 			//FAIRE LA FONCTION DE PLACEMENT DES UNITES
 			
 			while (!end_turn) {
@@ -145,6 +147,20 @@ public class Board {
 					double x2 = StdDraw.mouseX();
 					double y2 = StdDraw.mouseY();
 					
+					if (x1<929 && x1>365 && y1<744 && y1>635) {
+						if (x1<542) {
+							drawUnit(1);
+							unit_type = 1;
+						}
+						else if (x1>735) {
+							drawUnit(3);
+							unit_type = 3;
+						}
+						else {
+							drawUnit(2);
+							unit_type = 3;
+						}
+					}
 					
 					territory_id = returnTerritoryID(x1, y1);
 					if (territory_id != 0) {
@@ -185,39 +201,26 @@ public class Board {
 					
 					
 					if (x1<1542 && x1>1292 && y1<70 && y1>20 && Math.abs(x1-x2)<25 && Math.abs(y1-y2)<25) {
-						if (game_phase == 0) {
-							end_turn = verifPlacement();
-							if (end_turn) {							
-								if (player_playing == nbr_players+nbr_AI) {
-									player_playing = 1;
-									game_phase = 1;
-									drawButton(1);
-									call_reinforcements();
-								}
-								else if (player_playing < nbr_players) {
-									player_playing += 1;
-								}
-								else {
-									player_playing +=1;
-									AI_playing = true;
-								}
+						if (game_phase == 0) {						
+							if (player_playing == nbr_players+nbr_AI) {
+								player_playing = 1;
+								game_phase = 1;
+								drawButton(1);
+								call_reinforcements();
+							}
+							else if (player_playing < nbr_players) {
+								player_playing += 1;
 							}
 							else {
-								//AFFICHER UNE ERREUR
-							}
-							
+								player_playing +=1;
+								AI_playing = true;
+							}						
 						}
 						
 						else if (game_phase == 1) {
-							end_turn = verifPlacement();
-							if (end_turn) {	
-								game_phase = 2;
-								drawButton(2);
-							}
-							else {
-								//AFFICHER UNE ERREUR
-							}
-							
+							end_turn = true;
+							game_phase = 2;
+							drawButton(2);
 						}
 						
 						else if (game_phase == 2) {
@@ -409,18 +412,19 @@ public class Board {
 	}
 	
 	
-	public boolean verifPlacement() {
+	public int verifPlacement() {
+		int empty_territories = 0;
 		for (Region r : regions_list) {
 			ArrayList<Territory> territories_list = r.getTerritoryList();
 			for (Territory t : territories_list) {
 				if (t.getOwner() == player_playing) {
 					if (t.getNbUnits() == 0) {
-						return false;
+						empty_territories += 1; 
 					}
 				}
 			}
 		}
-		return true;
+		return empty_territories;
 	}
 
 	
