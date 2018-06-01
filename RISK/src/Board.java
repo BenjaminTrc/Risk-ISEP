@@ -107,6 +107,7 @@ public class Board {
 		}
 		
 		Unit selected_unit;
+		drawButton(0);
 		
 		while (!victory) {
 			
@@ -459,21 +460,45 @@ public class Board {
 		}
 	}
 	
+	// dessine le bouton correspondant à la phase en cours
 	public void drawButton(int phase) {
+		if (phase == 0) {
+			StdDraw.setPenColor(51,102,170);
+			StdDraw.filledRectangle(1417, 45, 125, 25);
+			StdDraw.setPenColor(0,0,0);
+			StdDraw.setPenRadius(0.01);
+			StdDraw.rectangle(1417, 45, 125, 25);
+			
+			Font font = new Font("",Font.BOLD,20);
+			StdDraw.setFont(font);
+			StdDraw.setPenColor(StdDraw.WHITE);
+			StdDraw.text(1417, 45, "FIN DE L'INITIALISATION");
+		}
+		
 		if (phase == 1) {
 			StdDraw.setPenColor(237,195,126);
 			StdDraw.filledRectangle(1417, 45, 125, 25);
 			StdDraw.setPenColor(0,0,0);
 			StdDraw.setPenRadius(0.01);
 			StdDraw.rectangle(1417, 45, 125, 25);
-
+			
+			Font font = new Font("",Font.BOLD,20);
+			StdDraw.setFont(font);
+			StdDraw.setPenColor(StdDraw.WHITE);
+			StdDraw.text(1417, 45, "FIN DU RENFORCEMENT");
 		}
+		
 		if (phase == 2) {
 			StdDraw.setPenColor(241,27,29);
 			StdDraw.filledRectangle(1417, 45, 125, 25);
 			StdDraw.setPenColor(0,0,0);
 			StdDraw.setPenRadius(0.01);
 			StdDraw.rectangle(1417, 45, 125, 25);
+			
+			Font font = new Font("",Font.BOLD,20);
+			StdDraw.setFont(font);
+			StdDraw.setPenColor(StdDraw.WHITE);
+			StdDraw.text(1417, 45, "FIN DU TOUR");
 		}
 	}
 	
@@ -1150,7 +1175,6 @@ public class Board {
 		this.drawTerritoryCount(players_list.get(player_playing-1).getLastTurnTerritories());
 		this.drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
 		
-		drawButton(1);
 		StdDraw.show();
 		
 		play();
