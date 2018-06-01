@@ -616,7 +616,7 @@ public class Board {
 			
 			//Territoire sélectionné			
 			Territory t = giveTerritory(territoryId);
-			int compteur = 560;
+			int compteur = 530;
 			String territory_name;
 			Player owner;
 					
@@ -625,13 +625,54 @@ public class Board {
 			players_list.get(t.getOwner()).changeColor();
 			StdDraw.text(1420,600, ""+t.getTerritoryName());
 			
-			//Territoires voisins
-			Font font2 = new Font("Arial", Font.BOLD, 30);
+			//Armées possédées sur ce territoire
+			Font font2 = new Font("Arial", Font.BOLD, 25);
 			StdDraw.setFont(font2);
+			
+			StdDraw.picture(1380, 530, "./src/ressources/soldat_noir_petit.png");					
+			StdDraw.picture(1380, 480, "./src/ressources/cavalier_noir_petit.png");						
+			StdDraw.picture(1380, 430, "./src/ressources/canon_noir_petit.png");
+			
+			//On compte le nombre d'unités de chaque type
+			int nb_soldier = 0, nb_horseman = 0, nb_cannon = 0;
+			for(Unit U : t.getUnits()) {
+				if (U.getType() == 1) {
+					nb_soldier++;
+				}else if (U.getType() == 2) {
+					nb_horseman++;
+				}else if (U.getType() == 3) {
+					nb_cannon++;
+				}				
+			}
+			
+			//On affiche le nombre de soldats, cavaliers et canons
+			StdDraw.setPenColor(StdDraw.WHITE);
+			StdDraw.filledCircle(1450, compteur+5, 15);
+			StdDraw.setPenColor(StdDraw.BLACK);
+			StdDraw.text(1450,compteur, ""+nb_soldier);
+			compteur = 480;
+			StdDraw.setPenColor(StdDraw.WHITE);
+			StdDraw.filledCircle(1450, compteur+5, 15);
+			StdDraw.setPenColor(StdDraw.BLACK);
+			StdDraw.text(1450,compteur, ""+nb_horseman);
+			compteur = 430;
+			StdDraw.setPenColor(StdDraw.WHITE);
+			StdDraw.filledCircle(1450, compteur+5, 15);
+			StdDraw.setPenColor(StdDraw.BLACK);
+			StdDraw.text(1450,compteur, ""+nb_cannon);
+			
+			//Territoires voisins
+			compteur = 350;
 			for(Territory T : t.getNeighbourTerritories())
 			{
 				players_list.get(T.getOwner()).changeColor();
-				StdDraw.text(1420,compteur, ""+T.getTerritoryName());
+				StdDraw.text(1400,compteur, ""+T.getTerritoryName());
+				
+				StdDraw.setPenColor(StdDraw.WHITE);
+				StdDraw.filledCircle(1565, compteur+5, 15);
+				StdDraw.setPenColor(StdDraw.BLACK);
+				StdDraw.text(1565,compteur, ""+T.getNbUnits());
+				
 				compteur -= 35;
 			}
 
@@ -1243,6 +1284,9 @@ public class Board {
 		
 		//Carte
 		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v6.png");
+		
+		StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
+		
 		
 		//Affichage des informations
 		drawTurn(game_turn);
