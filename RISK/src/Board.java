@@ -18,7 +18,7 @@ public class Board {
 	private boolean victory = false;
 	private int player_playing = 1;
 	private int game_phase = 0;
-	private int game_turn;
+	private int game_turn = 0;
 	
 	
 	// ***** Constructeurs *****
@@ -253,6 +253,8 @@ public class Board {
 						if (game_phase == 0) {						
 							if (player_playing == nbr_players+nbr_AI) {
 								player_playing = 1;
+								game_turn++;
+								drawTurn(game_turn);
 								game_phase = 1;
 								drawButton(1);
 								call_reinforcements();
@@ -278,6 +280,8 @@ public class Board {
 							end_turn = true;
 							if (player_playing == nbr_players + nbr_AI) {
 								player_playing = 1;
+								game_turn++;
+								drawTurn(game_turn);
 							}
 							else if (player_playing < nbr_players) {
 								player_playing += 1;
