@@ -18,6 +18,7 @@ public class Board {
 	private boolean victory = false;
 	private int player_playing = 1;
 	private int game_phase = 0;
+	private int game_turn;
 	
 	
 	// ***** Constructeurs *****
@@ -467,6 +468,26 @@ public class Board {
 			StdDraw.setPenRadius(0.01);
 			StdDraw.rectangle(1417, 45, 125, 25);
 		}
+	}
+	
+	// cette méthode permet d'afficher le nombre de tours qui se sont déroulés dans la partie (dans la bande supérieure du jeu)
+	public void drawTurn(int turn) {
+		StdDraw.setPenColor(StdDraw.WHITE);
+		//StdDraw.filledCircle(posX, posY, 15);
+		
+		Font font = new Font("Arial", Font.BOLD, 24);
+		StdDraw.setFont(font);
+		//StdDraw.text(posX,posY, ""+turn);
+	}
+	
+	// cette méthode permet d'afficher le nombre de territoires que le joueur possède actuellement (dans la bande supérieure du jeu)
+	public void drawTerritoryCount(int nb_territories) {
+		StdDraw.setPenColor(StdDraw.WHITE);
+		//StdDraw.filledCircle(posX, posY, 15);
+		
+		Font font = new Font("Arial", Font.BOLD, 24);
+		StdDraw.setFont(font);
+		//StdDraw.text(posX,posY, ""+nb_territories);
 	}
 	
 	public void addRegion(Region R) {
@@ -1120,4 +1141,11 @@ public class Board {
 		return this.regions_list;
 	}
 	
+	public int getGameTurn() {
+		return this.game_turn;
+	}
+	
+	public void setGameTurn(int turn) {
+		this.game_turn = turn;
+	}
 }
