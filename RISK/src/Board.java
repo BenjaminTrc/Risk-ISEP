@@ -291,6 +291,7 @@ public class Board {
 								AI_playing = true;
 							}
 							call_reinforcements();
+							drawTerritoryCount(nbTerritoriesFromPlayer());
 						}
 					}
 					
@@ -945,6 +946,22 @@ public class Board {
 		
 		//Affichage des régions et leurs territoires
 		//this.printRegions();
+	}
+	
+	public int nbTerritoriesFromPlayer() {
+		int territories_player = 0;
+		//On parcourt les regions de la carte
+		for (Region r : regions_list) {
+			ArrayList<Territory> territories_list = r.getTerritoryList();
+			//On parcourt les territoires de chaque région
+			for (Territory t : territories_list) {
+				//On compte le territoire s'il appartient au joueur
+				if (t.getOwner() == player_playing) {
+					territories_player+=1;
+				}
+			}
+		}
+		return territories_player;
 	}
 	
 	public boolean verifyMission(Mission mission) {
