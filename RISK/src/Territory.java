@@ -29,6 +29,7 @@ public class Territory {
 		StdDraw.filledCircle(c[0], c[1], c[2]+5);
 		StdDraw.setPenColor();
 		StdDraw.circle(c[0], c[1], c[2]+5);
+		StdDraw.text(c[0], c[1], ""+getNbUnits());
 	}
 	
 	// Cette fonction permet de récupérer les coordonnées d'une bulle de territoire à l'aide de son ID
@@ -222,15 +223,8 @@ public class Territory {
 		return false;
 	}
 	
-	// cette méthode permet de renvoyer le nombre d'unités présentes dans le territoire actuel
-	public int countUnits() {
-		int nb_units = 0;
-		for (Unit U : units_list) {
-			nb_units++;
-		}
-		return nb_units;
-	}
-	
+
+
 	public void addNeighbour(Territory T) {
 		neighbour_list.add(T);
 	}
@@ -239,12 +233,16 @@ public class Territory {
 		for (Unit u : units) {
 			this.units_list.add(u);
 		}
+		
 	}
 	
 	public void addUnit(Unit unit) {
 		this.units_list.add(unit);
 	}
-		
+	
+	// cette méthode permet d'afficher le nombre d'unités dans ce territoire
+
+	
 	// ***** Getters / Setters *****
 	
 	public String getTerritoryName() {
@@ -282,6 +280,7 @@ public class Territory {
 		this.units_list = units;
 	}
 	
+	// ce getter permet de renvoyer le nombre d'unités présentes dans le territoire actuel
 	public int getNbUnits() {
 		return units_list.size();
 	}
