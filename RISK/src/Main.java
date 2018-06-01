@@ -16,7 +16,8 @@ public class Main {
 		
 		Board Plateautest = new Board(1,nb_players,nb_AI);
 		Plateautest.initialization();		
-		launch_game(Plateautest);
+		Plateautest.print();
+		//launch_game(Plateautest);
 		
 	}
 	
@@ -198,8 +199,6 @@ public class Main {
 		StdDraw.show();
 		
 		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v6.png");
-		
-		B.drawButton(1);
 		
 		B.play();
 

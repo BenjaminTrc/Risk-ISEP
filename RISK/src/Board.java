@@ -109,6 +109,7 @@ public class Board {
 		}
 		
 		Unit selected_unit;
+		drawButton(0);
 		
 		while (!victory) {
 			
@@ -504,21 +505,45 @@ public class Board {
 		}
 	}
 	
+	// dessine le bouton correspondant à la phase en cours
 	public void drawButton(int phase) {
+		if (phase == 0) {
+			StdDraw.setPenColor(51,102,170);
+			StdDraw.filledRectangle(1417, 45, 125, 25);
+			StdDraw.setPenColor(0,0,0);
+			StdDraw.setPenRadius(0.01);
+			StdDraw.rectangle(1417, 45, 125, 25);
+			
+			Font font = new Font("",Font.BOLD,20);
+			StdDraw.setFont(font);
+			StdDraw.setPenColor(StdDraw.WHITE);
+			StdDraw.text(1417, 45, "FIN DE L'INITIALISATION");
+		}
+		
 		if (phase == 1) {
 			StdDraw.setPenColor(237,195,126);
 			StdDraw.filledRectangle(1417, 45, 125, 25);
 			StdDraw.setPenColor(0,0,0);
 			StdDraw.setPenRadius(0.01);
 			StdDraw.rectangle(1417, 45, 125, 25);
-
+			
+			Font font = new Font("",Font.BOLD,20);
+			StdDraw.setFont(font);
+			StdDraw.setPenColor(StdDraw.WHITE);
+			StdDraw.text(1417, 45, "FIN DU RENFORCEMENT");
 		}
+		
 		if (phase == 2) {
 			StdDraw.setPenColor(241,27,29);
 			StdDraw.filledRectangle(1417, 45, 125, 25);
 			StdDraw.setPenColor(0,0,0);
 			StdDraw.setPenRadius(0.01);
 			StdDraw.rectangle(1417, 45, 125, 25);
+			
+			Font font = new Font("",Font.BOLD,20);
+			StdDraw.setFont(font);
+			StdDraw.setPenColor(StdDraw.WHITE);
+			StdDraw.text(1417, 45, "FIN DU TOUR");
 		}
 	}
 	
@@ -536,24 +561,51 @@ public class Board {
 	// cette méthode permet d'afficher le nombre de territoires que le joueur possède actuellement (dans la bande supérieure du jeu)
 	public void drawTerritoryCount(int nb_territories) {
 		StdDraw.setPenColor(StdDraw.WHITE);
-		StdDraw.filledCircle(247, 670, 25);
+		StdDraw.filledCircle(247, 667, 25);
 		
 		Font font = new Font("Arial", Font.BOLD, 40);
 		StdDraw.setFont(font);
 		StdDraw.setPenColor(StdDraw.BLACK);
-		StdDraw.text(247,665, ""+nb_territories);
+		StdDraw.text(247,662, ""+nb_territories);
 	}
 	
 	// cette méthode permet d'afficher le nom du joueur et sa couleur en haut à droite
-		public void drawName(String name) {
-			players_list.get(player_playing-1).changeColor();
-			StdDraw.filledRectangle(1418, 692, 180, 53);
+	public void drawName(String name) {
+		players_list.get(player_playing-1).changeColor();
+		StdDraw.filledRectangle(1418, 692, 180, 53);
 			
-			Font font = new Font("Arial", Font.BOLD, 40);
-			StdDraw.setFont(font);
-			StdDraw.setPenColor(StdDraw.BLACK);
-			StdDraw.text(1420,685, name);
-		}
+		Font font = new Font("Arial", Font.BOLD, 40);
+		StdDraw.setFont(font);
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(1420,685, name);
+	}
+		
+	// cette méthode permet d'afficher les unités qu'il est possible de recruter
+	public void drawPossibleUnits(int points) {
+		
+		//Soldat
+		StdDraw.setPenColor(StdDraw.WHITE);
+		StdDraw.filledCircle(495, 692, 25);
+			
+		Font font = new Font("Arial", Font.BOLD, 40);
+		StdDraw.setFont(font);
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(495,687, ""+points);
+		
+		//Cavalier
+		StdDraw.setPenColor(StdDraw.WHITE);
+		StdDraw.filledCircle(682, 692, 25);
+			
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(682,687, ""+points/3);
+		
+		//Canon
+		StdDraw.setPenColor(StdDraw.WHITE);
+		StdDraw.filledCircle(885, 692, 25);
+			
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(885,687, ""+points/7);
+	}	
 	
 	public void addRegion(Region R) {
 		regions_list.add(R);
@@ -1147,7 +1199,7 @@ public class Board {
 		return 0;
 	}
 	
-	
+	//Affichage des informations extérieur à la carte
 	public void print() {
 		System.out.println("Le jeu est en train d'être lancé");
 		int extended_width = 1598;
@@ -1159,28 +1211,15 @@ public class Board {
 		StdDraw.setXscale(0,extended_width);
 		StdDraw.setYscale(0,extended_height);
 		
-		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v5.png");
-		/*
-		//Affichage du nom du joueur en haut à droite
-		Font font = new Font("MS Gothic", Font.PLAIN, 40);
-		StdDraw.setFont(font);
-		players_list.get(player_playing-1).changeColor();
-		StdDraw.filledRectangle(1418, 692, 180, 53);
-		StdDraw.setPenColor(StdDraw.BLACK);
-		String joueur = players_list.get(player_playing-1).getPlayerName();
-		StdDraw.text(1420, 685, joueur);
-		*/
-		//Affichage du tour
-		//StdDraw.text(63, 665, "" + this.game_turn);
+		//Carte
+		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v6.png");
 		
-		//Affichage du nombre de territoires conquis 
-		//StdDraw.text(247, 660, "" + players_list.get(player_playing-1).getLastTurnTerritories());
-		
+		//Affichage des informations
 		this.drawTurn(game_turn);
 		this.drawName(players_list.get(player_playing-1).getPlayerName());
 		this.drawTerritoryCount(players_list.get(player_playing-1).getLastTurnTerritories());
+		this.drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
 		
-		drawButton(1);
 		StdDraw.show();
 		
 		play();
