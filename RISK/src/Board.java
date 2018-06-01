@@ -491,24 +491,51 @@ public class Board {
 	// cette méthode permet d'afficher le nombre de territoires que le joueur possède actuellement (dans la bande supérieure du jeu)
 	public void drawTerritoryCount(int nb_territories) {
 		StdDraw.setPenColor(StdDraw.WHITE);
-		StdDraw.filledCircle(247, 670, 25);
+		StdDraw.filledCircle(247, 667, 25);
 		
 		Font font = new Font("Arial", Font.BOLD, 40);
 		StdDraw.setFont(font);
 		StdDraw.setPenColor(StdDraw.BLACK);
-		StdDraw.text(247,665, ""+nb_territories);
+		StdDraw.text(247,662, ""+nb_territories);
 	}
 	
 	// cette méthode permet d'afficher le nom du joueur et sa couleur en haut à droite
-		public void drawName(String name) {
-			players_list.get(player_playing-1).changeColor();
-			StdDraw.filledRectangle(1418, 692, 180, 53);
+	public void drawName(String name) {
+		players_list.get(player_playing-1).changeColor();
+		StdDraw.filledRectangle(1418, 692, 180, 53);
 			
-			Font font = new Font("Arial", Font.BOLD, 40);
-			StdDraw.setFont(font);
-			StdDraw.setPenColor(StdDraw.BLACK);
-			StdDraw.text(1420,685, name);
-		}
+		Font font = new Font("Arial", Font.BOLD, 40);
+		StdDraw.setFont(font);
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(1420,685, name);
+	}
+		
+	// cette méthode permet d'afficher les unités qu'il est possible de recruter
+	public void drawPossibleUnits(int points) {
+		
+		//Soldat
+		StdDraw.setPenColor(StdDraw.WHITE);
+		StdDraw.filledCircle(495, 692, 25);
+			
+		Font font = new Font("Arial", Font.BOLD, 40);
+		StdDraw.setFont(font);
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(495,687, ""+points);
+		
+		//Cavalier
+		StdDraw.setPenColor(StdDraw.WHITE);
+		StdDraw.filledCircle(682, 692, 25);
+			
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(682,687, ""+points/3);
+		
+		//Canon
+		StdDraw.setPenColor(StdDraw.WHITE);
+		StdDraw.filledCircle(885, 692, 25);
+			
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(885,687, ""+points/7);
+	}	
 	
 	public void addRegion(Region R) {
 		regions_list.add(R);
@@ -1121,6 +1148,7 @@ public class Board {
 		this.drawTurn(game_turn);
 		this.drawName(players_list.get(player_playing-1).getPlayerName());
 		this.drawTerritoryCount(players_list.get(player_playing-1).getLastTurnTerritories());
+		this.drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
 		
 		drawButton(1);
 		StdDraw.show();
