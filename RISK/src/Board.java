@@ -1100,7 +1100,7 @@ public class Board {
 		return 0;
 	}
 	
-	
+	//Affichage des informations extérieur à la carte
 	public void print() {
 		System.out.println("Le jeu est en train d'être lancé");
 		int extended_width = 1598;
@@ -1112,23 +1112,10 @@ public class Board {
 		StdDraw.setXscale(0,extended_width);
 		StdDraw.setYscale(0,extended_height);
 		
-		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v5.png");
-		/*
-		//Affichage du nom du joueur en haut à droite
-		Font font = new Font("MS Gothic", Font.PLAIN, 40);
-		StdDraw.setFont(font);
-		players_list.get(player_playing-1).changeColor();
-		StdDraw.filledRectangle(1418, 692, 180, 53);
-		StdDraw.setPenColor(StdDraw.BLACK);
-		String joueur = players_list.get(player_playing-1).getPlayerName();
-		StdDraw.text(1420, 685, joueur);
-		*/
-		//Affichage du tour
-		//StdDraw.text(63, 665, "" + this.game_turn);
+		//Carte
+		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v6.png");
 		
-		//Affichage du nombre de territoires conquis 
-		//StdDraw.text(247, 660, "" + players_list.get(player_playing-1).getLastTurnTerritories());
-		
+		//Affichage des informations
 		this.drawTurn(game_turn);
 		this.drawName(players_list.get(player_playing-1).getPlayerName());
 		this.drawTerritoryCount(players_list.get(player_playing-1).getLastTurnTerritories());
