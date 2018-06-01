@@ -32,7 +32,6 @@ public class Board {
 		this.nbr_AI = nbr_AI;
 		String name = "";
 		boolean unique_color = false;
-		this.game_turn = 1;
 		
 		int [] used_colors = new int[6];
 		
@@ -95,7 +94,7 @@ public class Board {
 		territoriesDistribution();
 		// player_playing = 1;
 		
-		Territory ally_territory;
+		Territory ally_territory = new Territory(0, "error");
 		Territory enemy_territory;
 		Territory chosen_territory;
 		int unit_type = 1;
@@ -105,9 +104,8 @@ public class Board {
 		int[] unit_costs = {1,3,7};
 		int points;
 		boolean army_selected = false;
-		ArrayList<Unit> ally_army;
-		ArrayList<Unit> enemy_army;
-		boolean territory_selected = false;
+		ArrayList<Unit> ally_army = new ArrayList<Unit>();
+		ArrayList<Unit> enemy_army = new ArrayList<Unit>();
 		
 		if (nbr_players == 0) {
 			AI_playing = true;
@@ -115,15 +113,14 @@ public class Board {
 		
 		Unit selected_unit;
 		drawButton(0);
+		drawUnit(1);
+		unit_type = 1;
+		drawTurn(game_turn);
+		drawTerritoryCount(nbTerritoriesFromPlayer());
 		
 		while (!victory) {
 			
 			boolean end_turn = false;
-			
-			// call_reinforcements(); on l'appelle plutot juste après le changement de tour
-
-			drawUnit(1);
-			unit_type = 1;
 			
 			//FAIRE LA FONCTION DE PLACEMENT DES UNITES
 			
@@ -163,7 +160,7 @@ public class Board {
 					double x2 = StdDraw.mouseX();
 					double y2 = StdDraw.mouseY();
 					
-					if (x1<929 && x1>365 && y1<744 && y1>635) {
+					if (x1<929 && x1>365 && y1<744 && y1>635 && game_phase != 2) {
 						if (x1<542) {
 							unit_type = 1;
 						}
@@ -188,7 +185,6 @@ public class Board {
 						chosen_territory = giveTerritory(territory_id);
 						if (chosen_territory.getOwner() == player_playing) {
 							ally_territory = chosen_territory;
-							territory_selected = true;
 							
 							selected_unit = new Unit(unit_type);
 							
@@ -214,7 +210,7 @@ public class Board {
 						else {
 							enemy_territory = chosen_territory;
 							
-							if (army_selected && game_phase == 2 && territory_selected) {
+							if (army_selected && game_phase == 2) {
 								enemy_army = enemy_territory.determineDefence();
 								battle(ally_army, enemy_army, ally_territory, enemy_territory);
 							}
@@ -237,34 +233,45 @@ public class Board {
 					
 					
 					if (x1<1542 && x1>1292 && y1<70 && y1>20 && Math.abs(x1-x2)<25 && Math.abs(y1-y2)<25) {
-						if (game_phase == 0) {						
-							if (player_playing == nbr_players+nbr_AI) {
-								player_playing = 1;
-								game_turn++;
-								drawTurn(game_turn);
-								game_phase = 1;
+						if (game_phase == 0) {
+							end_turn = verifyPlacement();
+							if (end_turn) {
+								if (player_playing == nbr_players+nbr_AI) {
+									player_playing = 1;
+									game_turn++;
+									drawTurn(game_turn);
+									game_phase = 1;
+									drawButton(1);
+									call_reinforcements();
+								}
+								else if (player_playing < nbr_players) {
+									player_playing += 1;
+								}
+								else {
+									player_playing +=1;
+									AI_playing = true;
+								}				
+								drawTerritoryCount(nbTerritoriesFromPlayer());
 								drawButton(1);
-								call_reinforcements();
+								unit_type = 1;
 							}
-							else if (player_playing < nbr_players) {
-								player_playing += 1;
-							}
-							else {
-								player_playing +=1;
-								AI_playing = true;
-							}						
 						}
 						
 						else if (game_phase == 1) {
-							end_turn = true;
-							game_phase = 2;
-							drawButton(2);
+							end_turn = verifyPlacement();
+							if (end_turn) {
+								game_phase = 2;
+								drawButton(2);
+								drawUnit(0);
+								resetUnitMoves();
+							}
 						}
 						
 						else if (game_phase == 2) {
 							game_phase = 1;
 							drawButton(1);
-							territory_selected = false;
+							drawUnit(1);
+							unit_type = 1;
 							end_turn = true;
 							if (player_playing == nbr_players + nbr_AI) {
 								player_playing = 1;
@@ -467,6 +474,25 @@ public class Board {
 			}
 		}
 		return empty_territories;
+	}
+	
+	public boolean verifyPlacement() {
+		if (emptyTerritories() > 0) {
+			return false;
+		}
+		return true;
+	}
+	
+	public void resetUnitMoves() {
+		for (Region r : regions_list) {
+			ArrayList<Territory> territories_list = r.getTerritoryList();
+			for (Territory t : territories_list) {
+				ArrayList<Unit> units_list = t.getUnits();
+				for (Unit u : units_list) {
+					u.setThisTurnMove(u.getMove());
+				}
+			}
+		}
 	}
 
 	
