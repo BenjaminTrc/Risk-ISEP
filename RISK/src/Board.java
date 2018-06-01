@@ -18,7 +18,7 @@ public class Board {
 	private boolean victory = false;
 	private int player_playing = 1;
 	private int game_phase = 0;
-	private int game_turn;
+	private int game_turn = 0;
 	
 	
 	// ***** Constructeurs *****
@@ -240,6 +240,8 @@ public class Board {
 						if (game_phase == 0) {						
 							if (player_playing == nbr_players+nbr_AI) {
 								player_playing = 1;
+								game_turn++;
+								drawTurn(game_turn);
 								game_phase = 1;
 								drawButton(1);
 								call_reinforcements();
@@ -266,6 +268,8 @@ public class Board {
 							end_turn = true;
 							if (player_playing == nbr_players + nbr_AI) {
 								player_playing = 1;
+								game_turn++;
+								drawTurn(game_turn);
 							}
 							else if (player_playing < nbr_players) {
 								player_playing += 1;
@@ -275,6 +279,7 @@ public class Board {
 								AI_playing = true;
 							}
 							call_reinforcements();
+							drawTerritoryCount(nbTerritoriesFromPlayer());
 						}
 					}
 					
@@ -595,6 +600,32 @@ public class Board {
 		StdDraw.text(885,687, ""+points/7);
 	}	
 	
+	//Méthode permettant d'afficher les informations sur un territoire en sélectionné
+		public void drawTerritoryInformations(int territoryId) {
+			
+			//Territoire sélectionné			
+			Territory t = giveTerritory(territoryId);
+			int compteur = 560;
+			String territory_name;
+			Player owner;
+					
+			Font font = new Font("Arial", Font.BOLD, 40);
+			StdDraw.setFont(font);
+			players_list.get(t.getOwner()).changeColor();
+			StdDraw.text(1420,600, ""+t.getTerritoryName());
+			
+			//Territoires voisins
+			Font font2 = new Font("Arial", Font.BOLD, 30);
+			StdDraw.setFont(font2);
+			for(Territory T : t.getNeighbourTerritories())
+			{
+				players_list.get(T.getOwner()).changeColor();
+				StdDraw.text(1420,compteur, ""+T.getTerritoryName());
+				compteur -= 35;
+			}
+
+		}	
+	
 	public void addRegion(Region R) {
 		regions_list.add(R);
 	}
@@ -907,6 +938,22 @@ public class Board {
 		//this.printRegions();
 	}
 	
+	public int nbTerritoriesFromPlayer() {
+		int territories_player = 0;
+		//On parcourt les regions de la carte
+		for (Region r : regions_list) {
+			ArrayList<Territory> territories_list = r.getTerritoryList();
+			//On parcourt les territoires de chaque région
+			for (Territory t : territories_list) {
+				//On compte le territoire s'il appartient au joueur
+				if (t.getOwner() == player_playing) {
+					territories_player+=1;
+				}
+			}
+		}
+		return territories_player;
+	}
+	
 	public boolean verifyMission(Mission mission) {
 		
 		//Les conditions de victoire dépendent du type de mission
@@ -1203,14 +1250,15 @@ public class Board {
 		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v6.png");
 		
 		//Affichage des informations
-		this.drawTurn(game_turn);
-		this.drawName(players_list.get(player_playing-1).getPlayerName());
-		this.drawTerritoryCount(players_list.get(player_playing-1).getLastTurnTerritories());
-		this.drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
+		drawTurn(game_turn);
+		drawName(players_list.get(player_playing-1).getPlayerName());
+		drawTerritoryCount(players_list.get(player_playing-1).getLastTurnTerritories());
+		drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
+		drawTerritoryInformations(107);
 		
 		StdDraw.show();
 		
-		play();
+		//play();
 		
 		
 		while(true) {

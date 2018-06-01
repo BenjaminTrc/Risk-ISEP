@@ -309,4 +309,8 @@ public class Territory {
 		return units_list.size();
 	}
 	
+	public List<Territory> getNeighbourTerritories() {
+        return this.neighbour_list;
+    }
+	
 }
