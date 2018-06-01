@@ -245,6 +245,25 @@ public class Territory {
 		this.units_list.add(unit);
 	}
 	
+	public ArrayList<Unit> determineDefence(){
+		int highest_priority = 0;
+		int second_priority = 0;
+		ArrayList<Unit> defence = new ArrayList<Unit>();
+		for (int i=0; i<units_list.size(); i++) {
+			if (units_list.get(i).getDEF()>highest_priority) {
+				highest_priority = i;
+			}
+			else if (units_list.get(i).getDEF()>second_priority) {
+				second_priority = i;
+			}
+		}
+		defence.add(units_list.get(highest_priority));
+		if (units_list.size()>1) {
+			defence.add(units_list.get(second_priority));
+		}
+		return defence;
+	}
+	
 	// cette méthode permet d'afficher le nombre d'unités dans ce territoire
 
 	
