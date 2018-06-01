@@ -122,8 +122,6 @@ public class Board {
 			
 			boolean end_turn = false;
 			
-			//FAIRE LA FONCTION DE PLACEMENT DES UNITES
-			
 			while (!end_turn) {
 			
 			//Click de la barre espace fait changer le type d'unité
@@ -132,7 +130,6 @@ public class Board {
 						unit_type = 1;
 					}
 					
-					//FAIRE FONCTION POUR GARANTIR QUON A AU MOINS 1 SOLDAT PAR TERRITOIRE
 					else {
 						unit_type += 1;
 					}
@@ -150,16 +147,20 @@ public class Board {
 				//On détecte un clic
 				if (StdDraw.isMousePressed()) { 
 					
+					// on récupère les coordonnées du clic
 					double x1 = StdDraw.mouseX();
 					double y1 = StdDraw.mouseY();
 					
-					//On attend la fin du clic
+					// on attend la fin du clic
 					while (StdDraw.isMousePressed()) {
 					}
 					
+					// coordonnées de la fin du clic importantes en cas de tentative de "cancel" du clic
 					double x2 = StdDraw.mouseX();
 					double y2 = StdDraw.mouseY();
 					
+					
+					// clic
 					if (x1<929 && x1>365 && y1<744 && y1>635 && game_phase != 2) {
 						if (x1<542) {
 							unit_type = 1;
@@ -210,7 +211,7 @@ public class Board {
 						else {
 							enemy_territory = chosen_territory;
 							
-							if (army_selected && game_phase == 2) {
+							if (army_selected && game_phase == 2 && ally_territory.canAttack(enemy_territory)) {
 								enemy_army = enemy_territory.determineDefence();
 								battle(ally_army, enemy_army, ally_territory, enemy_territory);
 							}
