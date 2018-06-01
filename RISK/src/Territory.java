@@ -1,5 +1,6 @@
 import java.util.*;
 import edu.princeton.cs.introcs.StdDraw;
+import java.awt.Font;
 
 public class Territory {
 
@@ -29,7 +30,11 @@ public class Territory {
 		StdDraw.filledCircle(c[0], c[1], c[2]+5);
 		StdDraw.setPenColor();
 		StdDraw.circle(c[0], c[1], c[2]+5);
-		StdDraw.text(c[0], c[1], ""+getNbUnits());
+		
+		Font font = new Font("Arial",Font.BOLD,20);
+		StdDraw.setFont(font);
+		StdDraw.setPenColor(StdDraw.WHITE);
+		StdDraw.text(c[0], c[1]-4, ""+getNbUnits());
 	}
 	
 	// Cette fonction permet de récupérer les coordonnées d'une bulle de territoire à l'aide de son ID
