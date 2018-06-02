@@ -61,19 +61,19 @@ public class Player {
 		}
 		
 		if (player_color == 3) {
-			StdDraw.setPenColor(StdDraw.GREEN);
+			StdDraw.setPenColor(255,20,147);
 		}
 		
 		if (player_color == 4) {
-			StdDraw.setPenColor(StdDraw.YELLOW);
+			StdDraw.setPenColor(34,139,34);
 		}
 		
 		if (player_color == 5) {
-			StdDraw.setPenColor(51, 255, 238);
+			StdDraw.setPenColor(32, 178, 170);
 		}
 		
 		if (player_color == 6) {
-			StdDraw.setPenColor(255, 184, 51);
+			StdDraw.setPenColor(128, 0, 0);
 		}
 	}
 	
