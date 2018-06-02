@@ -210,7 +210,9 @@ public class Board {
 									selected_unit.setThisTurnMove(999);
 								}
 							}
-							drawAttackingArmies(territory_id);
+							drawTerritoryInformations(territory_id);
+							
+							drawButton(game_phase);
 						}
 						else {
 							enemy_territory = chosen_territory;
@@ -219,11 +221,12 @@ public class Board {
 								enemy_army = enemy_territory.determineDefence();
 								battle(ally_army, enemy_army, ally_territory, enemy_territory);
 							}
+							drawTerritoryInformations(territory_id);
+							drawButton(game_phase);
 						}
 						/* Display du territoire dans le bandeau à droite + territoires adjacents avec
 						 * nom, couleur de l'owner et unités présentes
 						 */
-						drawTerritoryInformations(territory_id);
 						
 						
 					}
@@ -712,6 +715,10 @@ public class Board {
 				
 				compteur -= 35;
 			}
+			
+			if (t.getOwner() == player_playing) {
+				drawAttackingArmies(territoryId);
+			}
 
 		}	
 		
@@ -722,7 +729,8 @@ public class Board {
 			Font font = new Font("Arial", Font.BOLD, 20);
 			Font font2 = new Font("Arial", Font.BOLD, 40);
 			
-			StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
+			//StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
+
 			
 			//Carrés, unités sélectionnées, + et -
 			StdDraw.setFont(font);
