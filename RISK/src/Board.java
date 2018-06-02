@@ -792,6 +792,7 @@ public class Board {
 
 			StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
 			
+			int i=1;
 			for (Player P : players_list)
 			{
 				P.changeColor();
@@ -800,9 +801,10 @@ public class Board {
 				
 				StdDraw.setFont(font);
 				StdDraw.setPenColor(StdDraw.BLACK);
-				StdDraw.text(1420, height-40, "Territoires : " + nbTerritoriesFromPlayer());
+				StdDraw.text(1420, height-40, "Territoires : " + nbTerritoriesFromPlayers(i));
 				
 				height -= 88;
+				i++;
 				
 			}
 		}
@@ -1158,6 +1160,21 @@ public class Board {
 			}
 		return types;
 		}
+		
+		public int nbTerritoriesFromPlayers(int player_nb) {
+		int territories_player = 0;
+		for (Region r : regions_list) {
+			ArrayList<Territory> territories_list = r.getTerritoryList();
+			//On parcourt les territoires de chaque région
+			for (Territory t : territories_list) {
+				//On compte le territoire s'il appartient au joueur
+				if (t.getOwner() == player_nb) {
+					territories_player+=1;
+				}
+			}
+		}
+		return territories_player;
+	}
 	
 	public boolean verifyMission(Mission mission) {
 		
@@ -1561,7 +1578,7 @@ public class Board {
 		this.nbr_players = nb;
 	}
 	
-	public ArrayList getRegionsList() {
+	public ArrayList<Region> getRegionsList() {
 		return this.regions_list;
 	}
 	
@@ -1573,7 +1590,7 @@ public class Board {
 		this.game_turn = turn;
 	}
 	
-	public ArrayList getPlayers() {
+	public ArrayList<Player> getPlayers() {
 		return this.players_list;
 	}
 }
