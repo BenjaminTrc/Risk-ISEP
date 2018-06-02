@@ -117,6 +117,7 @@ public class Board {
 		unit_type = 1;
 		drawTurn(game_turn);
 		drawTerritoryCount(nbTerritoriesFromPlayer());
+		drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
 		
 		while (!victory) {
 			
@@ -253,9 +254,9 @@ public class Board {
 									AI_playing = true;
 								}				
 								drawTerritoryCount(nbTerritoriesFromPlayer());
-								drawButton(1);
 								unit_type = 1;
 							}
+							drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
 						}
 						
 						else if (game_phase == 1) {
@@ -288,6 +289,7 @@ public class Board {
 							}
 							call_reinforcements();
 							drawTerritoryCount(nbTerritoriesFromPlayer());
+							drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
 						}
 					}
 					
