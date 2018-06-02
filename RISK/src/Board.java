@@ -632,9 +632,10 @@ public class Board {
 			
 			//Territoire sélectionné			
 			Territory t = giveTerritory(territoryId);
-			int compteur = 530;
 			String territory_name;
 			Player owner;
+			
+			StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
 					
 			Font font = new Font("Arial", Font.BOLD, 40);
 			StdDraw.setFont(font);
@@ -645,9 +646,9 @@ public class Board {
 			Font font2 = new Font("Arial", Font.BOLD, 25);
 			StdDraw.setFont(font2);
 			
-			StdDraw.picture(1380, 530, "./src/ressources/soldat_noir_petit.png");					
-			StdDraw.picture(1380, 480, "./src/ressources/cavalier_noir_petit.png");						
-			StdDraw.picture(1380, 430, "./src/ressources/canon_noir_petit.png");
+			StdDraw.picture(1300, 530, "./src/ressources/soldat_noir_petit.png");					
+			StdDraw.picture(1300, 480, "./src/ressources/cavalier_noir_petit.png");						
+			StdDraw.picture(1300, 430, "./src/ressources/canon_noir_petit.png");
 			
 			//On compte le nombre d'unités de chaque type
 			int nb_soldier = 0, nb_horseman = 0, nb_cannon = 0;
@@ -663,22 +664,22 @@ public class Board {
 			
 			//On affiche le nombre de soldats, cavaliers et canons
 			StdDraw.setPenColor(StdDraw.WHITE);
-			StdDraw.filledCircle(1450, compteur+5, 15);
+			StdDraw.filledCircle(1350, 535, 15);
 			StdDraw.setPenColor(StdDraw.BLACK);
-			StdDraw.text(1450,compteur, ""+nb_soldier);
-			compteur = 480;
+			StdDraw.text(1350,530, ""+nb_soldier);
+
 			StdDraw.setPenColor(StdDraw.WHITE);
-			StdDraw.filledCircle(1450, compteur+5, 15);
+			StdDraw.filledCircle(1350, 485, 15);
 			StdDraw.setPenColor(StdDraw.BLACK);
-			StdDraw.text(1450,compteur, ""+nb_horseman);
-			compteur = 430;
+			StdDraw.text(1350,480, ""+nb_horseman);
+
 			StdDraw.setPenColor(StdDraw.WHITE);
-			StdDraw.filledCircle(1450, compteur+5, 15);
+			StdDraw.filledCircle(1350, 435, 15);
 			StdDraw.setPenColor(StdDraw.BLACK);
-			StdDraw.text(1450,compteur, ""+nb_cannon);
+			StdDraw.text(1350,430, ""+nb_cannon);
 			
 			//Territoires voisins
-			compteur = 350;
+			int compteur = 350;
 			for(Territory T : t.getNeighbourTerritories())
 			{
 				players_list.get(T.getOwner()).changeColor();
@@ -693,6 +694,70 @@ public class Board {
 			}
 
 		}	
+		
+		//Méthode permettant d'afficher les informations sur un territoire en sélectionné
+		public void drawAttackingArmies(int territoryId /*, ArrayList ally_army*/) {
+			Territory t = giveTerritory(territoryId);
+			
+			Font font = new Font("Arial", Font.BOLD, 20);
+			Font font2 = new Font("Arial", Font.BOLD, 40);
+			
+			StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
+			
+			//Carrés, unités sélectionnées, + et -
+			StdDraw.setFont(font);
+			StdDraw.setPenColor(StdDraw.WHITE);
+			StdDraw.filledSquare(1500, 535, 15);
+			StdDraw.setPenColor(StdDraw.BLACK);
+			StdDraw.text(1500, 530, ""+10);
+			StdDraw.setFont(font2);
+			StdDraw.text(1470, 532, "-");
+			StdDraw.text(1530, 530, "+");
+			
+			StdDraw.setFont(font);
+			StdDraw.setPenColor(StdDraw.WHITE);
+			StdDraw.filledSquare(1500, 485, 15);
+			StdDraw.setPenColor(StdDraw.BLACK);
+			StdDraw.text(1500, 480, ""+10);
+			StdDraw.setFont(font2);
+			StdDraw.text(1470, 482, "-");
+			StdDraw.text(1530, 480, "+");
+			
+			StdDraw.setFont(font);
+			StdDraw.setPenColor(StdDraw.WHITE);
+			StdDraw.filledSquare(1500, 435, 15);
+			StdDraw.setPenColor(StdDraw.BLACK);
+			StdDraw.text(1500, 430, ""+10);
+			StdDraw.setFont(font2);
+			StdDraw.text(1470, 432, "-");
+			StdDraw.text(1530, 430, "+");
+						
+			
+		}
+		
+		//Méthode permettant d'afficher les informations sur un territoire en sélectionné
+		public void drawPlayers(Board b) {
+			
+			int height = 590;
+			Font font = new Font("Arial", Font.BOLD, 20);
+			Font font2 = new Font("Arial", Font.BOLD, 40);
+
+			StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
+			
+			for (Player P : players_list)
+			{
+				P.changeColor();
+				StdDraw.setFont(font2);					
+				StdDraw.text(1420,height, ""+P.getPlayerName());
+				
+				StdDraw.setFont(font);
+				StdDraw.setPenColor(StdDraw.BLACK);
+				StdDraw.text(1420, height-40, "Territoires : " + P.getLastTurnTerritories());
+				
+				height -= 88;
+				
+			}
+		}
 	
 	public void addRegion(Region R) {
 		regions_list.add(R);
@@ -1342,11 +1407,13 @@ public class Board {
 		drawName(players_list.get(player_playing-1).getPlayerName());
 		drawTerritoryCount(players_list.get(player_playing-1).getLastTurnTerritories());
 		drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
-		drawTerritoryInformations(107);
+		//drawTerritoryInformations(107);
+		//drawAttackingArmies(107);
+		drawPlayers(this);
 		
 		StdDraw.show();
 		
-		//play();
+		play();
 		
 		
 		while(true) {
@@ -1384,5 +1451,9 @@ public class Board {
 	
 	public void setGameTurn(int turn) {
 		this.game_turn = turn;
+	}
+	
+	public ArrayList getPlayers() {
+		return this.players_list;
 	}
 }
