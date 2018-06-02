@@ -6,9 +6,10 @@ public class Mission {
 	private int associated_player;
 	private boolean mission_complete = false;
 	private int mission_nb;
-	private int type;
+	//private int type;
 	private int player_to_destroy;
 	private int nb_territories;
+	private String description;
 	
 	
 	// ***** Constructeurs *****
@@ -21,23 +22,32 @@ public class Mission {
 		
 			case 1:
 				nb_territories = 42;
+				description = "Conquérir tous les territoires";
 				break;
 				
 			case 2:				
 				nb_territories = 30;
+				description = "Contrôler 30 territoires";
 				break;
 				
 			case 3:
 				nb_territories = 24;
+				description = "Contrôler 24 territoires";
 				break;
 				
 			case 4:
 				nb_territories = 21;
+				description = "Contrôler 21 territoires";
 				break;
 				
 			case 5:
+				nb_territories = 18;
+				description = "Contrôler 18 territoires avec au moins 2 unités";
+				break;
+				
 			case 7:
 				nb_territories = 18;
+				description = "Contrôler 3 régions et au moins 18 territoires";
 				break;
 				
 			case 6: 
@@ -45,6 +55,10 @@ public class Mission {
 				while (player_to_destroy == associated_player) {
 					 player_to_destroy = (int) (Math.random()*6+1);
 				}
+				break;
+				
+			case 8:
+				description = "Contrôler l'Asie et une autre région";
 				break;
 		}
 	}
@@ -116,4 +130,13 @@ public class Mission {
 	public int getPlayerToDestroy() {
 		return this.player_to_destroy;
 	}
+	
+	public String getDescription() {
+		return this.description;
+	}
+	
+	public void setDescription(String d) {
+		this.description = d;
+	}
+	
 }
