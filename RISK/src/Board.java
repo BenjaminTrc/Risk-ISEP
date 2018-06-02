@@ -780,7 +780,7 @@ public class Board {
 				
 				StdDraw.setFont(font);
 				StdDraw.setPenColor(StdDraw.BLACK);
-				StdDraw.text(1420, height-40, "Territoires : " + P.getLastTurnTerritories());
+				StdDraw.text(1420, height-40, "Territoires : " + nbTerritoriesFromPlayer());
 				
 				height -= 88;
 				
