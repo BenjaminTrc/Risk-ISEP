@@ -19,6 +19,7 @@ public class Board {
 	private int player_playing = 1;
 	private int game_phase = 0;
 	private int game_turn = 0;
+	ArrayList<Unit> ally_army = new ArrayList<Unit>();
 	
 	
 	// ***** Constructeurs *****
@@ -57,7 +58,7 @@ public class Board {
 			}
 			else {
 				System.out.println("test");
-				name = "Computer " + (i-nbr_players+1) + "";
+				name = "Computer " + (i-nbr_players) + "";
 				unique_color = false;
 				int compteur = 0;
 				while (!unique_color) {
@@ -104,7 +105,7 @@ public class Board {
 		int[] unit_costs = {1,3,7};
 		int points;
 		boolean army_selected = false;
-		ArrayList<Unit> ally_army = new ArrayList<Unit>();
+		//ArrayList<Unit> ally_army = new ArrayList<Unit>();
 		ArrayList<Unit> enemy_army = new ArrayList<Unit>();
 		
 		if (nbr_players == 0) {
@@ -188,6 +189,10 @@ public class Board {
 					if (territory_id != 0) {
 						chosen_territory = giveTerritory(territory_id);
 						if (chosen_territory.getOwner() == player_playing) {
+							if (ally_territory != chosen_territory) {
+								resetUnits(ally_territory, ally_army);
+								army_selected = false;
+							}
 							ally_territory = chosen_territory;
 							
 							selected_unit = new Unit(unit_type);
@@ -220,6 +225,9 @@ public class Board {
 							if (army_selected && game_phase == 2 && ally_territory.canAttack(enemy_territory)) {
 								enemy_army = enemy_territory.determineDefence();
 								battle(ally_army, enemy_army, ally_territory, enemy_territory);
+								army_selected = false;
+								ally_army.removeAll(ally_army);
+								enemy_army.removeAll(enemy_army);
 							}
 							drawTerritoryInformations(territory_id);
 							drawButton(game_phase);
@@ -241,6 +249,17 @@ public class Board {
 					
 					//If liste des unités sélectionnées non vide, et que le territoire n'appartient pas au joueur
 					// -> battle()
+					
+					if (x1>1227) {
+						switchUnitButton(x1,x2, ally_territory);
+					}
+					
+					if (ally_army.size() != 0) {
+						army_selected = true;
+						
+					}
+					
+					
 					
 					//If click sur la mission -> affichage
 					
@@ -731,13 +750,14 @@ public class Board {
 			
 			//StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
 
+			int[] types_nb = getTypesNb(ally_army);
 			
 			//Carrés, unités sélectionnées, + et -
 			StdDraw.setFont(font);
 			StdDraw.setPenColor(StdDraw.WHITE);
 			StdDraw.filledSquare(1500, 535, 15);
 			StdDraw.setPenColor(StdDraw.BLACK);
-			StdDraw.text(1500, 530, ""+10);
+			StdDraw.text(1500, 530, ""+types_nb[0]);
 			StdDraw.setFont(font2);
 			StdDraw.text(1470, 532, "-");
 			StdDraw.text(1530, 530, "+");
@@ -746,7 +766,7 @@ public class Board {
 			StdDraw.setPenColor(StdDraw.WHITE);
 			StdDraw.filledSquare(1500, 485, 15);
 			StdDraw.setPenColor(StdDraw.BLACK);
-			StdDraw.text(1500, 480, ""+10);
+			StdDraw.text(1500, 480, ""+types_nb[1]);
 			StdDraw.setFont(font2);
 			StdDraw.text(1470, 482, "-");
 			StdDraw.text(1530, 480, "+");
@@ -755,7 +775,7 @@ public class Board {
 			StdDraw.setPenColor(StdDraw.WHITE);
 			StdDraw.filledSquare(1500, 435, 15);
 			StdDraw.setPenColor(StdDraw.BLACK);
-			StdDraw.text(1500, 430, ""+10);
+			StdDraw.text(1500, 430, ""+types_nb[2]);
 			StdDraw.setFont(font2);
 			StdDraw.text(1470, 432, "-");
 			StdDraw.text(1530, 430, "+");
@@ -1131,6 +1151,14 @@ public class Board {
 		return territories_player;
 	}
 	
+	public int[] getTypesNb(ArrayList<Unit> selected_army) {
+		int[] types = {0,0,0};
+		for (int i=0; i<selected_army.size(); i++) {
+			types[selected_army.get(i).getType()-1] += 1;
+			}
+		return types;
+		}
+	
 	public boolean verifyMission(Mission mission) {
 		
 		//Les conditions de victoire dépendent du type de mission
@@ -1270,26 +1298,68 @@ public class Board {
 	}
 	
 	// positif : on ajoute // négatif : on enlève // type d'unité 1 (soldat), 2 (cavalerie) et 3 (canon)
-	public int switchUnitButton(double posX, double posY) {
-		if (posX > 1460 && posX < 1485 && posY > 520 && posY < 550) {
-			return -1;
+	public ArrayList<Unit> switchUnitButton(double posX, double posY, Territory territory) {
+		
+		ArrayList<Unit> disposable_units = territory.getUnits();
+		int type = 0;
+		if (ally_army.size()>0) {
+			if (posX > 1460 && posX < 1485 && posY > 520 && posY < 550) {
+				type = 1;
+			}
+			else if (posX > 1460 && posX < 1485 && posY > 470 && posY < 500) {
+				type = 2;
+			}
+			else if (posX > 1460 && posX < 1485 && posY > 420 && posY < 450) {
+				type = 3;
+			}
+			if (type != 0) {
+				for (int i=ally_army.size()-1; i>=0; i--) {	
+					if (ally_army.get(i).getType() == type) {
+						disposable_units.add(ally_army.get(i));
+						ally_army.remove(i);
+						territory.setUnits(disposable_units);
+						System.out.println("unité supprimée");
+						break;
+					}
+				}
+			}
 		}
-		if (posX > 1515 && posX < 1530 && posY > 520 && posY < 550) {
-			return 1;
+		
+		if (disposable_units.size()>1) {
+			if (posX > 1515 && posX < 1530 && posY > 520 && posY < 550) {
+				type = 1;
+			}
+			else if (posX > 1515 && posX < 1530 && posY > 470 && posY < 500) {
+				type = 2;
+			}
+			else if (posX > 1515 && posX < 1530 && posY > 420 && posY < 450) {
+				type = 3;
+			}
+			if (type != 0) {
+				Unit u;
+				for (int i=0; i>=disposable_units.size(); i++) {
+					u = disposable_units.get(i);
+					System.out.println("tried");
+					if (u.getType() == type && u.getThisTurnMove()>0) {
+						ally_army.add(u);
+						System.out.println("unité ajoutée");
+						disposable_units.remove(i);
+						territory.setUnits(disposable_units);
+						break;
+					}
+				}
+			}
 		}
-		if (posX > 1460 && posX < 1485 && posY > 470 && posY < 500) {
-			return -2;
+		if (type != 0) {
+			drawTerritoryInformations(territory.getTerritoryId());
 		}
-		if (posX > 1515 && posX < 1530 && posY > 470 && posY < 500) {
-			return 2;
-		}
-		if (posX > 1460 && posX < 1485 && posY > 420 && posY < 450) {
-			return -3;
-		}
-		if (posX > 1515 && posX < 1530 && posY > 420 && posY < 450) {
-			return 3;
-		}
-		return 0;
+		return ally_army;
+	}
+	
+	public ArrayList<Unit> resetUnits(Territory t, ArrayList<Unit> army_selected) {
+		t.addUnits(army_selected);
+		army_selected.removeAll(army_selected);
+		return army_selected;
 	}
 	
 	public static int returnTerritoryID(double posX, double posY) {
