@@ -1243,141 +1243,140 @@ public class Board {
 	
 	public static int returnTerritoryID(double posX, double posY) {
 		// AMERIQUE DU NORD
-		if (posX > 67 && posX < 99 && posY > 537 && posY < 569) {
+		if (posX > 63 && posX < 101 && posY > 534 && posY < 573) {
 			return 101;
 		}
-		if (posX > 126 && posX < 158 && posY > 493 && posY < 525) {
+		if (posX > 121 && posX < 161 && posY > 491 && posY < 528) {
 			return 102;
 		}
-		if (posX > 113 && posX < 149 && posY > 346 && posY < 382) {
+		if (posX > 109 && posX < 153 && posY > 343 && posY < 384) {
 			return 103;
 		}
-		if (posX > 200 && posX < 238 && posY > 407 && posY < 445) {
+		if (posX > 196 && posX < 240 && posY > 405 && posY < 449) {
 			return 104;
 		}
-		if (posX > 418 && posX < 456 && posY > 567 && posY < 605) {
+		if (posX > 414 && posX < 459 && posY > 564 && posY < 609) {
 			return 105;
 		}
-		if (posX > 162 && posX < 194 && posY > 544 && posY < 576) {
+		if (posX > 158 && posX < 197 && posY > 541 && posY < 579) {
 			return 106;
 		}
-		if (posX > 220 && posX < 252 && posY > 490 && posY < 522) {
+		if (posX > 216 && posX < 255 && posY > 486 && posY < 527) {
 			return 107;
 		}
-		
-		if (posX > 303 && posX < 335 && posY > 493 && posY < 525) {
+		if (posX > 299 && posX < 340 && posY > 489 && posY < 529) {
 			return 108;
 		}
-		if (posX > 111 && posX < 149 && posY > 432 && posY < 470) {
+		if (posX > 108 && posX < 152 && posY > 430 && posY < 474) {
 			return 109;
 		}
 		
 		// AMERIQUE DU SUD
-		if (posX > 280 && posX < 316 && posY > 102 && posY < 138) {
+		if (posX > 276 && posX < 320 && posY > 99 && posY < 142) {
 			return 201;
 		}
-		if (posX > 322 && posX < 360 && posY > 191 && posY < 229) {
+		if (posX > 316 && posX < 365 && posY > 188 && posY < 234) {
 			return 202;
 		}
-		if (posX > 266 && posX < 294 && posY > 183 && posY < 211) {
+		if (posX > 258 && posX < 300 && posY > 178 && posY < 218) {
 			return 203;
 		}
-		if (posX > 249 && posX < 281 && posY > 281 && posY < 313) {
+		if (posX > 242 && posX < 285 && posY > 277 && posY < 318) {
 			return 204;
 		}
 		
 		// EUROPE
-		if (posX > 497 && posX < 529 && posY > 477 && posY < 509) {
+		if (posX > 492 && posX < 533 && posY > 473 && posY < 509) {
 			return 301;
 		}
-		if (posX > 475 && posX < 507 && posY > 516 && posY < 548) {
+		if (posX > 470 && posX < 511 && posY > 516 && posY < 544) {
 			return 302;
 		}
-		if (posX > 591 && posX < 621 && posY > 484 && posY < 514) {
+		if (posX > 586 && posX < 626 && posY > 481 && posY < 518) {
 			return 303;
 		}
-		if (posX > 598 && posX < 628 && posY > 528 && posY < 558) {
+		if (posX > 594 && posX < 631 && posY > 525 && posY < 563) {
 			return 304;
 		}
-		if (posX > 625 && posX < 655 && posY > 442 && posY < 472) {
+		if (posX > 621 && posX < 659 && posY > 440 && posY < 477) {
 			return 305;
 		}
-		if (posX > 673 && posX < 711 && posY > 492 && posY < 530) {
+		if (posX > 670 && posX < 717 && posY > 489 && posY < 537) {
 			return 306;
 		}
-		if (posX > 545 && posX < 577 && posY > 445 && posY < 477) {
+		if (posX > 540 && posX < 582 && posY > 441 && posY < 481) {
 			return 307;
 		}
 		
 		// AFRIQUE
-		if (posX > 627 && posX < 663 && posY > 244 && posY < 280) {
+		if (posX > 622 && posX < 669 && posY > 239 && posY < 285) {
 			return 401;
 		}
-		if (posX > 707 && posX < 745 && posY > 271 && posY < 309) {
+		if (posX > 703 && posX < 750 && posY > 267 && posY < 314) {
 			return 402;
 		}
-		if (posX > 635 && posX < 667 && posY > 369 && posY < 401) {
+		if (posX > 630 && posX < 672 && posY > 365 && posY < 405) {
 			return 403;
 		}
-		if (posX > 753 && posX < 789 && posY > 149 && posY < 185) {
+		if (posX > 747 && posX < 795 && posY > 144 && posY < 191) {
 			return 404;
 		}
-		if (posX > 530 && posX < 568 && posY > 329 && posY < 367) {
+		if (posX > 526 && posX < 572 && posY > 325 && posY < 372) {
 			return 405;
 		}
-		if (posX > 626 && posX < 664 && posY > 158 && posY < 196) {
+		if (posX > 622 && posX < 670 && posY > 152 && posY < 201) {
 			return 406;
 		}
 		
 		// ASIE
-		if (posX > 784 && posX < 822 && posY > 446 && posY < 484) {
+		if (posX > 780 && posX < 827 && posY > 442 && posY < 489) {
 			return 501;
 		}
-		if (posX > 948 && posX < 984 && posY > 395 && posY < 431) {
+		if (posX > 944 && posX < 989 && posY > 390 && posY < 436) {
 			return 502;
 		}
-		if (posX > 861 && posX < 899 && posY > 351 && posY < 389) {
+		if (posX > 855 && posX < 904 && posY > 347 && posY < 395) {
 			return 503;
 		}
-		if (posX > 935 && posX < 965 && posY > 493 && posY < 523) {
+		if (posX > 929 && posX < 968 && posY > 491 && posY < 529) {
 			return 504;
 		}
-		if (posX > 1107 && posX < 1143 && posY > 413 && posY < 449) {
+		if (posX > 1102 && posX < 1147 && posY > 410 && posY < 454) {
 			return 505;
 		}
-		if (posX > 1059 && posX < 1095 && posY > 518 && posY < 554) {
+		if (posX > 1055 && posX < 1099 && posY > 514 && posY < 559) {
 			return 506;
 		}
-		if (posX > 710 && posX < 742 && posY > 399 && posY < 431) {
+		if (posX > 706 && posX < 747 && posY > 395 && posY < 435) {
 			return 507;
 		}
-		if (posX > 948 && posX < 980 && posY > 446 && posY < 478) {
+		if (posX > 944 && posX < 984 && posY > 444 && posY < 483) {
 			return 508;
 		}
-		if (posX > 964 && posX < 996 && posY > 313 && posY < 345) {
+		if (posX > 959 && posX < 1001 && posY > 309 && posY < 350) {
 			return 509;
 		}
-		if (posX > 849 && posX < 887 && posY > 538 && posY < 576) {
+		if (posX > 844 && posX < 892 && posY > 534 && posY < 580) {
 			return 510;
 		}
-		if (posX > 776 && posX < 810 && posY > 519 && posY < 553) {
+		if (posX > 771 && posX < 813 && posY > 516 && posY < 558) {
 			return 511;
 		}
-		if (posX > 945 && posX < 983 && posY > 538 && posY < 576) {
+		if (posX > 940 && posX < 987 && posY > 534 && posY < 581) {
 			return 512;
 		}
 		
 		// OCEANIE
-		if (posX > 1130 && posX < 1166 && posY > 128 && posY < 164) {
+		if (posX > 1124 && posX < 1169 && posY > 123 && posY < 169) {
 			return 601;
 		}
-		if (posX > 1002 && posX < 1034 && posY > 243 && posY < 275) {
+		if (posX > 998 && posX < 1038 && posY > 240 && posY < 279) {
 			return 602;
 		}
-		if (posX > 1134 && posX < 1166 && posY > 243 && posY < 275) {
+		if (posX > 1129 && posX < 1171 && posY > 241 && posY < 279) {
 			return 603;
 		}
-		if (posX > 1030 && posX < 1068 && posY > 122 && posY < 160) {
+		if (posX > 1023 && posX < 1074 && posY > 118 && posY < 166) {
 			return 604;
 		}
 				
