@@ -20,6 +20,9 @@ public class Board {
 	private int game_phase = 0;
 	private int game_turn = 0;
 	ArrayList<Unit> ally_army = new ArrayList<Unit>();
+	ArrayList<Unit> enemy_army = new ArrayList<Unit>();
+	Territory ally_territory = new Territory(0, "error");
+	Territory enemy_territory;
 	
 	
 	// ***** Constructeurs *****
@@ -95,8 +98,8 @@ public class Board {
 		territoriesDistribution();
 		// player_playing = 1;
 		
-		Territory ally_territory = new Territory(0, "error");
-		Territory enemy_territory;
+		//Territory ally_territory = new Territory(0, "error");
+		//Territory enemy_territory;
 		Territory chosen_territory;
 		int unit_type = 1;
 		boolean AI_playing = false;
@@ -106,7 +109,7 @@ public class Board {
 		int points;
 		boolean army_selected = false;
 		//ArrayList<Unit> ally_army = new ArrayList<Unit>();
-		ArrayList<Unit> enemy_army = new ArrayList<Unit>();
+		//ArrayList<Unit> enemy_army = new ArrayList<Unit>();
 		
 		if (nbr_players == 0) {
 			AI_playing = true;
@@ -155,6 +158,7 @@ public class Board {
 					double x1 = StdDraw.mouseX();
 					double y1 = StdDraw.mouseY();
 					
+
 					// on attend la fin du clic
 					while (StdDraw.isMousePressed()) {
 					}
@@ -224,7 +228,7 @@ public class Board {
 							
 							if (army_selected && game_phase == 2 && ally_territory.canAttack(enemy_territory)) {
 								enemy_army = enemy_territory.determineDefence();
-								battle(ally_army, enemy_army, ally_territory, enemy_territory);
+								battle();
 								army_selected = false;
 								ally_army.removeAll(ally_army);
 								enemy_army.removeAll(enemy_army);
@@ -251,7 +255,7 @@ public class Board {
 					// -> battle()
 					
 					if (x1>1227) {
-						switchUnitButton(x1,x2, ally_territory);
+						switchUnitButton(x1, y1, ally_territory);
 					}
 					
 					if (ally_army.size() != 0) {
@@ -420,11 +424,11 @@ public class Board {
 		players_list.get(player_playing-1).setLastTurnTerritories(0);
 	}
 	
-	public void battle(ArrayList<Unit> attack, ArrayList<Unit> defence, Territory territory_att, Territory territory_def) {
+	public void battle() {
 		
 		//Listes des résultats de lancés de dés
-		int[] score_att = new int[attack.size()];
-		int[] score_def = new int[defence.size()];
+		int[] score_att = new int[ally_army.size()];
+		int[] score_def = new int[enemy_army.size()];
 	
 		int higher_att = 0;
 		int second_att = 0;
@@ -434,11 +438,11 @@ public class Board {
 		/*
 		 * Puissance de l'attaque et détermination priorité des unités dans chaque camp
 		 */
-		for (int i=0; i<attack.size(); i++) {
-			score_att[i] = (int) (Math.random()*(attack.get(i).getMaxPower()-attack.get(i).getMinPower())+1);
+		for (int i=0; i<ally_army.size(); i++) {
+			score_att[i] = (int) (Math.random()*(ally_army.get(i).getMaxPower()-ally_army.get(i).getMinPower())+1);
 			
 			if (score_att[i] == score_att[higher_att]) {
-				if (attack.get(i).getATT()>attack.get(higher_att).getATT()) {
+				if (ally_army.get(i).getATT()>ally_army.get(higher_att).getATT()) {
 					second_att = higher_att;
 					higher_att = i;
 				}
@@ -452,11 +456,11 @@ public class Board {
 				second_att = i;
 			}
 			
-			if (i<defence.size()) {
-				score_def[i] = (int) (Math.random()*(defence.get(i).getMaxPower()-defence.get(i).getMinPower())+1);
+			if (i<enemy_army.size()) {
+				score_def[i] = (int) (Math.random()*(enemy_army.get(i).getMaxPower()-enemy_army.get(i).getMinPower())+1);
 				
 				if (score_def[i] == score_def[higher_def]) {
-					if (defence.get(i).getDEF()>defence.get(higher_def).getDEF()) {
+					if (enemy_army.get(i).getDEF()>enemy_army.get(higher_def).getDEF()) {
 						second_def = higher_def;
 						higher_def = i;
 					}
@@ -475,30 +479,45 @@ public class Board {
 		/*
 		 * Bataille entre les unités
 		 */
+
 		
 		if (score_att[higher_att] > score_def[higher_def]) {
-			defence.remove(higher_def);
+			enemy_army.remove(higher_def);
+			if (higher_def<second_def) {
+				second_def -= 1;
+			}
+			System.out.println("victoire unité 1");
 		}
 		else {
-			attack.remove(higher_att);
+			ally_army.remove(higher_att);
+			if (higher_att<second_att) {
+				second_att -= 1;
+			}
+			System.out.println("défaite unité 1");
 		}
 		
-		if (score_att[second_att] > score_def[second_def]) {
-			defence.remove(second_def);
-		}
-		else {
-			attack.remove(second_att);
+		if (enemy_army.size()>1 && ally_army.size()>1) {
+			if (score_att[second_att] > score_def[second_def]) {
+				enemy_army.remove(second_def);
+			}
+			else {
+				ally_army.remove(second_att);
+			}
 		}
 		
-		territory_def.addUnits(defence);
+		enemy_territory.addUnits(enemy_army);
 		
-		if (territory_def.getNbUnits() == 0) {
-			territory_def.setOwner(players_list.get(player_playing-1));
-			territory_def.addUnits(attack);
+		if (enemy_territory.getNbUnits() == 0) {
+			enemy_territory.addUnits(ally_army);
+			enemy_territory.setOwner(players_list.get(player_playing-1));
+			ally_territory.setOwner(players_list.get(player_playing-1));
 			players_list.get(player_playing-1).addTerritory();
+			ally_territory = enemy_territory;
 		}
 		else {
-			territory_att.addUnits(attack);
+			ally_territory.addUnits(ally_army);
+			ally_territory.setOwner(players_list.get(player_playing-1));
+			enemy_territory.setOwner(players_list.get(enemy_territory.getOwner()-1));
 		}
 		
 	}
@@ -1315,11 +1334,11 @@ public class Board {
 	}
 	
 	// positif : on ajoute // négatif : on enlève // type d'unité 1 (soldat), 2 (cavalerie) et 3 (canon)
-	public ArrayList<Unit> switchUnitButton(double posX, double posY, Territory territory) {
+	public void switchUnitButton(double posX, double posY, Territory territory) {
 		
 		ArrayList<Unit> disposable_units = territory.getUnits();
 		int type = 0;
-		if (ally_army.size()>0) {
+		if (ally_army.size()>0 && posX<1500) {
 			if (posX > 1460 && posX < 1485 && posY > 520 && posY < 550) {
 				type = 1;
 			}
@@ -1342,7 +1361,7 @@ public class Board {
 			}
 		}
 		
-		if (disposable_units.size()>1) {
+		else if (disposable_units.size()>1) {
 			if (posX > 1515 && posX < 1530 && posY > 520 && posY < 550) {
 				type = 1;
 			}
@@ -1354,7 +1373,7 @@ public class Board {
 			}
 			if (type != 0) {
 				Unit u;
-				for (int i=0; i>=disposable_units.size(); i++) {
+				for (int i=0; i<disposable_units.size(); i++) {
 					u = disposable_units.get(i);
 					System.out.println("tried");
 					if (u.getType() == type && u.getThisTurnMove()>0) {
@@ -1370,7 +1389,7 @@ public class Board {
 		if (type != 0) {
 			drawTerritoryInformations(territory.getTerritoryId());
 		}
-		return ally_army;
+		return ;
 	}
 	
 	public ArrayList<Unit> resetUnits(Territory t, ArrayList<Unit> army_selected) {

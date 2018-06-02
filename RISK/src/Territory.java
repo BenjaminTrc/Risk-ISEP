@@ -258,8 +258,13 @@ public class Territory {
 			}
 		}
 		defence.add(units_list.get(highest_priority));
+		units_list.remove(highest_priority);
+		if (highest_priority < second_priority) {
+			second_priority -= 1;
+		}
 		if (units_list.size()>1) {
 			defence.add(units_list.get(second_priority));
+			units_list.remove(second_priority);
 		}
 		return defence;
 	}
