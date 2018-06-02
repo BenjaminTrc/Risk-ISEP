@@ -659,7 +659,7 @@ public class Board {
 					
 			Font font = new Font("Arial", Font.BOLD, 40);
 			StdDraw.setFont(font);
-			players_list.get(t.getOwner()).changeColor();
+			players_list.get(t.getOwner()-1).changeColor();
 			StdDraw.text(1420,600, ""+t.getTerritoryName());
 			
 			//Armées possédées sur ce territoire
@@ -702,7 +702,7 @@ public class Board {
 			int compteur = 350;
 			for(Territory T : t.getNeighbourTerritories())
 			{
-				players_list.get(T.getOwner()).changeColor();
+				players_list.get(T.getOwner()-1).changeColor();
 				StdDraw.text(1400,compteur, ""+T.getTerritoryName());
 				
 				StdDraw.setPenColor(StdDraw.WHITE);
