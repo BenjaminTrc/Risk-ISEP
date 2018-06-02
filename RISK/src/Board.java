@@ -112,12 +112,14 @@ public class Board {
 		}
 		
 		Unit selected_unit;
-		drawButton(0);
 		drawUnit(1);
 		unit_type = 1;
 		drawTurn(game_turn);
 		drawTerritoryCount(nbTerritoriesFromPlayer());
 		drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
+		drawName(players_list.get(0).getPlayerName());
+		drawPlayers(this);
+		drawButton(0);
 		
 		while (!victory) {
 			
@@ -208,6 +210,7 @@ public class Board {
 									selected_unit.setThisTurnMove(999);
 								}
 							}
+							drawAttackingArmies(territory_id);
 						}
 						else {
 							enemy_territory = chosen_territory;
@@ -220,10 +223,15 @@ public class Board {
 						/* Display du territoire dans le bandeau à droite + territoires adjacents avec
 						 * nom, couleur de l'owner et unités présentes
 						 */
+						drawTerritoryInformations(territory_id);
+						
 						
 					}
 					
-					
+					else if (x1<1227 && y1 <628) {
+						drawPlayers(this);
+						drawButton(game_phase);
+					}
 					
 					//If click sur les unités en haut ( + condition sur territoire allié selectionné)
 					//Fonction choix des unités (la même que pour le placement des renforts)
@@ -243,14 +251,22 @@ public class Board {
 									game_turn++;
 									drawTurn(game_turn);
 									game_phase = 1;
+									drawName(players_list.get(0).getPlayerName());
+									drawPlayers(this);
 									drawButton(1);
 									call_reinforcements();
 								}
 								else if (player_playing < nbr_players) {
 									player_playing += 1;
+									drawName(players_list.get(player_playing-1).getPlayerName());
+									drawPlayers(this);
+									drawButton(0);
 								}
 								else {
 									player_playing +=1;
+									drawName(players_list.get(player_playing-1).getPlayerName());
+									drawPlayers(this);
+									drawButton(0);
 									AI_playing = true;
 								}				
 								drawTerritoryCount(nbTerritoriesFromPlayer());
@@ -271,8 +287,6 @@ public class Board {
 						
 						else if (game_phase == 2) {
 							game_phase = 1;
-							drawButton(1);
-							drawUnit(1);
 							unit_type = 1;
 							end_turn = true;
 							if (player_playing == nbr_players + nbr_AI) {
@@ -290,6 +304,10 @@ public class Board {
 							call_reinforcements();
 							drawTerritoryCount(nbTerritoriesFromPlayer());
 							drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
+							drawName(players_list.get(player_playing-1).getPlayerName());
+							drawPlayers(this);
+							drawButton(1);
+							drawUnit(1);
 						}
 					}
 					
