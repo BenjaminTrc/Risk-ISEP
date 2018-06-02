@@ -817,7 +817,7 @@ public class Board {
 		North_America.addTerritory(Alberta);
 		Territory Central_America = new Territory(103, "Central America");
 		North_America.addTerritory(Central_America);
-		Territory Eastern_United_States = new Territory(104, "Eastern United States");
+		Territory Eastern_United_States = new Territory(104, "Eastern US");
 		North_America.addTerritory(Eastern_United_States);
 		Territory Greenland = new Territory(105, "Greenland");
 		North_America.addTerritory(Greenland);
@@ -827,7 +827,7 @@ public class Board {
 		North_America.addTerritory(Ontario);
 		Territory Quebec = new Territory(108, "Quebec");
 		North_America.addTerritory(Quebec);
-		Territory Western_United_States = new Territory(109, "Western United States");
+		Territory Western_United_States = new Territory(109, "Western US");
 		North_America.addTerritory(Western_United_States);
 		
 		//Amérique du Sud et ses territoires

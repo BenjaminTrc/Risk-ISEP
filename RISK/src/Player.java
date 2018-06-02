@@ -69,7 +69,7 @@ public class Player {
 		}
 		
 		if (player_color == 5) {
-			StdDraw.setPenColor(32, 178, 170);
+			StdDraw.setPenColor(0, 0, 139);
 		}
 		
 		if (player_color == 6) {
