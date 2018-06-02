@@ -1269,46 +1269,27 @@ public class Board {
 		return mission.getMissionComplete();
 	}
 	
-	public boolean lessSoldierButton(double posX, double posY) {
+	// positif : on ajoute // négatif : on enlève // type d'unité 1 (soldat), 2 (cavalerie) et 3 (canon)
+	public int switchUnitButton(double posX, double posY) {
 		if (posX > 1460 && posX < 1485 && posY > 520 && posY < 550) {
-			return true;
+			return -1;
 		}
-		return false;
-	}
-	
-	public boolean moreSoldierButton(double posX, double posY) {
 		if (posX > 1515 && posX < 1530 && posY > 520 && posY < 550) {
-			return true;
+			return 1;
 		}
-		return false;
-	}
-	
-	public boolean lessHorseButton(double posX, double posY) {
 		if (posX > 1460 && posX < 1485 && posY > 470 && posY < 500) {
-			return true;
+			return -2;
 		}
-		return false;
-	}
-	
-	public boolean moreHorseButton(double posX, double posY) {
 		if (posX > 1515 && posX < 1530 && posY > 470 && posY < 500) {
-			return true;
+			return 2;
 		}
-		return false;
-	}
-	
-	public boolean lessCanonButton(double posX, double posY) {
 		if (posX > 1460 && posX < 1485 && posY > 420 && posY < 450) {
-			return true;
+			return -3;
 		}
-		return false;
-	}
-	
-	public boolean moreCanonButton(double posX, double posY) {
 		if (posX > 1515 && posX < 1530 && posY > 420 && posY < 450) {
-			return true;
+			return 3;
 		}
-		return false;
+		return 0;
 	}
 	
 	public static int returnTerritoryID(double posX, double posY) {
