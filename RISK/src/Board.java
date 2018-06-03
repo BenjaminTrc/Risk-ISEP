@@ -198,7 +198,7 @@ public class Board {
 							if (ally_territory != chosen_territory && army_selected == true) {
 								if (game_phase == 0) {
 									chosen_territory.addUnits(ally_army);
-									ally_army.removeAll(ally_territory.getUnits());
+									//ally_army.removeAll(ally_territory.getUnits());
 								}
 								else if (ally_territory.canAttack(chosen_territory)) {
 									for (Unit u : ally_army) {
@@ -207,7 +207,7 @@ public class Board {
 											chosen_territory.addUnit(u);
 										}
 									}
-									ally_army.removeAll(ally_territory.getUnits());
+									//ally_army.removeAll(ally_territory.getUnits());
 								}
 								resetUnits(ally_territory, ally_army);
 								army_selected = false;
@@ -274,7 +274,7 @@ public class Board {
 					// -> battle()
 					
 					if (x1>1227) {
-						switchUnitButton(x1, y1, ally_territory);
+						switchUnitButton(x1, y1);
 					}
 					
 					if (ally_army.size() != 0) {
@@ -1371,9 +1371,9 @@ public class Board {
 	}
 	
 	// positif : on ajoute // négatif : on enlève // type d'unité 1 (soldat), 2 (cavalerie) et 3 (canon)
-	public void switchUnitButton(double posX, double posY, Territory territory) {
+	public void switchUnitButton(double posX, double posY) {
 		
-		ArrayList<Unit> disposable_units = territory.getUnits();
+		ArrayList<Unit> disposable_units = ally_territory.getUnits();
 		int type = 0;
 		if (ally_army.size()>0 && posX<1500) {
 			if (posX > 1460 && posX < 1485 && posY > 520 && posY < 550) {
@@ -1390,8 +1390,7 @@ public class Board {
 					if (ally_army.get(i).getType() == type) {
 						disposable_units.add(ally_army.get(i));
 						ally_army.remove(i);
-						territory.setUnits(disposable_units);
-						System.out.println("unité supprimée");
+						ally_territory.setUnits(disposable_units);
 						break;
 					}
 				}
@@ -1412,19 +1411,17 @@ public class Board {
 				Unit u;
 				for (int i=0; i<disposable_units.size(); i++) {
 					u = disposable_units.get(i);
-					System.out.println("tried");
 					if (u.getType() == type && u.getThisTurnMove()>0) {
 						ally_army.add(u);
-						System.out.println("unité ajoutée");
 						disposable_units.remove(i);
-						territory.setUnits(disposable_units);
+						ally_territory.setUnits(disposable_units);
 						break;
 					}
 				}
 			}
 		}
 		if (type != 0) {
-			drawTerritoryInformations(territory.getTerritoryId());
+			drawTerritoryInformations(ally_territory.getTerritoryId());
 			drawButton(game_phase);
 		}
 		return ;
