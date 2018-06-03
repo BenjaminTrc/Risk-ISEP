@@ -25,6 +25,7 @@ public class Unit {
 			this.ATT_priority = 2;
 			this.DEF_priority = 1;
 			this.movement = 2;
+			this.this_turn_movement = 2;
 		}
 		else if (type == 2) {
 			this.type = type;
@@ -34,6 +35,7 @@ public class Unit {
 			this.ATT_priority = 1;
 			this.DEF_priority = 3;
 			this.movement = 3;
+			this.this_turn_movement = 3;
 		}
 		else {
 			this.type = type;
@@ -43,11 +45,15 @@ public class Unit {
 			this.ATT_priority = 3;
 			this.DEF_priority = 2;
 			this.movement = 1;
+			this.this_turn_movement = 1;
 		}
 	}
 	
 	// ***** Methodes *****
 	
+	public void lessThisTurnMove() {
+		this.this_turn_movement -= 1;
+	}
 	
 	// ***** Getters / Setters *****
 	
