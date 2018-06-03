@@ -198,7 +198,7 @@ public class Board {
 							if (ally_territory != chosen_territory && army_selected == true) {
 								if (game_phase == 0) {
 									chosen_territory.addUnits(ally_army);
-									//ally_army.removeAll(ally_territory.getUnits());
+									ally_army.removeAll(ally_army);
 								}
 								else if (ally_territory.canAttack(chosen_territory)) {
 									for (Unit u : ally_army) {
@@ -207,9 +207,13 @@ public class Board {
 											chosen_territory.addUnit(u);
 										}
 									}
-									//ally_army.removeAll(ally_territory.getUnits());
+									ally_army.removeAll(ally_army);
+									
 								}
-								resetUnits(ally_territory, ally_army);
+								else {
+									resetUnits(ally_territory, ally_army);
+								}
+								
 								army_selected = false;
 								action = true;
 								ally_territory.setOwner(players_list.get(player_playing-1));
@@ -505,14 +509,12 @@ public class Board {
 			if (higher_def<second_def) {
 				second_def -= 1;
 			}
-			System.out.println("victoire unité 1");
 		}
 		else {
 			ally_army.remove(higher_att);
 			if (higher_att<second_att) {
 				second_att -= 1;
 			}
-			System.out.println("défaite unité 1");
 		}
 		
 		if (enemy_army.size()>1 && ally_army.size()>1) {
