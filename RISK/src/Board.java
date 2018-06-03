@@ -827,6 +827,24 @@ public class Board {
 				
 			}
 		}
+		
+		//Méthode permettant d'afficher le nom du vainqueur après la partie
+		public static void drawWinner(String name)
+		{
+			String message = "Vainqueur : " + name;
+			
+			
+			
+			StdDraw.setXscale(0.0,1598);
+			StdDraw.setYscale(0.0,744);	
+			
+			StdDraw.setPenColor(StdDraw.WHITE); 
+			StdDraw.filledRectangle(1598/2, 744/2, 250, 50);
+			
+			StdDraw.setPenColor(StdDraw.BLACK);   
+			StdDraw.text(1598/2, 744/2, message);
+		}
+		
 	
 	public void addRegion(Region R) {
 		regions_list.add(R);
@@ -1566,6 +1584,7 @@ public class Board {
 		//drawTerritoryInformations(107);
 		//drawAttackingArmies(107);
 		drawPlayers(this);
+		drawWinner("Benjamin");
 		
 		StdDraw.show();
 		
