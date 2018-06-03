@@ -450,6 +450,20 @@ public class Board {
 	public void battle() {
 		
 		//Listes des résultats de lancés de dés
+		//Si l'armée est plus grande que 3 on choisit les 3 meilleures unités pour attaquer
+		
+		ArrayList<Unit> reserve = new ArrayList<Unit>();
+		int type_count = 1;
+		while (ally_army.size()>3) {
+			for (int j=0; j<ally_army.size(); j++) {
+				if (ally_army.get(j).getType() == type_count && ally_army.size()>3) {
+					reserve.add(ally_army.get(j));
+					ally_army.remove(j);
+				}
+			}
+			type_count += 1;
+		}
+		
 		int[] score_att = new int[ally_army.size()];
 		int[] score_def = new int[enemy_army.size()];
 	
@@ -502,31 +516,39 @@ public class Board {
 		/*
 		 * Bataille entre les unités
 		 */
-
 		
-		if (score_att[higher_att] > score_def[higher_def]) {
-			enemy_army.remove(higher_def);
-			if (higher_def<second_def) {
-				second_def -= 1;
-			}
-		}
-		else {
-			ally_army.remove(higher_att);
-			if (higher_att<second_att) {
-				second_att -= 1;
-			}
-		}
+		System.out.println("att1" + score_att[higher_att]);
+		System.out.println("att2" + score_att[second_att]);
+		System.out.println("def1" + score_def[higher_def]);
+		System.out.println("def2" + score_def[second_def]);
+
 		
 		if (enemy_army.size()>1 && ally_army.size()>1) {
 			if (score_att[second_att] > score_def[second_def]) {
 				enemy_army.remove(second_def);
+				if (second_def<higher_def) {
+					higher_def -= 1;
+				}
 			}
 			else {
 				ally_army.remove(second_att);
+				if (second_att<higher_att) {
+					higher_att -= 1;
+				}
 			}
 		}
 		
+		if (score_att[higher_att] > score_def[higher_def]) {
+			enemy_army.remove(higher_def);
+		}
+		else {
+			ally_army.remove(higher_att);
+		}
+		
+		
+		
 		enemy_territory.addUnits(enemy_army);
+		ally_army.addAll(reserve);
 		
 		if (enemy_territory.getNbUnits() == 0) {
 			enemy_territory.addUnits(ally_army);

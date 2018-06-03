@@ -250,10 +250,11 @@ public class Territory {
 		int second_priority = 0;
 		ArrayList<Unit> defence = new ArrayList<Unit>();
 		for (int i=0; i<units_list.size(); i++) {
-			if (units_list.get(i).getDEF()>highest_priority) {
+			if (units_list.get(i).getDEF()>units_list.get(highest_priority).getDEF()) {
+				second_priority = highest_priority;
 				highest_priority = i;
 			}
-			else if (units_list.get(i).getDEF()>second_priority) {
+			else if (units_list.get(i).getDEF()>units_list.get(second_priority).getDEF()) {
 				second_priority = i;
 			}
 		}
@@ -262,7 +263,7 @@ public class Territory {
 		if (highest_priority < second_priority) {
 			second_priority -= 1;
 		}
-		if (units_list.size()>1) {
+		if (units_list.size()>0) {
 			defence.add(units_list.get(second_priority));
 			units_list.remove(second_priority);
 		}
