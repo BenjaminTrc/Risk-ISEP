@@ -22,7 +22,7 @@ public class Mission {
 		
 			case 1:
 				nb_territories = 42;
-				description = "Conquérir tous les territoires";
+				description = "Conquérir le monde";
 				break;
 				
 			case 2:				
@@ -42,24 +42,24 @@ public class Mission {
 				
 			case 5:
 				nb_territories = 18;
-				description = "Contrôler 18 territoires avec au moins 2 unités";
+				description = "Contrôler 18 territoires avec 2 unités";
 				break;
 				
 			case 7:
 				nb_territories = 18;
-				description = "Contrôler 3 régions et au moins 18 territoires";
+				description = "Contrôler 3 régions et 18 territoires";
 				break;
 				
 			case 6: 
 				player_to_destroy=associated_player;
 				while (player_to_destroy == associated_player) {
-					 player_to_destroy = (int) (Math.random()*6+1);
+					 player_to_destroy = (int) (Math.random()*nb_players+1);
 				}
 				description = "Détruire le joueur " + player_to_destroy + "";
 				break;
 				
 			case 8:
-				description = "Contrôler l'Asie et une autre région";
+				description = "Contrôler l'Asie + une autre région";
 				break;
 		}
 	}

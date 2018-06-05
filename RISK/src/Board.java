@@ -392,6 +392,7 @@ public class Board {
 							drawPlayers(this);
 							drawButton(1);
 							drawUnit(1);
+							drawMission();
 							StdDraw.show();
 							StdDraw.disableDoubleBuffering();
 						}
@@ -610,6 +611,7 @@ public class Board {
 			ally_territory.setOwner(players_list.get(player_playing-1));
 			players_list.get(player_playing-1).addTerritory();
 			ally_territory = enemy_territory;
+			drawTerritoryCount(nbTerritoriesFromPlayer());
 		}
 		else {
 			ally_territory.addUnits(ally_army);
@@ -620,6 +622,7 @@ public class Board {
 		if (verifyMission(players_list.get(player_playing-1).getMission())) {
 			drawWinner(players_list.get(player_playing-1).getPlayerName());
 			victory = true;
+			
 		}
 		
 	}
@@ -949,9 +952,17 @@ public class Board {
 		
 	public void drawMission() {
 		StdDraw.setPenColor(StdDraw.WHITE); 
-		StdDraw.filledRectangle(1081, 672, 120, 25);
+		StdDraw.filledRectangle(1081, 665, 135, 15);
+		StdDraw.setPenColor();
+		StdDraw.filledRectangle(1081, 690, 135, 10);
+		
+		Font fontMission = new Font("Arial", Font.BOLD, 16);
+		StdDraw.setFont(fontMission);
+		
 		StdDraw.setPenColor(StdDraw.BLACK); 
-		StdDraw.text(1081, 672, players_list.get(player_playing-1).getMission().getDescription());
+		StdDraw.text(1081, 665, players_list.get(player_playing-1).getMission().getDescription());
+		StdDraw.setPenColor(StdDraw.WHITE); 
+		StdDraw.text(1081, 688, "Montrer");
 	}
 		
 	
