@@ -55,6 +55,7 @@ public class Mission {
 				while (player_to_destroy == associated_player) {
 					 player_to_destroy = (int) (Math.random()*6+1);
 				}
+				description = "Détruire le joueur " + player_to_destroy + "";
 				break;
 				
 			case 8:

@@ -61,7 +61,7 @@ public class Board {
 			}
 			else {
 				System.out.println("test");
-				name = "Computer " + (i-nbr_players) + "";
+				name = "Computer " + (i) + "";
 				unique_color = false;
 				int compteur = 0;
 				while (!unique_color) {
@@ -613,6 +613,11 @@ public class Board {
 			ally_territory.addUnits(ally_army);
 			ally_territory.setOwner(players_list.get(player_playing-1));
 			enemy_territory.setOwner(players_list.get(enemy_territory.getOwner()-1));
+		}
+		
+		if (verifyMission(players_list.get(player_playing-1).getMission())) {
+			drawWinner(players_list.get(player_playing-1).getPlayerName());
+			victory = true;
 		}
 		
 	}
@@ -1318,18 +1323,8 @@ public class Board {
 			case 2:
 			case 3:
 			case 4:
-				territories = 0;
-				//On parcourt les regions de la carte
-				for (Region r : regions_list) {
-					ArrayList<Territory> territories_list = r.getTerritoryList();
-					//On parcourt les territoires de chaque région
-					for (Territory t : territories_list) {
-						//On compte le territoire s'il appartient au joueur
-						if (t.getOwner() == mission.getPlayerNb()) {
-							territories+=1;
-						}
-					}
-				}
+				territories = nbTerritoriesFromPlayer();
+				
 				//Si le nombre de territoires décrit par la mission est atteint, le joueur gagne la partie
 				if (territories >= mission.getNbTerritories()) {
 					mission.setMissionComplete(true);

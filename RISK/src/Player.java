@@ -21,6 +21,7 @@ public class Player {
 		this.player_name = name;
 		this.player_color = color;
 		initArmyPoints(players);
+		this.player_mission = new Mission(player_nb, players);
 		
 		//player_mission = new Mission(player_nb, Plateautest.getNbPlayers()); //game = nom du board
 	}
@@ -117,5 +118,13 @@ public class Player {
 	
 	public void setLastTurnTerritories(int territories_won) {
 		this.last_turn_territories_won = territories_won;
+	}
+	
+	public Mission getMission() {
+		return this.player_mission;
+	}
+	
+	public void setMission(int players) {
+		this.player_mission = new Mission(player_nb, players);
 	}
 }
