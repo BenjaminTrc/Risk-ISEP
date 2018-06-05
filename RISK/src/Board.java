@@ -476,73 +476,90 @@ public class Board {
 		 * Puissance de l'attaque et détermination priorité des unités dans chaque camp
 		 */
 		for (int i=0; i<ally_army.size(); i++) {
-			score_att[i] = (int) (Math.random()*(ally_army.get(i).getMaxPower()-ally_army.get(i).getMinPower())+1);
+			score_att[i] = (int) (Math.random()*(ally_army.get(i).getMaxPower()-ally_army.get(i).getMinPower()+1)+ally_army.get(i).getMinPower());
+			System.out.println("score attaque pour unité " + i + " = " + score_att[i]);
+			if (i == 1) {
+				second_att = i;
+			}
 			
-			if (score_att[i] == score_att[higher_att]) {
+			if (score_att[i] > score_att[higher_att]) {
+				second_att = higher_att;
+				higher_att = i;
+			}
+			
+			else if(score_att[i]>score_att[second_att] && score_att[i] < score_att[higher_att]) {
+				second_att = i;
+			}
+			
+			else if (score_att[i] == score_att[higher_att] && i!=0) {
 				if (ally_army.get(i).getATT()>ally_army.get(higher_att).getATT()) {
 					second_att = higher_att;
 					higher_att = i;
 				}
+				else if (score_att[i] > score_att[second_att] || ally_army.get(i).getATT()>ally_army.get(second_att).getATT())
+					second_att = i;
 			}
+		}
 			
-			else if (score_att[i] > score_att[higher_att]) {
-				second_att = higher_att;
-				higher_att = i;
-			}
-			else if(score_att[i]>score_att[second_att]) {
-				second_att = i;
-			}
-			
-			if (i<enemy_army.size()) {
-				score_def[i] = (int) (Math.random()*(enemy_army.get(i).getMaxPower()-enemy_army.get(i).getMinPower())+1);
+		for (int i=0; i<enemy_army.size(); i++) {
+			score_def[i] = (int) (Math.random()*(enemy_army.get(i).getMaxPower()-enemy_army.get(i).getMinPower()+1)+enemy_army.get(i).getMinPower());
+			System.out.println("score défense pour unité " + i + " = " + score_def[i]);
+			if (i == 0) {
 				
-				if (score_def[i] == score_def[higher_def]) {
-					if (enemy_army.get(i).getDEF()>enemy_army.get(higher_def).getDEF()) {
-						second_def = higher_def;
-						higher_def = i;
-					}
-				}
+			}
 				
-				if (score_def[i] > score_def[higher_def]) {
-					second_def = higher_def;
+			else if (score_def[i] == score_def[higher_def]) {
+				if (enemy_army.get(i).getDEF()>enemy_army.get(higher_def).getDEF()) {
+					//second_def = higher_def;
 					higher_def = i;
 				}
-				else if(score_def[i]>score_def[second_def]) {
+				else {
 					second_def = i;
 				}
 			}
+			
+			else if (score_def[i] > score_def[higher_def]) {
+				//second_def = higher_def;
+				higher_def = i;
+			}
+			else {
+				second_def = i;
+			}
 		}
+		
 		
 		/*
 		 * Bataille entre les unités
 		 */
 		
-		System.out.println("att1" + score_att[higher_att]);
-		System.out.println("att2" + score_att[second_att]);
-		System.out.println("def1" + score_def[higher_def]);
-		System.out.println("def2" + score_def[second_def]);
+		System.out.println("att1 " + score_att[higher_att]);
+		System.out.println("att2 " + score_att[second_att]);
+		System.out.println("def1 " + score_def[higher_def]);
+		System.out.println("def2 " + score_def[second_def]);
 
+		int offset_att = 0;
+		int offset_def = 0;
 		
 		if (enemy_army.size()>1 && ally_army.size()>1) {
 			if (score_att[second_att] > score_def[second_def]) {
 				enemy_army.remove(second_def);
 				if (second_def<higher_def) {
-					higher_def -= 1;
+					offset_def -= 1;
 				}
 			}
 			else {
 				ally_army.remove(second_att);
 				if (second_att<higher_att) {
-					higher_att -= 1;
+					offset_att -= 1;
 				}
 			}
 		}
 		
 		if (score_att[higher_att] > score_def[higher_def]) {
-			enemy_army.remove(higher_def);
+			enemy_army.remove(higher_def+offset_def);
 		}
 		else {
-			ally_army.remove(higher_att);
+			ally_army.remove(higher_att+offset_att);
 		}
 		
 		
