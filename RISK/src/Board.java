@@ -119,11 +119,14 @@ public class Board {
 		Unit selected_unit;
 		drawUnit(1);
 		unit_type = 1;
+		StdDraw.enableDoubleBuffering();
 		drawTurn(game_turn);
 		drawTerritoryCount(nbTerritoriesFromPlayer());
 		drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
 		drawName(players_list.get(0).getPlayerName());
 		drawPlayers(this);
+		StdDraw.show();
+		StdDraw.disableDoubleBuffering();
 		drawButton(0);
 		
 		while (!victory) {
@@ -236,14 +239,19 @@ public class Board {
 									ally_territory.setOwner(players_list.get(player_playing-1));
 									points = players_list.get(player_playing-1).getArmyPoints();
 									players_list.get(player_playing-1).setArmyPoints(points - selected_unit.getCost());
+									StdDraw.enableDoubleBuffering();
 									drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
+									StdDraw.show();
+									StdDraw.disableDoubleBuffering();
 									//On permet à l'utilisateur de changer le placement de son unité tant qu'il ne l'a pas validé
 									//selected_unit.setThisTurnMove(999);
 								}
 							}
-							drawTerritoryInformations(territory_id);
-							
+							StdDraw.enableDoubleBuffering();
+							drawTerritoryInformations(territory_id);				
 							drawButton(game_phase);
+							StdDraw.show();
+							StdDraw.disableDoubleBuffering();
 							action = false;
 						}
 						else {
@@ -256,8 +264,11 @@ public class Board {
 								ally_army.removeAll(ally_army);
 								enemy_army.removeAll(enemy_army);
 							}
+							StdDraw.enableDoubleBuffering();
 							drawTerritoryInformations(territory_id);
 							drawButton(game_phase);
+							StdDraw.show();
+							StdDraw.disableDoubleBuffering();
 						}
 						/* Display du territoire dans le bandeau à droite + territoires adjacents avec
 						 * nom, couleur de l'owner et unités présentes
@@ -267,8 +278,11 @@ public class Board {
 					}
 					
 					else if (x1<1227 && y1 <628) {
+						StdDraw.enableDoubleBuffering();
 						drawPlayers(this);
 						drawButton(game_phase);
+						StdDraw.show();
+						StdDraw.disableDoubleBuffering();
 					}
 					
 					//If click sur les unités en haut ( + condition sur territoire allié selectionné)
@@ -298,38 +312,56 @@ public class Board {
 								if (player_playing == nbr_players+nbr_AI) {
 									player_playing = 1;
 									game_turn++;
-									drawTurn(game_turn);
 									game_phase = 1;
+									StdDraw.enableDoubleBuffering();
+									drawTurn(game_turn);
 									drawName(players_list.get(0).getPlayerName());
 									drawPlayers(this);
 									drawButton(1);
+									StdDraw.show();
+									StdDraw.disableDoubleBuffering();
 									call_reinforcements();
 								}
 								else if (player_playing < nbr_players) {
 									player_playing += 1;
+									StdDraw.enableDoubleBuffering();
 									drawName(players_list.get(player_playing-1).getPlayerName());
 									drawPlayers(this);
 									drawButton(0);
+									StdDraw.show();
+									StdDraw.disableDoubleBuffering();
 								}
 								else {
 									player_playing +=1;
+									StdDraw.enableDoubleBuffering();
 									drawName(players_list.get(player_playing-1).getPlayerName());
 									drawPlayers(this);
 									drawButton(0);
+									StdDraw.show();
+									StdDraw.disableDoubleBuffering();
 									AI_playing = true;
-								}				
+								}
+								StdDraw.enableDoubleBuffering();
 								drawTerritoryCount(nbTerritoriesFromPlayer());
+								StdDraw.show();
+								StdDraw.disableDoubleBuffering();
 								unit_type = 1;
 							}
+							StdDraw.enableDoubleBuffering();
 							drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
+							StdDraw.show();
+							StdDraw.disableDoubleBuffering();
 						}
 						
 						else if (game_phase == 1) {
 							end_turn = verifyPlacement();
 							if (end_turn) {
 								game_phase = 2;
+								StdDraw.enableDoubleBuffering();
 								drawButton(2);
 								drawUnit(0);
+								StdDraw.show();
+								StdDraw.disableDoubleBuffering();
 							}
 						}
 						
@@ -351,12 +383,15 @@ public class Board {
 								AI_playing = true;
 							}
 							call_reinforcements();
+							StdDraw.enableDoubleBuffering();
 							drawTerritoryCount(nbTerritoriesFromPlayer());
 							drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
 							drawName(players_list.get(player_playing-1).getPlayerName());
 							drawPlayers(this);
 							drawButton(1);
 							drawUnit(1);
+							StdDraw.show();
+							StdDraw.disableDoubleBuffering();
 						}
 					}
 					
@@ -1445,8 +1480,12 @@ public class Board {
 			}
 		}
 		if (type != 0) {
+			StdDraw.enableDoubleBuffering();
 			drawTerritoryInformations(ally_territory.getTerritoryId());
 			drawButton(game_phase);
+			StdDraw.show();
+			StdDraw.disableDoubleBuffering();
+			
 		}
 		return ;
 	}
