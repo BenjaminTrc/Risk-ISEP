@@ -975,9 +975,9 @@ public class Board {
 		
 	public void drawMission() {
 		StdDraw.setPenColor(StdDraw.WHITE); 
-		StdDraw.filledRectangle(1081, 665, 135, 15);
+		StdDraw.filledRectangle(1081, 665, 137, 15);
 		StdDraw.setPenColor();
-		StdDraw.filledRectangle(1081, 690, 135, 10);
+		StdDraw.filledRectangle(1081, 690, 137, 10);
 		
 		Font fontMission = new Font("Arial", Font.BOLD, 16);
 		StdDraw.setFont(fontMission);
