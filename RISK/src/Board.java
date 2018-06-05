@@ -1672,4 +1672,8 @@ public class Board {
 	public ArrayList<Player> getPlayers() {
 		return this.players_list;
 	}
+	
+	public int getPlayerPlaying() {
+		return this.player_playing;
+	}
 }
