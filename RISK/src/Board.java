@@ -29,7 +29,7 @@ public class Board {
 	
 	public Board(int map, int nbr_players, int nbr_AI) {
 		
-		Scanner scan = new Scanner(System.in);
+		//Scanner scan = new Scanner(System.in);
 		
 		this.map_number = map;
 		this.nbr_players = nbr_players;
@@ -96,6 +96,7 @@ public class Board {
 	public void play() {
 		
 		territoriesDistribution();
+		autoFill();
 		// player_playing = 1;
 		
 		//Territory ally_territory = new Territory(0, "error");
@@ -661,7 +662,29 @@ public class Board {
 			}
 		}
 	}
+	
+	public void autoFill() {
+		for (Player P : players_list) {
+			StdDraw.enableDoubleBuffering();
+			int i = 0;
+			for (Region R : regions_list) {
+				for (Territory T : R.getTerritoryList()) {
+					if(T.getOwner() == (P.getPlayerNb())) {
+						Unit U = new Unit(1);
+						T.addUnit(U);
+						i++;
+						T.setOwner(P);
+					}		
+				}
+			}
+			P.setArmyPoints(P.getArmyPoints() - i);
+		}
+		StdDraw.show();
+		StdDraw.disableDoubleBuffering();
+	}
 
+
+	
 	
 	public void drawUnit(int type) {
 		switch(type) {
@@ -1748,3 +1771,28 @@ public class Board {
 		return this.player_playing;
 	}
 }
+
+/*
+ * 
+ * public void autoFill2(Player P) {
+		StdDraw.enableDoubleBuffering();
+		int i = 0;
+		for (Region R : regions_list) {
+			for (Territory T : R.getTerritoryList()) {
+				if(T.getOwner() == (P.getPlayerNb())) {
+					Unit U = new Unit(1);
+					T.addUnit(U);
+					i++;
+					T.setOwner(P);
+				}		
+			}
+		}
+		P.setArmyPoints(P.getArmyPoints() - i);
+		StdDraw.show();
+		StdDraw.disableDoubleBuffering();
+	}
+ * 
+ * 
+ * 
+ */
+
