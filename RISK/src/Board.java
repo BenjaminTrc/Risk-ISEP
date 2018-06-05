@@ -103,6 +103,7 @@ public class Board {
 		//Territory enemy_territory;
 		Territory chosen_territory;
 		int unit_type = 1;
+		boolean mission_hidden = true;
 		boolean AI_playing = false;
 		int territory_id = 0;
 		int empty_territories;
@@ -127,7 +128,7 @@ public class Board {
 		drawName(players_list.get(0).getPlayerName());
 		drawPlayers(this);
 		drawButton(0);
-		drawMission();
+		drawMission(mission_hidden);
 		StdDraw.show();
 		StdDraw.disableDoubleBuffering();
 		
@@ -180,7 +181,7 @@ public class Board {
 					double y2 = StdDraw.mouseY();
 					
 					
-					// clic
+					// clic sur un type d'unité
 					if (x1<929 && x1>365 && y1<744 && y1>635 && game_phase != 2) {
 						if (x1<542) {
 							unit_type = 1;
@@ -200,6 +201,13 @@ public class Board {
 						
 						drawUnit(unit_type);
 					}
+					
+					// clic sur "montrer" ou "cacher" la mission
+					if (x1 > 944 && x1 < 1218 && y1 > 680 && y1 < 700) {
+						mission_hidden = !mission_hidden;
+						drawMission(mission_hidden);
+					}
+					
 					
 					territory_id = returnTerritoryID(x1, y1);
 					if (territory_id != 0) {
@@ -345,7 +353,7 @@ public class Board {
 								
 								StdDraw.enableDoubleBuffering();
 								drawTerritoryCount(nbTerritoriesFromPlayer());
-								drawMission();
+								drawMission(mission_hidden);
 								StdDraw.show();
 								StdDraw.disableDoubleBuffering();
 								unit_type = 1;
@@ -393,7 +401,7 @@ public class Board {
 							drawPlayers(this);
 							drawButton(1);
 							drawUnit(1);
-							drawMission();
+							drawMission(mission_hidden);
 							StdDraw.show();
 							StdDraw.disableDoubleBuffering();
 						}
@@ -817,175 +825,185 @@ public class Board {
 	}	
 	
 	//Méthode permettant d'afficher les informations sur un territoire en sélectionné
-		public void drawTerritoryInformations(int territoryId) {
+	public void drawTerritoryInformations(int territoryId) {
 			
-			//Territoire sélectionné			
-			Territory t = giveTerritory(territoryId);
-			String territory_name;
-			Player owner;
+		//Territoire sélectionné			
+		Territory t = giveTerritory(territoryId);
+		String territory_name;
+		Player owner;
 			
-			StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
-					
-			Font font = new Font("Arial", Font.BOLD, 40);
-			StdDraw.setFont(font);
-			players_list.get(t.getOwner()-1).changeColor();
-			StdDraw.text(1420,600, ""+t.getTerritoryName());
-			
-			//Armées possédées sur ce territoire
-			Font font2 = new Font("Arial", Font.BOLD, 25);
-			StdDraw.setFont(font2);
-			
-			StdDraw.picture(1300, 530, "./src/ressources/soldat_noir_petit.png");					
-			StdDraw.picture(1300, 480, "./src/ressources/cavalier_noir_petit.png");						
-			StdDraw.picture(1300, 430, "./src/ressources/canon_noir_petit.png");
-			
-			//On compte le nombre d'unités de chaque type
-			int nb_soldier = 0, nb_horseman = 0, nb_cannon = 0;
-			for(Unit U : t.getUnits()) {
-				if (U.getType() == 1) {
-					nb_soldier++;
-				}else if (U.getType() == 2) {
-					nb_horseman++;
-				}else if (U.getType() == 3) {
-					nb_cannon++;
-				}				
-			}
-			
-			//On affiche le nombre de soldats, cavaliers et canons
-			StdDraw.setPenColor(StdDraw.WHITE);
-			StdDraw.filledCircle(1350, 535, 15);
-			StdDraw.setPenColor(StdDraw.BLACK);
-			StdDraw.text(1350,530, ""+nb_soldier);
-
-			StdDraw.setPenColor(StdDraw.WHITE);
-			StdDraw.filledCircle(1350, 485, 15);
-			StdDraw.setPenColor(StdDraw.BLACK);
-			StdDraw.text(1350,480, ""+nb_horseman);
-
-			StdDraw.setPenColor(StdDraw.WHITE);
-			StdDraw.filledCircle(1350, 435, 15);
-			StdDraw.setPenColor(StdDraw.BLACK);
-			StdDraw.text(1350,430, ""+nb_cannon);
-			
-			//Territoires voisins
-			int compteur = 350;
-			for(Territory T : t.getNeighbourTerritories())
-			{
-				players_list.get(T.getOwner()-1).changeColor();
-				StdDraw.text(1400,compteur, ""+T.getTerritoryName());
+		StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
 				
-				StdDraw.setPenColor(StdDraw.WHITE);
-				StdDraw.filledCircle(1565, compteur+5, 15);
-				StdDraw.setPenColor(StdDraw.BLACK);
-				StdDraw.text(1565,compteur, ""+T.getNbUnits());
-				
-				compteur -= 35;
-			}
-			
-			if (t.getOwner() == player_playing) {
-				drawAttackingArmies(territoryId);
-			}
-
-		}	
+		Font font = new Font("Arial", Font.BOLD, 40);
+		StdDraw.setFont(font);
+		players_list.get(t.getOwner()-1).changeColor();
+		StdDraw.text(1420,600, ""+t.getTerritoryName());
 		
-		//Méthode permettant d'afficher les informations sur un territoire en sélectionné
-		public void drawAttackingArmies(int territoryId /*, ArrayList ally_army*/) {
-			Territory t = giveTerritory(territoryId);
+		//Armées possédées sur ce territoire
+		Font font2 = new Font("Arial", Font.BOLD, 25);
+		StdDraw.setFont(font2);
+		
+		StdDraw.picture(1300, 530, "./src/ressources/soldat_noir_petit.png");					
+		StdDraw.picture(1300, 480, "./src/ressources/cavalier_noir_petit.png");						
+		StdDraw.picture(1300, 430, "./src/ressources/canon_noir_petit.png");
 			
-			Font font = new Font("Arial", Font.BOLD, 20);
-			Font font2 = new Font("Arial", Font.BOLD, 40);
+		//On compte le nombre d'unités de chaque type
+		int nb_soldier = 0, nb_horseman = 0, nb_cannon = 0;
+		for(Unit U : t.getUnits()) {
+			if (U.getType() == 1) {
+				nb_soldier++;
+			}else if (U.getType() == 2) {
+				nb_horseman++;
+			}else if (U.getType() == 3) {
+				nb_cannon++;
+			}				
+		}
 			
-			//StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
+		//On affiche le nombre de soldats, cavaliers et canons
+		StdDraw.setPenColor(StdDraw.WHITE);
+		StdDraw.filledCircle(1350, 535, 15);
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(1350,530, ""+nb_soldier);
 
-			int[] types_nb = getTypesNb(ally_army);
+		StdDraw.setPenColor(StdDraw.WHITE);
+		StdDraw.filledCircle(1350, 485, 15);
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(1350,480, ""+nb_horseman);
+
+		StdDraw.setPenColor(StdDraw.WHITE);
+		StdDraw.filledCircle(1350, 435, 15);
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(1350,430, ""+nb_cannon);
 			
-			//Carrés, unités sélectionnées, + et -
-			StdDraw.setFont(font);
-			StdDraw.setPenColor(StdDraw.WHITE);
-			StdDraw.filledSquare(1500, 535, 15);
-			StdDraw.setPenColor(StdDraw.BLACK);
-			StdDraw.text(1500, 530, ""+types_nb[0]);
-			StdDraw.setFont(font2);
-			StdDraw.text(1470, 532, "-");
-			StdDraw.text(1530, 530, "+");
+		//Territoires voisins
+		int compteur = 350;
+		for(Territory T : t.getNeighbourTerritories())
+		{
+			players_list.get(T.getOwner()-1).changeColor();
+			StdDraw.text(1400,compteur, ""+T.getTerritoryName());
 			
-			StdDraw.setFont(font);
 			StdDraw.setPenColor(StdDraw.WHITE);
-			StdDraw.filledSquare(1500, 485, 15);
+			StdDraw.filledCircle(1565, compteur+5, 15);
 			StdDraw.setPenColor(StdDraw.BLACK);
-			StdDraw.text(1500, 480, ""+types_nb[1]);
-			StdDraw.setFont(font2);
-			StdDraw.text(1470, 482, "-");
-			StdDraw.text(1530, 480, "+");
+			StdDraw.text(1565,compteur, ""+T.getNbUnits());
 			
-			StdDraw.setFont(font);
-			StdDraw.setPenColor(StdDraw.WHITE);
-			StdDraw.filledSquare(1500, 435, 15);
-			StdDraw.setPenColor(StdDraw.BLACK);
-			StdDraw.text(1500, 430, ""+types_nb[2]);
-			StdDraw.setFont(font2);
-			StdDraw.text(1470, 432, "-");
-			StdDraw.text(1530, 430, "+");
+			compteur -= 35;
+		}
+		
+		if (t.getOwner() == player_playing) {
+			drawAttackingArmies(territoryId);
+		}
+
+	}	
+		
+	//Méthode permettant d'afficher les informations sur un territoire en sélectionné
+	public void drawAttackingArmies(int territoryId /*, ArrayList ally_army*/) {
+		Territory t = giveTerritory(territoryId);
+		
+		Font font = new Font("Arial", Font.BOLD, 20);
+		Font font2 = new Font("Arial", Font.BOLD, 40);
+			
+		//StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
+
+		int[] types_nb = getTypesNb(ally_army);
+			
+		//Carrés, unités sélectionnées, + et -
+		StdDraw.setFont(font);
+		StdDraw.setPenColor(StdDraw.WHITE);
+		StdDraw.filledSquare(1500, 535, 15);
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(1500, 530, ""+types_nb[0]);
+		StdDraw.setFont(font2);
+		StdDraw.text(1470, 532, "-");
+		StdDraw.text(1530, 530, "+");
+			
+		StdDraw.setFont(font);
+		StdDraw.setPenColor(StdDraw.WHITE);
+		StdDraw.filledSquare(1500, 485, 15);
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(1500, 480, ""+types_nb[1]);
+		StdDraw.setFont(font2);
+		StdDraw.text(1470, 482, "-");
+		StdDraw.text(1530, 480, "+");
+			
+		StdDraw.setFont(font);
+		StdDraw.setPenColor(StdDraw.WHITE);
+		StdDraw.filledSquare(1500, 435, 15);
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(1500, 430, ""+types_nb[2]);
+		StdDraw.setFont(font2);
+		StdDraw.text(1470, 432, "-");
+		StdDraw.text(1530, 430, "+");
 						
 			
 		}
 		
-		//Méthode permettant d'afficher les informations sur un territoire en sélectionné
-		public void drawPlayers(Board b) {
+	//Méthode permettant d'afficher les informations sur un territoire en sélectionné
+	public void drawPlayers(Board b) {
 			
-			int height = 590;
-			Font font = new Font("Arial", Font.BOLD, 20);
-			Font font2 = new Font("Arial", Font.BOLD, 40);
+		int height = 590;
+		Font font = new Font("Arial", Font.BOLD, 20);
+		Font font2 = new Font("Arial", Font.BOLD, 40);
 
-			StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
+		StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
 			
-			int i=1;
-			for (Player P : players_list)
-			{
-				P.changeColor();
-				StdDraw.setFont(font2);					
-				StdDraw.text(1420,height, ""+P.getPlayerName());
-				
-				StdDraw.setFont(font);
-				StdDraw.setPenColor(StdDraw.BLACK);
-				StdDraw.text(1420, height-40, "Territoires : " + nbTerritoriesFromPlayers(i));
-				
-				height -= 88;
-				i++;
-				
-			}
-		}
-		
-		//Méthode permettant d'afficher le nom du vainqueur après la partie
-		public static void drawWinner(String name)
+		int i=1;
+		for (Player P : players_list)
 		{
-			String message = "Vainqueur : " + name;
+			P.changeColor();
+			StdDraw.setFont(font2);					
+			StdDraw.text(1420,height, ""+P.getPlayerName());
 			
+			StdDraw.setFont(font);
+			StdDraw.setPenColor(StdDraw.BLACK);
+			StdDraw.text(1420, height-40, "Territoires : " + nbTerritoriesFromPlayers(i));
+				
+			height -= 88;
+			i++;
+				
+		}
+	}
+		
+	//Méthode permettant d'afficher le nom du vainqueur après la partie
+	public static void drawWinner(String name)	{
+		String message = "Vainqueur : " + name;
+					
+		StdDraw.setXscale(0.0,1598);
+		StdDraw.setYscale(0.0,744);	
+		
+		StdDraw.setPenColor(StdDraw.WHITE); 
+		StdDraw.filledRectangle(1598/2, 744/2, 250, 50);
 			
-			
-			StdDraw.setXscale(0.0,1598);
-			StdDraw.setYscale(0.0,744);	
-			
-			StdDraw.setPenColor(StdDraw.WHITE); 
-			StdDraw.filledRectangle(1598/2, 744/2, 250, 50);
-			
-			StdDraw.setPenColor(StdDraw.BLACK);   
-			StdDraw.text(1598/2, 744/2, message);
+		StdDraw.setPenColor(StdDraw.BLACK);   
+		StdDraw.text(1598/2, 744/2, message);
 		}
 		
-	public void drawMission() {
-		StdDraw.setPenColor(StdDraw.WHITE); 
-		StdDraw.filledRectangle(1081, 665, 137, 15);
+	public void drawMission(boolean mission_hidden) {
 		StdDraw.setPenColor();
-		StdDraw.filledRectangle(1081, 690, 137, 10);
-		
-		Font fontMission = new Font("Arial", Font.BOLD, 16);
-		StdDraw.setFont(fontMission);
-		
-		StdDraw.setPenColor(StdDraw.BLACK); 
-		StdDraw.text(1081, 665, players_list.get(player_playing-1).getMission().getDescription());
+		StdDraw.filledRectangle(1081, 690, 137, 15);
 		StdDraw.setPenColor(StdDraw.WHITE); 
-		StdDraw.text(1081, 688, "Montrer");
+		StdDraw.filledRectangle(1081, 660, 137, 15);
+
+		Font fontButton = new Font ("Arial", Font.BOLD, 20);
+		Font fontMission = new Font("Arial", Font.BOLD, 16);
+
+		
+		if(mission_hidden) {
+			StdDraw.setFont(fontButton);
+			StdDraw.setPenColor(StdDraw.WHITE); 
+			StdDraw.text(1081, 688, "Montrer");
+		}
+		else {
+			StdDraw.setFont(fontButton);
+			StdDraw.setPenColor(StdDraw.WHITE); 
+			StdDraw.text(1081, 688, "Cacher");
+			
+			StdDraw.setFont(fontMission);
+			StdDraw.setPenColor(StdDraw.BLACK); 
+			StdDraw.text(1081, 660, players_list.get(player_playing-1).getMission().getDescription());
+		}
+		
+		
 	}
 		
 	
@@ -1007,7 +1025,6 @@ public class Board {
 	}
 	
 	public void printRegions() {
-		int i = 1;
 		for (Region R : regions_list){
 			System.out.println(R.getRegionId() + " " + R.getRegionName());
 			for (Territory T : R.getTerritoryList()) {
