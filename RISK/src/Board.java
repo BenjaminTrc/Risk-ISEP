@@ -23,6 +23,10 @@ public class Board {
 	ArrayList<Unit> enemy_army = new ArrayList<Unit>();
 	Territory ally_territory = new Territory(0, "error");
 	Territory enemy_territory;
+	int unit_type = 1;
+	boolean mission_hidden = true;
+	boolean AI_playing = false;
+	boolean end_turn = false;
 	
 	
 	// ***** Constructeurs *****
@@ -102,9 +106,7 @@ public class Board {
 		//Territory ally_territory = new Territory(0, "error");
 		//Territory enemy_territory;
 		Territory chosen_territory;
-		int unit_type = 1;
-		boolean mission_hidden = true;
-		boolean AI_playing = false;
+		
 		int territory_id = 0;
 		int empty_territories;
 		int[] unit_costs = {1,3,7};
@@ -135,7 +137,7 @@ public class Board {
 		
 		while (!victory) {
 			
-			boolean end_turn = false;
+			end_turn = false;
 			
 			if (verifyMission(players_list.get(player_playing-1).getMission())) {
 				drawWinner(players_list.get(player_playing-1).getPlayerName());
@@ -144,6 +146,15 @@ public class Board {
 			
 			while (!end_turn) {
 			
+				if (AI_playing) {
+					if (game_phase != 2) {
+						autoPlacement();
+						endTurn();
+					}
+					else {
+					}
+				}
+				
 			//Click de la barre espace fait changer le type d'unité
 				if (game_phase != 2 && StdDraw.isKeyPressed(32)) {
 					if (unit_type == 3) {
@@ -322,89 +333,9 @@ public class Board {
 					
 					
 					if (x1<1542 && x1>1292 && y1<70 && y1>20 && Math.abs(x1-x2)<25 && Math.abs(y1-y2)<25) {
-						if (game_phase == 0) {
-							end_turn = verifyPlacement();
-							if (end_turn) {
-								if (player_playing == nbr_players+nbr_AI) {
-									player_playing = 1;
-									game_turn++;
-									game_phase = 1;
-									StdDraw.enableDoubleBuffering();
-									drawTurn(game_turn);
-									drawName(players_list.get(0).getPlayerName());
-									drawPlayers(this);
-									drawButton(1);
-									StdDraw.show();
-									StdDraw.disableDoubleBuffering();
-									call_reinforcements();
-								}
-								else {
-									player_playing += 1;
-									StdDraw.enableDoubleBuffering();
-									drawName(players_list.get(player_playing-1).getPlayerName());
-									drawPlayers(this);
-									drawButton(0);
-									StdDraw.show();
-									StdDraw.disableDoubleBuffering();
-									if (player_playing >= nbr_players) {
-										AI_playing = true;
-									}
-								}
-								
-								StdDraw.enableDoubleBuffering();
-								drawTerritoryCount(nbTerritoriesFromPlayer());
-								drawMission(mission_hidden);
-								StdDraw.show();
-								StdDraw.disableDoubleBuffering();
-								unit_type = 1;
-							}
-							StdDraw.enableDoubleBuffering();
-							drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
-							StdDraw.show();
-							StdDraw.disableDoubleBuffering();
-						}
 						
-						else if (game_phase == 1) {
-							end_turn = verifyPlacement();
-							if (end_turn) {
-								game_phase = 2;
-								StdDraw.enableDoubleBuffering();
-								drawButton(2);
-								drawUnit(0);
-								StdDraw.show();
-								StdDraw.disableDoubleBuffering();
-							}
-						}
+						endTurn();
 						
-						else if (game_phase == 2) {
-							game_phase = 1;
-							unit_type = 1;
-							end_turn = true;
-							if (player_playing == nbr_players + nbr_AI) {
-								player_playing = 1;
-								game_turn++;
-								drawTurn(game_turn);
-								resetUnitMoves();
-							}
-							else if (player_playing < nbr_players) {
-								player_playing += 1;
-							}
-							else {
-								player_playing +=1;
-								AI_playing = true;
-							}
-							call_reinforcements();
-							StdDraw.enableDoubleBuffering();
-							drawTerritoryCount(nbTerritoriesFromPlayer());
-							drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
-							drawName(players_list.get(player_playing-1).getPlayerName());
-							drawPlayers(this);
-							drawButton(1);
-							drawUnit(1);
-							drawMission(mission_hidden);
-							StdDraw.show();
-							StdDraw.disableDoubleBuffering();
-						}
 					}
 					
 					
@@ -412,6 +343,106 @@ public class Board {
 				}
 			}
 		}
+	}
+	
+	
+	public void endTurn() {
+		if (game_phase == 0) {
+			end_turn = verifyPlacement();
+			if (end_turn) {
+				if (player_playing == nbr_players+nbr_AI) {
+					player_playing = 1;
+					game_turn++;
+					game_phase = 1;
+					StdDraw.enableDoubleBuffering();
+					drawTurn(game_turn);
+					drawName(players_list.get(0).getPlayerName());
+					drawPlayers(this);
+					drawButton(1);
+					StdDraw.show();
+					StdDraw.disableDoubleBuffering();
+					call_reinforcements();
+					if (nbr_players == 0) {
+						AI_playing = true;
+					}
+					else {
+						AI_playing = false;
+					}
+				}
+				else {
+					player_playing += 1;
+					StdDraw.enableDoubleBuffering();
+					drawName(players_list.get(player_playing-1).getPlayerName());
+					drawPlayers(this);
+					drawButton(0);
+					StdDraw.show();
+					StdDraw.disableDoubleBuffering();
+					if (player_playing > nbr_players) {
+						AI_playing = true;
+					}
+				}
+				
+				StdDraw.enableDoubleBuffering();
+				drawTerritoryCount(nbTerritoriesFromPlayer());
+				drawMission(mission_hidden);
+				StdDraw.show();
+				StdDraw.disableDoubleBuffering();
+				unit_type = 1;
+			}
+			StdDraw.enableDoubleBuffering();
+			drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
+			StdDraw.show();
+			StdDraw.disableDoubleBuffering();
+		}
+		
+		else if (game_phase == 1) {
+			end_turn = verifyPlacement();
+			if (end_turn) {
+				game_phase = 2;
+				StdDraw.enableDoubleBuffering();
+				drawButton(2);
+				drawUnit(0);
+				StdDraw.show();
+				StdDraw.disableDoubleBuffering();
+			}
+		}
+		
+		else if (game_phase == 2) {
+			game_phase = 1;
+			unit_type = 1;
+			end_turn = true;
+			if (player_playing == nbr_players + nbr_AI) {
+				player_playing = 1;
+				game_turn++;
+				drawTurn(game_turn);
+				resetUnitMoves();
+				if (nbr_players == 0) {
+					AI_playing = true;
+				}
+				else {
+					AI_playing = false;
+				}
+			}
+			else if (player_playing < nbr_players) {
+				player_playing += 1;
+			}
+			else {
+				player_playing +=1;
+				AI_playing = true;
+			}
+			call_reinforcements();
+			StdDraw.enableDoubleBuffering();
+			drawTerritoryCount(nbTerritoriesFromPlayer());
+			drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
+			drawName(players_list.get(player_playing-1).getPlayerName());
+			drawPlayers(this);
+			drawButton(1);
+			drawUnit(1);
+			drawMission(mission_hidden);
+			StdDraw.show();
+			StdDraw.disableDoubleBuffering();
+		}
+		return ;
 	}
 	
 	/*
@@ -524,7 +555,6 @@ public class Board {
 		 */
 		for (int i=0; i<ally_army.size(); i++) {
 			score_att[i] = (int) (Math.random()*(ally_army.get(i).getMaxPower()-ally_army.get(i).getMinPower()+1)+ally_army.get(i).getMinPower());
-			System.out.println("score attaque pour unité " + i + " = " + score_att[i]);
 			if (i == 1) {
 				second_att = i;
 			}
@@ -550,7 +580,6 @@ public class Board {
 			
 		for (int i=0; i<enemy_army.size(); i++) {
 			score_def[i] = (int) (Math.random()*(enemy_army.get(i).getMaxPower()-enemy_army.get(i).getMinPower()+1)+enemy_army.get(i).getMinPower());
-			System.out.println("score défense pour unité " + i + " = " + score_def[i]);
 			if (i == 0) {
 				
 			}
@@ -578,11 +607,6 @@ public class Board {
 		/*
 		 * Bataille entre les unités
 		 */
-		
-		System.out.println("att1 " + score_att[higher_att]);
-		System.out.println("att2 " + score_att[second_att]);
-		System.out.println("def1 " + score_def[higher_def]);
-		System.out.println("def2 " + score_def[second_def]);
 
 		int offset_att = 0;
 		int offset_def = 0;
@@ -657,6 +681,68 @@ public class Board {
 			return false;
 		}
 		return true;
+	}
+	
+	public void autoPlacement() {
+		StdDraw.enableDoubleBuffering();
+		List<Territory> neighbour = new ArrayList<Territory>();
+		ArrayList<Territory> used_territories = new ArrayList<Territory>();
+		ArrayList<Territory> targeted_territories = new ArrayList<Territory>();
+		int nb_enemy_territories = 0;
+		int points = players_list.get(player_playing-1).getArmyPoints();
+		for (Region r : regions_list) {
+			ArrayList<Territory> territories_list = r.getTerritoryList();
+			for (Territory t : territories_list) {
+				if (t.getOwner() == player_playing) {
+					neighbour = t.getNeighbourTerritories();
+					for (Territory n : neighbour) {
+						if (n.getOwner() != player_playing && !targeted_territories.contains(n)) {
+							nb_enemy_territories += 1;
+							targeted_territories.add(n);
+						}
+					}
+					if (nb_enemy_territories == 1 && points >=2 && t.getNbUnits()<2) {
+						t.addUnit(new Unit(1));
+						t.addUnit(new Unit(1));
+						used_territories.add(t);
+						players_list.get(player_playing-1).setArmyPoints(points - 2);
+					}
+					else if (nb_enemy_territories > 1 && points >=3 && t.getNbUnits()<3) {
+						t.addUnit(new Unit(1));
+						t.addUnit(new Unit(1));
+						t.addUnit(new Unit(1));
+						used_territories.add(t);
+						players_list.get(player_playing-1).setArmyPoints(points - 3);				
+					}
+					else if (nb_enemy_territories>=1 && points>0 && t.getNbUnits()<4) {
+						t.addUnit(new Unit(1));
+						used_territories.add(t);
+						players_list.get(player_playing-1).setArmyPoints(points - 1);
+					}
+					t.setOwner(players_list.get(player_playing-1));
+					points = players_list.get(player_playing-1).getArmyPoints();
+				}
+				nb_enemy_territories = 0;
+			}
+		}
+		System.out.println(points);
+		int count = 0;
+		while (points > 0) {
+			if (used_territories.get(count).getNbUnits()<3) {
+				used_territories.get(count).addUnit(new Unit(1));
+				points -=1;	
+				used_territories.get(count).setOwner(players_list.get(player_playing-1));
+			}
+			count +=1;
+			if (count == used_territories.size()) {
+				count = 0;
+			}
+		}
+		players_list.get(player_playing-1).setArmyPoints(points);
+		
+		drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
+		StdDraw.show();
+		StdDraw.disableDoubleBuffering();
 	}
 	
 	public void resetUnitMoves() {
