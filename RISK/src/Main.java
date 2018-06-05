@@ -194,7 +194,6 @@ public class Main {
 		StdDraw.setCanvasSize(extended_width,extended_height);
 		StdDraw.setXscale(0,extended_width);
 		StdDraw.setYscale(0,extended_height);
-		StdDraw.show();
 		
 		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v6.png");
 		
