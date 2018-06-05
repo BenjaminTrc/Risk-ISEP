@@ -125,13 +125,20 @@ public class Board {
 		drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
 		drawName(players_list.get(0).getPlayerName());
 		drawPlayers(this);
+		drawButton(0);
+		drawMission();
 		StdDraw.show();
 		StdDraw.disableDoubleBuffering();
-		drawButton(0);
+		
 		
 		while (!victory) {
 			
 			boolean end_turn = false;
+			
+			if (verifyMission(players_list.get(player_playing-1).getMission())) {
+				drawWinner(players_list.get(player_playing-1).getPlayerName());
+				victory = true;
+			}
 			
 			while (!end_turn) {
 			
@@ -322,7 +329,7 @@ public class Board {
 									StdDraw.disableDoubleBuffering();
 									call_reinforcements();
 								}
-								else if (player_playing < nbr_players) {
+								else {
 									player_playing += 1;
 									StdDraw.enableDoubleBuffering();
 									drawName(players_list.get(player_playing-1).getPlayerName());
@@ -330,19 +337,14 @@ public class Board {
 									drawButton(0);
 									StdDraw.show();
 									StdDraw.disableDoubleBuffering();
+									if (player_playing >= nbr_players) {
+										AI_playing = true;
+									}
 								}
-								else {
-									player_playing +=1;
-									StdDraw.enableDoubleBuffering();
-									drawName(players_list.get(player_playing-1).getPlayerName());
-									drawPlayers(this);
-									drawButton(0);
-									StdDraw.show();
-									StdDraw.disableDoubleBuffering();
-									AI_playing = true;
-								}
+								
 								StdDraw.enableDoubleBuffering();
 								drawTerritoryCount(nbTerritoriesFromPlayer());
+								drawMission();
 								StdDraw.show();
 								StdDraw.disableDoubleBuffering();
 								unit_type = 1;
@@ -944,6 +946,13 @@ public class Board {
 			StdDraw.setPenColor(StdDraw.BLACK);   
 			StdDraw.text(1598/2, 744/2, message);
 		}
+		
+	public void drawMission() {
+		StdDraw.setPenColor(StdDraw.WHITE); 
+		StdDraw.filledRectangle(1081, 672, 120, 25);
+		StdDraw.setPenColor(StdDraw.BLACK); 
+		StdDraw.text(1081, 672, players_list.get(player_playing-1).getMission().getDescription());
+	}
 		
 	
 	public void addRegion(Region R) {
