@@ -750,6 +750,7 @@ public class Board {
 				limit +=1;
 			}
 		}
+		System.out.println("fin placement");
 		players_list.get(player_playing-1).setArmyPoints(points);
 		
 		drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
@@ -794,7 +795,10 @@ public class Board {
 							drawButton(game_phase);
 							StdDraw.show();
 							StdDraw.disableDoubleBuffering();
-							StdDraw.pause(400);
+							StdDraw.pause(600);
+							if (victory) {
+								return ;
+							}
 						}
 						
 					}
