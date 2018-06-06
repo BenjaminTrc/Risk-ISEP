@@ -246,10 +246,12 @@ public class Territory {
 	}
 	
 	public ArrayList<Unit> determineDefence(){
+		System.out.println("bloqué defence 1");
 		int highest_priority = 0;
 		int second_priority = 0;
 		ArrayList<Unit> defence = new ArrayList<Unit>();
 		for (int i=0; i<units_list.size(); i++) {
+			System.out.println("bloqué defence 2");
 			if (units_list.get(i).getDEF()>units_list.get(highest_priority).getDEF()) {
 				second_priority = highest_priority;
 				highest_priority = i;
@@ -258,6 +260,7 @@ public class Territory {
 				second_priority = i;
 			}
 		}
+		System.out.println("bloqué defence 3");
 		defence.add(units_list.get(highest_priority));
 		units_list.remove(highest_priority);
 		if (highest_priority < second_priority) {
@@ -267,6 +270,7 @@ public class Territory {
 			defence.add(units_list.get(second_priority));
 			units_list.remove(second_priority);
 		}
+		System.out.println("bloqué defence 4");
 		return defence;
 	}
 	

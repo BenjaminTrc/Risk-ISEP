@@ -151,191 +151,197 @@ public class Board {
 					}
 				}
 				
-			//Click de la barre espace fait changer le type d'unité
-				if (game_phase != 2 && StdDraw.isKeyPressed(32)) {
-					if (unit_type == 3) {
-						unit_type = 1;
-					}
+				else {
 					
-					else {
-						unit_type += 1;
-					}
-					
-					empty_territories = emptyTerritories();
-					
-					if (empty_territories > players_list.get(player_playing-1).getArmyPoints() - unit_costs[unit_type -1]+1) {
-						unit_type = 1;
-					}
-					
-					drawUnit(unit_type);
-					StdDraw.pause(150);
-				}
 				
-				//On détecte un clic
-				if (StdDraw.isMousePressed()) { 
-					
-					// on récupère les coordonnées du clic
-					double x1 = StdDraw.mouseX();
-					double y1 = StdDraw.mouseY();
-					
-
-					// on attend la fin du clic
-					while (StdDraw.isMousePressed()) {
-					}
-					
-					// coordonnées de la fin du clic importantes en cas de tentative de "cancel" du clic
-					double x2 = StdDraw.mouseX();
-					double y2 = StdDraw.mouseY();
-					
-					
-					// clic sur un type d'unité
-					if (x1<929 && x1>365 && y1<744 && y1>635 && game_phase != 2) {
-						if (x1<542) {
+				
+			//Click de la barre espace fait changer le type d'unité
+					if (game_phase != 2 && StdDraw.isKeyPressed(32)) {
+						if (unit_type == 3) {
 							unit_type = 1;
 						}
-						else if (x1>735) {
-							unit_type = 3;
-						}
+						
 						else {
-							unit_type = 2;
+							unit_type += 1;
 						}
 						
 						empty_territories = emptyTerritories();
 						
-						if (empty_territories > players_list.get(player_playing-1).getArmyPoints() - unit_costs[unit_type -1] +1) {
+						if (empty_territories > players_list.get(player_playing-1).getArmyPoints() - unit_costs[unit_type -1]+1) {
 							unit_type = 1;
 						}
 						
 						drawUnit(unit_type);
+						StdDraw.pause(150);
 					}
 					
-					// clic sur "montrer" ou "cacher" la mission
-					if (x1 > 944 && x1 < 1218 && y1 > 680 && y1 < 700) {
-						mission_hidden = !mission_hidden;
-						drawMission(mission_hidden);
-					}
-					
-					
-					territory_id = returnTerritoryID(x1, y1);
-					if (territory_id != 0) {
-						chosen_territory = giveTerritory(territory_id);
-						if (chosen_territory.getOwner() == player_playing) {
+					//On détecte un clic
+					if (StdDraw.isMousePressed()) { 
+						
+						// on récupère les coordonnées du clic
+						double x1 = StdDraw.mouseX();
+						double y1 = StdDraw.mouseY();
+						
+	
+						
+						// on attend la fin du clic
+						while (StdDraw.isMousePressed()) {
+						}
+						
+						// coordonnées de la fin du clic importantes en cas de tentative de "cancel" du clic
+						double x2 = StdDraw.mouseX();
+						double y2 = StdDraw.mouseY();
+						
+						
+						// clic sur un type d'unité
+						if (x1<929 && x1>365 && y1<744 && y1>635 && game_phase != 2) {
+							if (x1<542) {
+								unit_type = 1;
+							}
+							else if (x1>735) {
+								unit_type = 3;
+							}
+							else {
+								unit_type = 2;
+							}
 							
-							if (ally_territory != chosen_territory && army_selected == true) {
-								if (game_phase == 0) {
-									chosen_territory.addUnits(ally_army);
-									ally_army.removeAll(ally_army);
-								}
-								else if (ally_territory.canAttack(chosen_territory)) {
-									for (Unit u : ally_army) {
-										chosen_territory.addUnit(u);
-										u.setThisTurnMove(u.getThisTurnMove()-1);
-										
+							empty_territories = emptyTerritories();
+							
+							if (empty_territories > players_list.get(player_playing-1).getArmyPoints() - unit_costs[unit_type -1] +1) {
+								unit_type = 1;
+							}
+							
+							drawUnit(unit_type);
+						}
+						
+						// clic sur "montrer" ou "cacher" la mission
+						if (x1 > 944 && x1 < 1218 && y1 > 680 && y1 < 700) {
+							mission_hidden = !mission_hidden;
+							drawMission(mission_hidden);
+						}
+						
+						
+						territory_id = returnTerritoryID(x1, y1);
+						if (territory_id != 0) {
+							chosen_territory = giveTerritory(territory_id);
+							if (chosen_territory.getOwner() == player_playing) {
+								
+								if (ally_territory != chosen_territory && army_selected == true) {
+									if (game_phase == 0) {
+										chosen_territory.addUnits(ally_army);
+										ally_army.removeAll(ally_army);
+									}
+									else if (ally_territory.canAttack(chosen_territory)) {
+										for (Unit u : ally_army) {
+											chosen_territory.addUnit(u);
+											u.setThisTurnMove(u.getThisTurnMove()-1);
+											
+											
+										}
+										ally_army.removeAll(ally_army);
 										
 									}
-									ally_army.removeAll(ally_army);
+									else {
+										resetUnits(ally_territory, ally_army);
+									}
 									
-								}
-								else {
-									resetUnits(ally_territory, ally_army);
-								}
-								
-								army_selected = false;
-								action = true;
-								ally_territory.setOwner(players_list.get(player_playing-1));
-								chosen_territory.setOwner(players_list.get(player_playing-1));
-							}
-							ally_territory = chosen_territory;
-							
-							selected_unit = new Unit(unit_type);
-							
-							if (game_phase != 2 && players_list.get(player_playing-1).getArmyPoints() >= selected_unit.getCost() && !action) {
-								empty_territories = emptyTerritories();
-								if (empty_territories > players_list.get(player_playing-1).getArmyPoints()-unit_costs[unit_type-1]+1) {
-									unit_type = 1;
-									drawUnit(unit_type);
-									selected_unit = new Unit(unit_type);
-								}
-								
-								if (ally_territory.getNbUnits() == 0 || empty_territories < players_list.get(player_playing-1).getArmyPoints()-selected_unit.getCost()+1) {
-									ally_territory.addUnit(selected_unit);
+									army_selected = false;
+									action = true;
 									ally_territory.setOwner(players_list.get(player_playing-1));
-									points = players_list.get(player_playing-1).getArmyPoints();
-									players_list.get(player_playing-1).setArmyPoints(points - selected_unit.getCost());
-									StdDraw.enableDoubleBuffering();
-									drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
-									StdDraw.show();
-									StdDraw.disableDoubleBuffering();
-									//On permet à l'utilisateur de changer le placement de son unité tant qu'il ne l'a pas validé
-									//selected_unit.setThisTurnMove(999);
+									chosen_territory.setOwner(players_list.get(player_playing-1));
 								}
+								ally_territory = chosen_territory;
+								
+								selected_unit = new Unit(unit_type);
+								
+								if (game_phase != 2 && players_list.get(player_playing-1).getArmyPoints() >= selected_unit.getCost() && !action) {
+									empty_territories = emptyTerritories();
+									if (empty_territories > players_list.get(player_playing-1).getArmyPoints()-unit_costs[unit_type-1]+1) {
+										unit_type = 1;
+										drawUnit(unit_type);
+										selected_unit = new Unit(unit_type);
+									}
+									
+									if (ally_territory.getNbUnits() == 0 || empty_territories < players_list.get(player_playing-1).getArmyPoints()-selected_unit.getCost()+1) {
+										ally_territory.addUnit(selected_unit);
+										ally_territory.setOwner(players_list.get(player_playing-1));
+										points = players_list.get(player_playing-1).getArmyPoints();
+										players_list.get(player_playing-1).setArmyPoints(points - selected_unit.getCost());
+										StdDraw.enableDoubleBuffering();
+										drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
+										StdDraw.show();
+										StdDraw.disableDoubleBuffering();
+										//On permet à l'utilisateur de changer le placement de son unité tant qu'il ne l'a pas validé
+										//selected_unit.setThisTurnMove(999);
+									}
+								}
+								StdDraw.enableDoubleBuffering();
+								drawTerritoryInformations(territory_id);				
+								drawButton(game_phase);
+								StdDraw.show();
+								StdDraw.disableDoubleBuffering();
+								action = false;
 							}
-							StdDraw.enableDoubleBuffering();
-							drawTerritoryInformations(territory_id);				
-							drawButton(game_phase);
-							StdDraw.show();
-							StdDraw.disableDoubleBuffering();
-							action = false;
-						}
-						else {
-							enemy_territory = chosen_territory;
+							else {
+								enemy_territory = chosen_territory;
+								
+								if (army_selected && game_phase == 2 && ally_territory.canAttack(enemy_territory)) {
+									enemy_army = enemy_territory.determineDefence();
+									battle();
+									army_selected = false;
+									ally_army.removeAll(ally_army);
+									enemy_army.removeAll(enemy_army);
+								}
+								StdDraw.enableDoubleBuffering();
+								drawTerritoryInformations(territory_id);
+								drawButton(game_phase);
+								StdDraw.show();
+								StdDraw.disableDoubleBuffering();
+							}
+							/* Display du territoire dans le bandeau à droite + territoires adjacents avec
+							 * nom, couleur de l'owner et unités présentes
+							 */
 							
-							if (army_selected && game_phase == 2 && ally_territory.canAttack(enemy_territory)) {
-								enemy_army = enemy_territory.determineDefence();
-								battle();
-								army_selected = false;
-								ally_army.removeAll(ally_army);
-								enemy_army.removeAll(enemy_army);
-							}
+							
+						}
+						
+						else if (x1<1227 && y1 <628) {
 							StdDraw.enableDoubleBuffering();
-							drawTerritoryInformations(territory_id);
+							drawPlayers(this);
 							drawButton(game_phase);
 							StdDraw.show();
 							StdDraw.disableDoubleBuffering();
 						}
-						/* Display du territoire dans le bandeau à droite + territoires adjacents avec
-						 * nom, couleur de l'owner et unités présentes
-						 */
+						
+						//If click sur les unités en haut ( + condition sur territoire allié selectionné)
+						//Fonction choix des unités (la même que pour le placement des renforts)
+						
+						//If liste des unités sélectionnées non vide, et que le territoire n'appartient pas au joueur
+						// -> battle()
+						
+						if (x1>1227) {
+							switchUnitButton(x1, y1);
+						}
+						
+						if (ally_army.size() != 0) {
+							army_selected = true;
+							
+						}
 						
 						
-					}
-					
-					else if (x1<1227 && y1 <628) {
-						StdDraw.enableDoubleBuffering();
-						drawPlayers(this);
-						drawButton(game_phase);
-						StdDraw.show();
-						StdDraw.disableDoubleBuffering();
-					}
-					
-					//If click sur les unités en haut ( + condition sur territoire allié selectionné)
-					//Fonction choix des unités (la même que pour le placement des renforts)
-					
-					//If liste des unités sélectionnées non vide, et que le territoire n'appartient pas au joueur
-					// -> battle()
-					
-					if (x1>1227) {
-						switchUnitButton(x1, y1);
-					}
-					
-					if (ally_army.size() != 0) {
-						army_selected = true;
 						
-					}
-					
-					
-					
-					//If click sur la mission -> affichage
-					
-					
-					if (x1<1542 && x1>1292 && y1<70 && y1>20 && Math.abs(x1-x2)<25 && Math.abs(y1-y2)<25) {
+						//If click sur la mission -> affichage
 						
-						endTurn();
 						
+						if (x1<1542 && x1>1292 && y1<70 && y1>20 && Math.abs(x1-x2)<25 && Math.abs(y1-y2)<25) {
+							
+							endTurn();
+							
+						}
+						
+						
+	
 					}
-					
-					
-
 				}
 			}
 		}
@@ -345,6 +351,7 @@ public class Board {
 	public void endTurn() {
 		if (game_phase == 0) {
 			end_turn = verifyPlacement();
+			System.out.println(end_turn);
 			if (end_turn) {
 				if (player_playing == nbr_players+nbr_AI) {
 					player_playing = 1;
@@ -522,20 +529,29 @@ public class Board {
 	}
 	
 	public void battle() {
+		System.out.println("bloqué attaque 1");
 		
 		//Listes des résultats de lancés de dés
 		//Si l'armée est plus grande que 3 on choisit les 3 meilleures unités pour attaquer
 		
 		ArrayList<Unit> reserve = new ArrayList<Unit>();
 		int type_count = 1;
+		System.out.println(ally_army.size());
 		while (ally_army.size()>3) {
+			System.out.println("bloqué attaque 2");
 			for (int j=0; j<ally_army.size(); j++) {
+				System.out.println("bloqué attaque xdddddddd");
 				if (ally_army.get(j).getType() == type_count && ally_army.size()>3) {
 					reserve.add(ally_army.get(j));
 					ally_army.remove(j);
+					System.out.println(ally_army.size());
+					
 				}
+				
 			}
-			type_count += 1;
+			if (!AI_playing) {
+				type_count += 1;
+			}
 		}
 		
 		int[] score_att = new int[ally_army.size()];
@@ -545,11 +561,12 @@ public class Board {
 		int second_att = 0;
 		int higher_def = 0;
 		int second_def = 0;
-		
+		System.out.println("bloqué attaque 3");
 		/*
 		 * Puissance de l'attaque et détermination priorité des unités dans chaque camp
 		 */
 		for (int i=0; i<ally_army.size(); i++) {
+			System.out.println("bloqué attaque 4");
 			score_att[i] = (int) (Math.random()*(ally_army.get(i).getMaxPower()-ally_army.get(i).getMinPower()+1)+ally_army.get(i).getMinPower());
 			if (i == 1) {
 				second_att = i;
@@ -575,6 +592,7 @@ public class Board {
 		}
 			
 		for (int i=0; i<enemy_army.size(); i++) {
+			System.out.println("bloqué attaque 5");
 			score_def[i] = (int) (Math.random()*(enemy_army.get(i).getMaxPower()-enemy_army.get(i).getMinPower()+1)+enemy_army.get(i).getMinPower());
 			if (i == 0) {
 				
@@ -606,6 +624,7 @@ public class Board {
 
 		int offset_att = 0;
 		int offset_def = 0;
+		System.out.println("bloqué attaque 6");
 		
 		if (enemy_army.size()>1 && ally_army.size()>1) {
 			if (score_att[second_att] > score_def[second_def]) {
@@ -761,8 +780,8 @@ public class Board {
 				System.out.println("bloqué 1");
 				if (t.getOwner() == player_playing && t.getNbUnits()>2) {
 					ally_territory = t;
-					territory_units = t.getUnits();
-					neighbour = t.getNeighbourTerritories();
+					territory_units = ally_territory.getUnits();
+					neighbour = ally_territory.getNeighbourTerritories();
 					for (Territory n : neighbour) {
 						System.out.println("bloqué 2");
 						if (n.getOwner() != player_playing && n.getNbUnits()+1<t.getNbUnits()) {
@@ -778,20 +797,25 @@ public class Board {
 								}
 								
 							}
-							enemy_army = enemy_territory.determineDefence();
+							System.out.println("bloqué 7");
+							
 							StdDraw.enableDoubleBuffering();
-							if (ally_army.size()>0) {
+							while (ally_army.size()>0 && enemy_territory.getOwner()!=ally_territory.getOwner()) {
+								enemy_army = enemy_territory.determineDefence();
 								battle();
+								System.out.println("fight ended");
 							}
 							army_selected = false;
 							ally_army.removeAll(ally_army);
 							enemy_army.removeAll(enemy_army);
-							drawTerritoryInformations(n.getTerritoryId());
+							drawTerritoryInformations(enemy_territory.getTerritoryId());
 							drawButton(game_phase);
 							StdDraw.show();
 							StdDraw.disableDoubleBuffering();
-							//StdDraw.pause(100);
+							StdDraw.pause(500);
+							System.out.println("bloqué 9");
 							if (victory) {
+								System.out.println("bloqué 8");
 								return ;
 							}
 						}
@@ -799,7 +823,9 @@ public class Board {
 					}
 				}
 			}
+			System.out.println("bloqué 4");
 		}
+		System.out.println("bloqué 5");
 		return ;
 	}
 
