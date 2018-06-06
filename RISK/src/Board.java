@@ -795,7 +795,7 @@ public class Board {
 							drawButton(game_phase);
 							StdDraw.show();
 							StdDraw.disableDoubleBuffering();
-							StdDraw.pause(600);
+							//StdDraw.pause(600);
 							if (victory) {
 								return ;
 							}
@@ -1113,17 +1113,36 @@ public class Board {
 	}
 		
 	//Méthode permettant d'afficher le nom du vainqueur après la partie
-	public static void drawWinner(String name)	{
-		String message = "Vainqueur : " + name;
+	public void drawWinner(String name)	{
+		String message = "" + name;
+		
+		Font font = new Font("SansSerif", Font.BOLD, 40);
+		Font font2 = new Font("SansSerif", Font.BOLD, 20);
+		StdDraw.setFont(font);
 					
 		StdDraw.setXscale(0.0,1598);
 		StdDraw.setYscale(0.0,744);	
 		
 		StdDraw.setPenColor(StdDraw.WHITE); 
-		StdDraw.filledRectangle(1598/2, 744/2, 250, 50);
+		StdDraw.filledRectangle(1598/2, 744/2, 250, 100);
 			
-		StdDraw.setPenColor(StdDraw.BLACK);   
-		StdDraw.text(1598/2, 744/2, message);
+		StdDraw.setPenColor(StdDraw.BLACK); 
+		StdDraw.rectangle(1598/2, 744/2, 250, 100);
+		StdDraw.rectangle(1598/2, 744/2, 249, 99);
+		StdDraw.rectangle(1598/2, 744/2, 248, 98);
+		StdDraw.rectangle(1598/2, 744/2, 247, 97);
+		StdDraw.rectangle(1598/2, 744/2, 246, 96);
+		StdDraw.rectangle(1598/2, 744/2, 245, 95);
+		StdDraw.rectangle(1598/2, 744/2, 244, 94);
+		
+		StdDraw.text(1598/2-115, 744/2+25, "Vainqueur : ");
+		players_list.get(player_playing-1).changeColor();
+		StdDraw.text(1598/2+115, 744/2+25, message);
+		
+		StdDraw.setFont(font2);
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.text(1598/2, 744/2-25, "Il a détruit tout le monde ");
+		
 		}
 		
 	public void drawMission(boolean mission_hidden) {
