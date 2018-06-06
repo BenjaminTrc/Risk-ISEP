@@ -232,10 +232,10 @@ public class Board {
 								}
 								else if (ally_territory.canAttack(chosen_territory)) {
 									for (Unit u : ally_army) {
-										if (u.getThisTurnMove()>0) {
-											u.lessThisTurnMove();
-											chosen_territory.addUnit(u);
-										}
+										chosen_territory.addUnit(u);
+										u.setThisTurnMove(u.getThisTurnMove()-1);
+										
+										
 									}
 									ally_army.removeAll(ally_army);
 									
@@ -645,6 +645,9 @@ public class Board {
 			players_list.get(player_playing-1).addTerritory();
 			ally_territory = enemy_territory;
 			drawTerritoryCount(nbTerritoriesFromPlayer());
+			for (Unit u : ally_army) {
+				u.setThisTurnMove(u.getThisTurnMove()-1);
+			}
 		}
 		else {
 			ally_territory.addUnits(ally_army);
