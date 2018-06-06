@@ -1141,24 +1141,29 @@ public class Board {
 		
 		StdDraw.setFont(font2);
 		StdDraw.setPenColor(StdDraw.BLACK);
-		int rand = (int) Math.random()*(5-1+1)+1;
-		if(rand == 1.0) {
-			StdDraw.text(1598/2, 744/2-25, "Il a détruit tout le monde");
-		}
-		else if(rand == 2.0) {
-			StdDraw.text(1598/2, 744/2-25, "Il est devenu le maître du monde");
-		}
-		else if(rand == 3.0) {
-			StdDraw.text(1598/2, 744/2-25, "Il les gouverne tous");
-		}
-		else if(rand == 4.0) {
-			StdDraw.text(1598/2, 744/2-25, "Il n'est pas passé par 4 chemins");
-		}
-		else if(rand == 5.0) {
-			StdDraw.text(1598/2, 744/2-25, "Il domine la planète Terre");
+		
+		if(verifyMission(players_list.get(player_playing-1).getMission())) { 
+			StdDraw.text(1598/2, 744/2-25, "Mission : "+players_list.get(player_playing-1).getMission().getDescription());
 		}else {
-			StdDraw.text(1598/2, 744/2-25, "blop blop");
-		}
+			int rand = (int) (Math.random()*(5-1+1)+1);
+			if(rand == 1.0) {
+				StdDraw.text(1598/2, 744/2-25, "Il a détruit tout le monde.");
+			}
+			else if(rand == 2.0) {
+				StdDraw.text(1598/2, 744/2-25, "Il est devenu le maître du monde.");
+			}
+			else if(rand == 3.0) {
+				StdDraw.text(1598/2, 744/2-25, "Il les gouverne tous.");
+			}
+			else if(rand == 4.0) {
+				StdDraw.text(1598/2, 744/2-25, "Il n'est pas passé par 4 chemins.");
+			}
+			else if(rand == 5.0) {
+				StdDraw.text(1598/2, 744/2-25, "Il domine la planète.");
+			}else {
+				StdDraw.text(1598/2, 744/2-25, "Il a conquis tous les territoires.");
+			}
+		}		
 		
 	}
 		
