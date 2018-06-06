@@ -27,6 +27,7 @@ public class Board {
 	boolean mission_hidden = true;
 	boolean AI_playing = false;
 	boolean end_turn = false;
+	boolean army_selected = false;
 	
 	
 	// ***** Constructeurs *****
@@ -111,7 +112,6 @@ public class Board {
 		int empty_territories;
 		int[] unit_costs = {1,3,7};
 		int points;
-		boolean army_selected = false;
 		boolean action = false; // séparer placement dans un territoire allié de l'armée ou juste une nouvelle unité
 		//ArrayList<Unit> ally_army = new ArrayList<Unit>();
 		//ArrayList<Unit> enemy_army = new ArrayList<Unit>();
@@ -147,11 +147,13 @@ public class Board {
 			while (!end_turn) {
 			
 				if (AI_playing) {
-					if (game_phase != 2) {
+					if (game_phase == 0 || game_phase == 1) {
 						autoPlacement();
 						endTurn();
 					}
-					else {
+					if (game_phase == 2) {
+						autoAttack();
+						endTurn();
 					}
 				}
 				
@@ -717,10 +719,15 @@ public class Board {
 						used_territories.add(t);
 						players_list.get(player_playing-1).setArmyPoints(points - 3);				
 					}
-					else if (nb_enemy_territories>=1 && points>0 && t.getNbUnits()<4) {
-						t.addUnit(new Unit(1));
-						used_territories.add(t);
-						players_list.get(player_playing-1).setArmyPoints(points - 1);
+					else if (nb_enemy_territories>=1 && points>0) {
+						if (t.getNbUnits()<4) {
+							t.addUnit(new Unit(1));
+							used_territories.add(t);
+							players_list.get(player_playing-1).setArmyPoints(points - 1);
+						}
+						else {
+							used_territories.add(t);
+						}
 					}
 					t.setOwner(players_list.get(player_playing-1));
 					points = players_list.get(player_playing-1).getArmyPoints();
@@ -730,8 +737,9 @@ public class Board {
 		}
 		System.out.println(points);
 		int count = 0;
-		while (points > 0) {
-			if (used_territories.get(count).getNbUnits()<3) {
+		int limit = 3;
+		while (points > 0 && used_territories.size()>0) {
+			if (used_territories.get(count).getNbUnits()<limit) {
 				used_territories.get(count).addUnit(new Unit(1));
 				points -=1;	
 				used_territories.get(count).setOwner(players_list.get(player_playing-1));
@@ -739,6 +747,7 @@ public class Board {
 			count +=1;
 			if (count == used_territories.size()) {
 				count = 0;
+				limit +=1;
 			}
 		}
 		players_list.get(player_playing-1).setArmyPoints(points);
@@ -747,6 +756,54 @@ public class Board {
 		StdDraw.show();
 		StdDraw.disableDoubleBuffering();
 	}
+	
+	
+	public void autoAttack() {
+		List<Territory> neighbour = new ArrayList<Territory>();
+		ArrayList<Unit> territory_units = new ArrayList<Unit>();
+		int count = 0;
+		for (Region r : regions_list) {
+			ArrayList<Territory> territories_list = r.getTerritoryList();
+			for (Territory t : territories_list) {
+				if (t.getOwner() == player_playing && t.getNbUnits()>2) {
+					ally_territory = t;
+					territory_units = t.getUnits();
+					neighbour = t.getNeighbourTerritories();
+					for (Territory n : neighbour) {
+						if (n.getOwner() != player_playing && n.getNbUnits()+1<t.getNbUnits()) {
+							count = 0;
+							enemy_territory = n;
+							for (int i=0; i<territory_units.size(); i++) {
+								if (territory_units.size()>1 && territory_units.get(i).getThisTurnMove()>0) {
+									ally_army.add(territory_units.get(i));
+									army_selected = true;
+									territory_units.remove(i);
+									i-=1;
+								}
+								
+							}
+							enemy_army = enemy_territory.determineDefence();
+							if (ally_army.size()>enemy_army.size()) {
+								battle();
+							}
+							army_selected = false;
+							ally_army.removeAll(ally_army);
+							enemy_army.removeAll(enemy_army);
+							StdDraw.enableDoubleBuffering();
+							drawTerritoryInformations(n.getTerritoryId());
+							drawButton(game_phase);
+							StdDraw.show();
+							StdDraw.disableDoubleBuffering();
+							StdDraw.pause(400);
+						}
+						
+					}
+				}
+			}
+		}
+	}
+
+
 	
 	public void resetUnitMoves() {
 		for (Region r : regions_list) {
@@ -779,8 +836,6 @@ public class Board {
 		StdDraw.show();
 		StdDraw.disableDoubleBuffering();
 	}
-
-
 	
 	
 	public void drawUnit(int type) {
