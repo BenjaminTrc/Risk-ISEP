@@ -102,19 +102,13 @@ public class Board {
 		
 		territoriesDistribution();
 		autoFill();
-		// player_playing = 1;
-		
-		//Territory ally_territory = new Territory(0, "error");
-		//Territory enemy_territory;
-		Territory chosen_territory;
-		
+
+		Territory chosen_territory;	
 		int territory_id = 0;
 		int empty_territories;
 		int[] unit_costs = {1,3,7};
 		int points;
 		boolean action = false; // séparer placement dans un territoire allié de l'armée ou juste une nouvelle unité
-		//ArrayList<Unit> ally_army = new ArrayList<Unit>();
-		//ArrayList<Unit> enemy_army = new ArrayList<Unit>();
 		
 		if (nbr_players == 0) {
 			AI_playing = true;
@@ -735,7 +729,6 @@ public class Board {
 				nb_enemy_territories = 0;
 			}
 		}
-		System.out.println(points);
 		int count = 0;
 		int limit = 3;
 		while (points > 0 && used_territories.size()>0) {
@@ -750,7 +743,6 @@ public class Board {
 				limit +=1;
 			}
 		}
-		System.out.println("fin placement");
 		players_list.get(player_playing-1).setArmyPoints(points);
 		
 		drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
@@ -762,19 +754,22 @@ public class Board {
 	public void autoAttack() {
 		List<Territory> neighbour = new ArrayList<Territory>();
 		ArrayList<Unit> territory_units = new ArrayList<Unit>();
-		int count = 0;
+		//int count = 0;
 		for (Region r : regions_list) {
 			ArrayList<Territory> territories_list = r.getTerritoryList();
 			for (Territory t : territories_list) {
+				System.out.println("bloqué 1");
 				if (t.getOwner() == player_playing && t.getNbUnits()>2) {
 					ally_territory = t;
 					territory_units = t.getUnits();
 					neighbour = t.getNeighbourTerritories();
 					for (Territory n : neighbour) {
+						System.out.println("bloqué 2");
 						if (n.getOwner() != player_playing && n.getNbUnits()+1<t.getNbUnits()) {
-							count = 0;
+							//count = 0;
 							enemy_territory = n;
 							for (int i=0; i<territory_units.size(); i++) {
+								System.out.println("bloqué 3");
 								if (territory_units.size()>1 && territory_units.get(i).getThisTurnMove()>0) {
 									ally_army.add(territory_units.get(i));
 									army_selected = true;
@@ -784,18 +779,18 @@ public class Board {
 								
 							}
 							enemy_army = enemy_territory.determineDefence();
-							if (ally_army.size()>enemy_army.size()) {
+							StdDraw.enableDoubleBuffering();
+							if (ally_army.size()>0) {
 								battle();
 							}
 							army_selected = false;
 							ally_army.removeAll(ally_army);
 							enemy_army.removeAll(enemy_army);
-							StdDraw.enableDoubleBuffering();
 							drawTerritoryInformations(n.getTerritoryId());
 							drawButton(game_phase);
 							StdDraw.show();
 							StdDraw.disableDoubleBuffering();
-							StdDraw.pause(600);
+							//StdDraw.pause(100);
 							if (victory) {
 								return ;
 							}
@@ -805,6 +800,7 @@ public class Board {
 				}
 			}
 		}
+		return ;
 	}
 
 
