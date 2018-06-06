@@ -529,7 +529,6 @@ public class Board {
 	}
 	
 	public void battle() {
-		System.out.println("bloqué attaque 1");
 		
 		//Listes des résultats de lancés de dés
 		//Si l'armée est plus grande que 3 on choisit les 3 meilleures unités pour attaquer
@@ -537,22 +536,36 @@ public class Board {
 		ArrayList<Unit> reserve = new ArrayList<Unit>();
 		int type_count = 1;
 		System.out.println(ally_army.size());
+		int counter = 0;
 		while (ally_army.size()>3) {
-			System.out.println("bloqué attaque 2");
+			if (counter == ally_army.size()) {
+				System.out.println("revenu à 0");
+				type_count +=1;
+				counter = 0;
+			}
+			if (ally_army.get(counter).getType() == type_count) {
+				System.out.println("ajout");
+				reserve.add(ally_army.get(counter));
+				ally_army.remove(counter);
+			}
+			else {
+				System.out.println("counter +1");
+				counter += 1;
+			}
+			
+			
+			/*
 			for (int j=0; j<ally_army.size(); j++) {
-				System.out.println("bloqué attaque xdddddddd");
 				if (ally_army.get(j).getType() == type_count && ally_army.size()>3) {
 					reserve.add(ally_army.get(j));
 					ally_army.remove(j);
 					System.out.println(ally_army.size());
 					
 				}
-				
-			}
-			if (!AI_playing) {
-				type_count += 1;
-			}
+				*/
 		}
+		
+		
 		
 		int[] score_att = new int[ally_army.size()];
 		int[] score_def = new int[enemy_army.size()];
@@ -561,12 +574,11 @@ public class Board {
 		int second_att = 0;
 		int higher_def = 0;
 		int second_def = 0;
-		System.out.println("bloqué attaque 3");
+
 		/*
 		 * Puissance de l'attaque et détermination priorité des unités dans chaque camp
 		 */
 		for (int i=0; i<ally_army.size(); i++) {
-			System.out.println("bloqué attaque 4");
 			score_att[i] = (int) (Math.random()*(ally_army.get(i).getMaxPower()-ally_army.get(i).getMinPower()+1)+ally_army.get(i).getMinPower());
 			if (i == 1) {
 				second_att = i;
@@ -592,7 +604,6 @@ public class Board {
 		}
 			
 		for (int i=0; i<enemy_army.size(); i++) {
-			System.out.println("bloqué attaque 5");
 			score_def[i] = (int) (Math.random()*(enemy_army.get(i).getMaxPower()-enemy_army.get(i).getMinPower()+1)+enemy_army.get(i).getMinPower());
 			if (i == 0) {
 				
@@ -777,18 +788,15 @@ public class Board {
 		for (Region r : regions_list) {
 			ArrayList<Territory> territories_list = r.getTerritoryList();
 			for (Territory t : territories_list) {
-				System.out.println("bloqué 1");
 				if (t.getOwner() == player_playing && t.getNbUnits()>2) {
 					ally_territory = t;
 					territory_units = ally_territory.getUnits();
 					neighbour = ally_territory.getNeighbourTerritories();
 					for (Territory n : neighbour) {
-						System.out.println("bloqué 2");
 						if (n.getOwner() != player_playing && n.getNbUnits()+1<t.getNbUnits()) {
 							//count = 0;
 							enemy_territory = n;
 							for (int i=0; i<territory_units.size(); i++) {
-								System.out.println("bloqué 3");
 								if (territory_units.size()>1 && territory_units.get(i).getThisTurnMove()>0) {
 									ally_army.add(territory_units.get(i));
 									army_selected = true;
@@ -797,13 +805,12 @@ public class Board {
 								}
 								
 							}
-							System.out.println("bloqué 7");
+							
 							
 							StdDraw.enableDoubleBuffering();
 							while (ally_army.size()>0 && enemy_territory.getOwner()!=ally_territory.getOwner()) {
 								enemy_army = enemy_territory.determineDefence();
 								battle();
-								System.out.println("fight ended");
 							}
 							army_selected = false;
 							ally_army.removeAll(ally_army);
@@ -812,10 +819,8 @@ public class Board {
 							drawButton(game_phase);
 							StdDraw.show();
 							StdDraw.disableDoubleBuffering();
-							StdDraw.pause(500);
-							System.out.println("bloqué 9");
+							//StdDraw.pause(500);
 							if (victory) {
-								System.out.println("bloqué 8");
 								return ;
 							}
 						}
@@ -823,9 +828,7 @@ public class Board {
 					}
 				}
 			}
-			System.out.println("bloqué 4");
 		}
-		System.out.println("bloqué 5");
 		return ;
 	}
 
