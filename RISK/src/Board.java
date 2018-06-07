@@ -387,6 +387,7 @@ public class Board {
 				
 				StdDraw.enableDoubleBuffering();
 				drawTerritoryCount(nbTerritoriesFromPlayer());
+				mission_hidden = true;
 				drawMission(mission_hidden);
 				StdDraw.show();
 				StdDraw.disableDoubleBuffering();
@@ -441,6 +442,7 @@ public class Board {
 			drawPlayers(this);
 			drawButton(1);
 			drawUnit(1);
+			mission_hidden = true;
 			drawMission(mission_hidden);
 			StdDraw.show();
 			StdDraw.disableDoubleBuffering();
@@ -535,24 +537,20 @@ public class Board {
 		
 		ArrayList<Unit> reserve = new ArrayList<Unit>();
 		int type_count = 1;
-		System.out.println(ally_army.size());
+
 		int counter = 0;
 		while (ally_army.size()>3) {
 			if (counter == ally_army.size()) {
-				System.out.println("revenu à 0");
 				type_count +=1;
 				counter = 0;
 			}
 			if (ally_army.get(counter).getType() == type_count) {
-				System.out.println("ajout");
 				reserve.add(ally_army.get(counter));
 				ally_army.remove(counter);
 			}
 			else {
-				System.out.println("counter +1");
 				counter += 1;
 			}
-			
 			
 			/*
 			for (int j=0; j<ally_army.size(); j++) {
@@ -611,7 +609,6 @@ public class Board {
 				
 			else if (score_def[i] == score_def[higher_def]) {
 				if (enemy_army.get(i).getDEF()>enemy_army.get(higher_def).getDEF()) {
-					//second_def = higher_def;
 					higher_def = i;
 				}
 				else {
@@ -620,7 +617,6 @@ public class Board {
 			}
 			
 			else if (score_def[i] > score_def[higher_def]) {
-				//second_def = higher_def;
 				higher_def = i;
 			}
 			else {
@@ -635,7 +631,6 @@ public class Board {
 
 		int offset_att = 0;
 		int offset_def = 0;
-		System.out.println("bloqué attaque 6");
 		
 		if (enemy_army.size()>1 && ally_army.size()>1) {
 			if (score_att[second_att] > score_def[second_def]) {
@@ -681,7 +676,7 @@ public class Board {
 			enemy_territory.setOwner(players_list.get(enemy_territory.getOwner()-1));
 		}
 		
-		if (verifyMission(players_list.get(player_playing-1).getMission())) {
+		if (verifyMission(players_list.get(player_playing-1).getMission()) || verifyWorld()) {
 			drawWinner(players_list.get(player_playing-1).getPlayerName());
 			victory = true;
 			
@@ -809,12 +804,25 @@ public class Board {
 							
 							StdDraw.enableDoubleBuffering();
 							while (ally_army.size()>0 && enemy_territory.getOwner()!=ally_territory.getOwner()) {
+								
 								enemy_army = enemy_territory.determineDefence();
 								battle();
+								ally_army.removeAll(ally_army);
+								
+								for (int i=0; i<territory_units.size(); i++) {
+									if (territory_units.size()>1 && territory_units.get(i).getThisTurnMove()>0) {
+										ally_army.add(territory_units.get(i));
+										army_selected = true;
+										territory_units.remove(i);
+										i-=1;
+									}
+								}
+								
 							}
-							army_selected = false;
 							ally_army.removeAll(ally_army);
 							enemy_army.removeAll(enemy_army);
+							army_selected = false;
+							
 							drawTerritoryInformations(enemy_territory.getTerritoryId());
 							drawButton(game_phase);
 							StdDraw.show();
@@ -1625,6 +1633,7 @@ public class Board {
 				if (territories >= mission.getNbTerritories()) {
 					mission.setMissionComplete(true);
 				}
+				
 				break;
 				
 			//Détruire le joueur donné
@@ -1675,12 +1684,14 @@ public class Board {
 				int record = 0;
 				int count = 0;
 				nb_regions = 0;
+				int territories_region;
+				ArrayList<Territory> territories_list;
+				int max_territories_region_owned = 0;
 				for (Region r : regions_list) {
-					ArrayList<Territory> territories_list = r.getTerritoryList();
-					int max_territories = 0;
-					int territories_region = 0;
+					territories_list = r.getTerritoryList();
+					territories_region = 0;
 					for (Territory t : territories_list) {
-						max_territories+=1;
+						
 						if (t.getOwner() == mission.getPlayerNb()) {
 							territories+=1;
 							territories_region+=1;
@@ -1689,30 +1700,40 @@ public class Board {
 					}
 					if (territories_region == territories_list.size()) {
 						nb_regions+=1;
+						if (territories_list.size()>max_territories_region_owned) {
+							max_territories_region_owned = territories_region;
+						}
 					}
 					
-					if (max_territories> record) {
-						record = max_territories;
+					if (territories_list.size() > record) {
+						record = territories_list.size();
 						biggest_region = count;
 					}
 					count+=1;
 				}
-				ArrayList<Territory> territories_region = regions_list.get(biggest_region).getTerritoryList();
-				
-				territories = 0;
-				for (Territory t : territories_region) {
-					if (t.getOwner() == mission.getPlayerNb()) {
-						territories+=1;
-						if (nb_regions>1) {
-							mission.setMissionComplete(true);
-						}
+
+				if (max_territories_region_owned == regions_list.get(biggest_region).getTerritoryList().size()) {
+					if (nb_regions>1) {
+						mission.setMissionComplete(true);
 					}
 				}
+				
+				territories = 0;
+				
 				
 				break;
 		}
 		
 		return mission.getMissionComplete();
+	}
+	
+	public boolean verifyWorld() {
+		if (nbTerritoriesFromPlayer() == 42) {
+			drawWinner(players_list.get(player_playing-1).getPlayerName());
+			victory = true;
+			return true;
+		}
+		return false;
 	}
 	
 	// positif : on ajoute // négatif : on enlève // type d'unité 1 (soldat), 2 (cavalerie) et 3 (canon)
