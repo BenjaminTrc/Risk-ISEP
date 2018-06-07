@@ -1,3 +1,12 @@
+/*
+ * 
+ * ***** PROJET RISK JAVA 2018 *****
+ * 
+ * Réalisé par : Clément COUSSIN, Damien DEREDEC et Benjamin TORCHUT
+ * 
+ */
+
+
 import edu.princeton.cs.introcs.StdDraw;
 
 public class Main {
@@ -11,9 +20,10 @@ public class Main {
 			show_first_page();
 			configuration();
 			
-			Board Plateautest = new Board(1,nb_players,nb_AI);
-			Plateautest.initialization();		
-			launch_game(Plateautest);
+			Board Plateau = new Board(1,nb_players,nb_AI);
+			Plateau.initialization();
+			
+			launch_game(Plateau);
 		}
 		
 	}

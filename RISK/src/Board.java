@@ -837,8 +837,7 @@ public class Board {
 		return ;
 	}
 
-
-	
+	// cette méthode permet de reset les points de mouvement de chaque unité sur le plateau
 	public void resetUnitMoves() {
 		for (Region r : regions_list) {
 			ArrayList<Territory> territories_list = r.getTerritoryList();
@@ -851,6 +850,7 @@ public class Board {
 		}
 	}
 	
+	// cette méthode permet de remplir par un soldat chaque territoire au début de la partie
 	public void autoFill() {
 		for (Player P : players_list) {
 			StdDraw.enableDoubleBuffering();
@@ -871,7 +871,7 @@ public class Board {
 		StdDraw.disableDoubleBuffering();
 	}
 	
-	
+	// cette méthode gère l'affichage des unités en blanc ou en noir
 	public void drawUnit(int type) {
 		switch(type) {
 			case 0:
@@ -900,7 +900,7 @@ public class Board {
 		}
 	}
 	
-	// dessine le bouton correspondant à la phase en cours
+	// cette méthode gère l'affichage des boutons correspondant à la phase en cours
 	public void drawButton(int phase) {
 		if (phase == 0) {
 			StdDraw.setPenColor(51,102,170);
@@ -942,7 +942,7 @@ public class Board {
 		}
 	}
 	
-	// cette méthode permet d'afficher le nombre de tours qui se sont déroulés dans la partie (dans la bande supérieure du jeu)
+	// cette méthode gère l'affichage du nombre de tours qui se sont déroulés dans la partie
 	public void drawTurn(int turn) {
 		StdDraw.setPenColor(StdDraw.WHITE);
 		StdDraw.filledCircle(63, 670, 25);
@@ -953,7 +953,7 @@ public class Board {
 		StdDraw.text(63,665, ""+turn);
 	}
 	
-	// cette méthode permet d'afficher le nombre de territoires que le joueur possède actuellement (dans la bande supérieure du jeu)
+	// cette méthode gère l'affichage du nombre de territoires que le joueur possède actuellement
 	public void drawTerritoryCount(int nb_territories) {
 		StdDraw.setPenColor(StdDraw.WHITE);
 		StdDraw.filledCircle(247, 667, 25);
@@ -964,7 +964,7 @@ public class Board {
 		StdDraw.text(247,662, ""+nb_territories);
 	}
 	
-	// cette méthode permet d'afficher le nom du joueur et sa couleur en haut à droite
+	// cette méthode gère l'affichage du nom du joueur et de sa couleur en haut à droite
 	public void drawName(String name) {
 		players_list.get(player_playing-1).changeColor();
 		StdDraw.filledRectangle(1418, 692, 180, 53);
@@ -975,7 +975,7 @@ public class Board {
 		StdDraw.text(1420,685, name);
 	}
 		
-	// cette méthode permet d'afficher les unités qu'il est possible de recruter
+	// cette méthode gère l'affichage des unités que l'on peut recruter
 	public void drawPossibleUnits(int points) {
 		
 		//Soldat
@@ -1002,7 +1002,7 @@ public class Board {
 		StdDraw.text(885,687, ""+points/7);
 	}	
 	
-	//Méthode permettant d'afficher les informations sur un territoire en sélectionné
+	// cette méthode gère l'affichage des informations d'un territoire sélectionné
 	public void drawTerritoryInformations(int territoryId) {
 			
 		//Territoire sélectionné			
@@ -1074,7 +1074,7 @@ public class Board {
 
 	}	
 		
-	//Méthode permettant d'afficher les informations sur un territoire en sélectionné
+	// cette méthode gère l'affichage des unités sélectionnées lors d'un déplacement / d'une attaque
 	public void drawAttackingArmies(int territoryId /*, ArrayList ally_army*/) {
 		Territory t = giveTerritory(territoryId);
 		
@@ -1116,7 +1116,7 @@ public class Board {
 			
 		}
 		
-	//Méthode permettant d'afficher les informations sur un territoire en sélectionné
+	// cette méthode gère l'affichage des informations sur les joueurs lorsqu'il n'y a pas de territoire sélectionné
 	public void drawPlayers(Board b) {
 			
 		int height = 590;
@@ -1142,7 +1142,7 @@ public class Board {
 		}
 	}
 		
-	//Méthode permettant d'afficher le nom du vainqueur après la partie
+	// cette méthode gère l'affichage du nom du vainqueur après la partie
 	public void drawWinner(String name)	{
 		String message = "" + name;
 		
@@ -1174,7 +1174,8 @@ public class Board {
 		
 		if(verifyMission(players_list.get(player_playing-1).getMission())) { 
 			StdDraw.text(1598/2, 744/2-25, "Mission : "+players_list.get(player_playing-1).getMission().getDescription());
-		}else {
+		} 
+		else {
 			int rand = (int) (Math.random()*(5-1+1)+1);
 			if(rand == 1.0) {
 				StdDraw.text(1598/2, 744/2-25, "Il a détruit tout le monde.");
@@ -1198,7 +1199,8 @@ public class Board {
 		StdDraw.text(1598/2, 744/2-75, "Rejouer");
 		
 	}
-		
+	
+	// cette méthode gère l'affichage de la mission
 	public void drawMission(boolean mission_hidden) {
 		StdDraw.setPenColor();
 		StdDraw.filledRectangle(1081, 690, 137, 15);
@@ -1227,11 +1229,11 @@ public class Board {
 		
 	}
 		
-	
 	public void addRegion(Region R) {
 		regions_list.add(R);
 	}
 	
+	// cette méthode prend en argument un id de territoire et renvoie le territoire correspondant à l'id  
 	public Territory giveTerritory(int id) {
 		for (Region r : regions_list ) {
 			ArrayList<Territory> territories_list = r.getTerritoryList();
@@ -1242,19 +1244,9 @@ public class Board {
 				}
 		}
 		return new Territory(0,"error");
-		
 	}
 	
-	public void printRegions() {
-		for (Region R : regions_list){
-			System.out.println(R.getRegionId() + " " + R.getRegionName());
-			for (Territory T : R.getTerritoryList()) {
-				System.out.println(T.getTerritoryId() + " " + T.getTerritoryName());
-			}
-		}
-	}
-	
-	//Instanciation des régions, territoires et leurs terrritoires voisins
+	//Instanciation des régions, territoires et leurs territoires voisins
 	public void initialization() {
 			
 		//Amérique du Nord et ses territoires
@@ -1539,22 +1531,16 @@ public class Board {
 		//this.printRegions();
 	}
 	
-	/*public int nbArmyAvailable(int army_points, int type_selected) {
-		switch(type_selected) {
-			case 1:
-				return army_points;
-				
-			case 2:
-				int nb_available = army_points/3;
-				return nb_available;
-				
-			case 3:
-				int nb_available_2 = army_points/7;
-				return nb_available_2;
+
+	public int[] getTypesNb(ArrayList<Unit> selected_army) {
+		int[] types = {0,0,0};
+		for (int i=0; i<selected_army.size(); i++) {
+			types[selected_army.get(i).getType()-1] += 1;
 		}
-		return 0;
-	}*/
+		return types;
+	}
 	
+	// cette méthode renvoie le nombre de territoire conquis par le joueur actuel
 	public int nbTerritoriesFromPlayer() {
 		int territories_player = 0;
 		//On parcourt les regions de la carte
@@ -1571,15 +1557,8 @@ public class Board {
 		return territories_player;
 	}
 	
-	public int[] getTypesNb(ArrayList<Unit> selected_army) {
-		int[] types = {0,0,0};
-		for (int i=0; i<selected_army.size(); i++) {
-			types[selected_army.get(i).getType()-1] += 1;
-			}
-		return types;
-		}
-		
-		public int nbTerritoriesFromPlayers(int player_nb) {
+	// cette méthode renvoie le nombre de territoire conquis par un joueur, à condition qu'on donne en argument le nombre associé au joueur
+	public int nbTerritoriesFromPlayers(int player_nb) {
 		int territories_player = 0;
 		for (Region r : regions_list) {
 			ArrayList<Territory> territories_list = r.getTerritoryList();
@@ -1594,6 +1573,7 @@ public class Board {
 		return territories_player;
 	}
 	
+	// cette méthode renvoie true si le joueur actuel a complété sa mission
 	public boolean verifyMission(Mission mission) {
 		
 		//Les conditions de victoire dépendent du type de mission
@@ -1726,6 +1706,7 @@ public class Board {
 		return mission.getMissionComplete();
 	}
 	
+	// cette méthode vérifie si un joueur a conquis tous les territoires, si c'est le cas, on renvoie true
 	public boolean verifyWorld() {
 		if (nbTerritoriesFromPlayer() == 42) {
 			drawWinner(players_list.get(player_playing-1).getPlayerName());
@@ -1735,7 +1716,7 @@ public class Board {
 		return false;
 	}
 	
-	// positif : on ajoute // négatif : on enlève // type d'unité 1 (soldat), 2 (cavalerie) et 3 (canon)
+	// cette méthode permet de gérer l'ajout ou le retrait d'une unité lors des déplacements / attaques
 	public void switchUnitButton(double posX, double posY) {
 		
 		ArrayList<Unit> disposable_units = ally_territory.getUnits();
@@ -1785,6 +1766,7 @@ public class Board {
 				}
 			}
 		}
+		
 		if (type != 0) {
 			StdDraw.enableDoubleBuffering();
 			drawTerritoryInformations(ally_territory.getTerritoryId());
@@ -1793,7 +1775,6 @@ public class Board {
 			StdDraw.disableDoubleBuffering();
 			
 		}
-		return ;
 	}
 	
 	public ArrayList<Unit> resetUnits(Territory t, ArrayList<Unit> army_selected) {
@@ -1943,51 +1924,7 @@ public class Board {
 				
 		return 0;
 	}
-	
-	//Affichage des informations extérieur à la carte
-	public void print() {
-		System.out.println("Le jeu est en train d'être lancé");
-		int extended_width = 1598;
-		int extended_height = 744;
 		
-		//Fenêtre
-		StdDraw.setCanvasSize(extended_width,extended_height);
-		StdDraw.setXscale(0,extended_width);
-		StdDraw.setYscale(0,extended_height);
-		
-		//Carte
-		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v6.png");
-		
-		StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
-		
-		
-		//Affichage des informations
-		drawTurn(game_turn);
-		drawName(players_list.get(player_playing-1).getPlayerName());
-		drawTerritoryCount(players_list.get(player_playing-1).getLastTurnTerritories());
-		drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
-		//drawTerritoryInformations(107);
-		//drawAttackingArmies(107);
-		drawPlayers(this);
-		drawWinner("Benjamin");
-		
-		StdDraw.show();
-		
-		//play();
-		while(true) {
-			if (StdDraw.isMousePressed()) {
-				double posX = StdDraw.mouseX();
-				double posY = StdDraw.mouseY();
-				System.out.println("Position X : " + posX + " +++ Position Y : " + posY);
-				if (posX > 750 && posX < 850 && posY > 285 && posY < 315) {
-					System.out.println("Grosse merde");
-				}
-				StdDraw.pause(150);
-			}
-		}
-		
-	}
-	
 	
 	// ***** Getters / Setters *****
 	
@@ -2019,28 +1956,3 @@ public class Board {
 		return this.player_playing;
 	}
 }
-
-/*
- * 
- * public void autoFill2(Player P) {
-		StdDraw.enableDoubleBuffering();
-		int i = 0;
-		for (Region R : regions_list) {
-			for (Territory T : R.getTerritoryList()) {
-				if(T.getOwner() == (P.getPlayerNb())) {
-					Unit U = new Unit(1);
-					T.addUnit(U);
-					i++;
-					T.setOwner(P);
-				}		
-			}
-		}
-		P.setArmyPoints(P.getArmyPoints() - i);
-		StdDraw.show();
-		StdDraw.disableDoubleBuffering();
-	}
- * 
- * 
- * 
- */
-
