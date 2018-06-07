@@ -8,22 +8,22 @@ public class Board {
 	
 	// ***** Attributs *****
 	
-	private int map_number; // Choix de la carte
-	private int nbr_players;
-	private int nbr_AI;
+	private int map_number; // choix de la carte
+	private int nbr_players; // joueurs humains
+	private int nbr_AI;      // joueurs AI
 	private ArrayList<Player> players_list = new ArrayList<Player>();
 	private ArrayList<Region> regions_list = new ArrayList<Region>();
 	private int territories = 0;
 	private int nb_regions = 0;	
-	private boolean victory = false;
-	private int player_playing = 1;
-	private int game_phase = 0;
-	private int game_turn = 0;
-	ArrayList<Unit> ally_army = new ArrayList<Unit>();
-	ArrayList<Unit> enemy_army = new ArrayList<Unit>();
-	Territory ally_territory = new Territory(0, "error");
-	Territory enemy_territory;
-	int unit_type = 1;
+	private boolean victory = false; 
+	private int player_playing = 1; // joueur en train de jouer
+	private int game_phase = 0; // phase de jeu en cours
+	private int game_turn = 0; // numéro du tour
+	ArrayList<Unit> ally_army = new ArrayList<Unit>(); // permet la sélection de l'armée pour attaquer
+	ArrayList<Unit> enemy_army = new ArrayList<Unit>(); // permet la sélection de l'armée qui défend
+	Territory ally_territory = new Territory(0, "error"); // territoire allié sélectionné
+	Territory enemy_territory; // territoire ennemi sélectionné
+	int unit_type = 1; // type de l'unité sélectionné
 	boolean mission_hidden = true;
 	boolean AI_playing = false;
 	boolean end_turn = false;
@@ -47,28 +47,21 @@ public class Board {
 		int color = 0;
 		for (int i=1; i<=nbr_players+nbr_AI; i++) {
 			
+			// ajout d'un joueur humain
 			if (i<=nbr_players) {
 				
 				name = "Player " + (i) + "";
 				color = i;
 				
-				/*
-				System.out.println("Joueur " + i);
-				System.out.println("Nom de joueur : ");  // temporaire en attendant la mise en place graphique
-				name = scan.nextLine();
-				scan.nextLine();
-				
-				System.out.println("Couleur : ");
-				color = scan.nextInt();
-				scan.nextLine();
-				*/
-				
 			}
+			
+			// ajout d'une IA
 			else {
-				System.out.println("test");
 				name = "Computer " + (i) + "";
 				unique_color = false;
 				int compteur = 0;
+				
+				// on trouve une couleur aléatoire pour l'IA
 				while (!unique_color) {
 					color = (int) (Math.random()*6+1);
 					System.out.println(color);
@@ -87,6 +80,7 @@ public class Board {
 				}
 			}
 			used_colors[i-1] = color;
+			// on ajoute ce joueur à la liste des joueurs
 			players_list.add(new Player(i, name, color, nbr_players + nbr_AI));
 		}
 
@@ -98,14 +92,20 @@ public class Board {
 	// ***** Methodes *****
 	
 	
+	/*
+	 * fonction de déroulement de la partie
+	 */
 	public void play() {
 		
+		// on distribue les teritoires aléatoirement
 		territoriesDistribution();
+		
+		// et on met 1 soldat dans chaque territoire pour plus d'ergonomie
 		autoFill();
 
 		Territory chosen_territory;	
 		int territory_id = 0;
-		int empty_territories;
+		int empty_territories = 0;
 		int[] unit_costs = {1,3,7};
 		int points;
 		boolean action = false; // séparer placement dans un territoire allié de l'armée ou juste une nouvelle unité
@@ -117,6 +117,8 @@ public class Board {
 		Unit selected_unit;
 		drawUnit(1);
 		unit_type = 1;
+		
+		// on dessine les différentes informations sur notre HUD
 		StdDraw.enableDoubleBuffering();
 		drawTurn(game_turn);
 		drawTerritoryCount(nbTerritoriesFromPlayer());
@@ -128,23 +130,29 @@ public class Board {
 		StdDraw.show();
 		StdDraw.disableDoubleBuffering();
 		
-		
+		// tant qu'il n'y a pas de vainqueur
 		while (!victory) {
 			
 			end_turn = false;
 			
+			// au début du tour on vérifie si le joueur est vainqueur (ex : un autre joueur a détruit le joueur de sa mission)
 			if (verifyMission(players_list.get(player_playing-1).getMission())) {
 				drawWinner(players_list.get(player_playing-1).getPlayerName());
 				victory = true;
 			}
 			
+			// tant que le joueur ne met pas fin à son tour
 			while (!end_turn) {
 			
+				
+				// fonctions différentes si l'IA joue
 				if (AI_playing) {
+					// on utilise le placement automatique en face d'initialisation et de renforcement
 					if (game_phase == 0 || game_phase == 1) {
 						autoPlacement();
 						endTurn();
 					}
+					// et l'attaque automatique pour la phase d'attaque
 					if (game_phase == 2) {
 						autoAttack();
 						endTurn();
@@ -153,29 +161,13 @@ public class Board {
 				
 				else {
 					
-				
-				
-			//Click de la barre espace fait changer le type d'unité
+	
+					// click de la barre espace fait changer le type d'unité
 					if (game_phase != 2 && StdDraw.isKeyPressed(32)) {
-						if (unit_type == 3) {
-							unit_type = 1;
-						}
-						
-						else {
-							unit_type += 1;
-						}
-						
-						empty_territories = emptyTerritories();
-						
-						if (empty_territories > players_list.get(player_playing-1).getArmyPoints() - unit_costs[unit_type -1]+1) {
-							unit_type = 1;
-						}
-						
-						drawUnit(unit_type);
-						StdDraw.pause(150);
+						unit_type = spacebar(unit_type, empty_territories, unit_costs);
 					}
 					
-					//On détecte un clic
+					// on détecte un clic
 					if (StdDraw.isMousePressed()) { 
 						
 						// on récupère les coordonnées du clic
@@ -204,13 +196,10 @@ public class Board {
 							else {
 								unit_type = 2;
 							}
-							
 							empty_territories = emptyTerritories();
-							
 							if (empty_territories > players_list.get(player_playing-1).getArmyPoints() - unit_costs[unit_type -1] +1) {
 								unit_type = 1;
-							}
-							
+							}	
 							drawUnit(unit_type);
 						}
 						
@@ -219,18 +208,26 @@ public class Board {
 							mission_hidden = !mission_hidden;
 							drawMission(mission_hidden);
 						}
+							
 						
-						
+						// on regarde si le clic correspond a un territoire
 						territory_id = returnTerritoryID(x1, y1);
+						//si c'est le cas :
 						if (territory_id != 0) {
+							// on sélectionne le territoire en fonction de l'id déterminé
 							chosen_territory = giveTerritory(territory_id);
+							// si le territoire appartient au joueur
 							if (chosen_territory.getOwner() == player_playing) {
 								
+								// si c'est un nouveau territoire allié et qu'il y a une armée sélectionné on opère un déplacement
 								if (ally_territory != chosen_territory && army_selected == true) {
+									// à l'initialisation, il n'y a pas de restriction sur le déplacement
 									if (game_phase == 0) {
 										chosen_territory.addUnits(ally_army);
 										ally_army.removeAll(ally_army);
 									}
+									// pendant les autres phases, on ne peut déplacer l'unité que sur un territoire voisin
+									// et les points de déplacement sont pris en compte
 									else if (ally_territory.canAttack(chosen_territory)) {
 										for (Unit u : ally_army) {
 											chosen_territory.addUnit(u);
@@ -241,27 +238,37 @@ public class Board {
 										ally_army.removeAll(ally_army);
 										
 									}
+									// si le territoire n'est pas voisin on déselectionne l'armée
 									else {
 										resetUnits(ally_territory, ally_army);
 									}
 									
 									army_selected = false;
 									action = true;
+									// on met à jour les territoires (nombre d'unités ayant changé)
 									ally_territory.setOwner(players_list.get(player_playing-1));
 									chosen_territory.setOwner(players_list.get(player_playing-1));
 								}
+								
+								// le territoire choisi est enregistré
 								ally_territory = chosen_territory;
 								
+								// unité déterminée par le type choisi précedemment (clic ou barre espace)
 								selected_unit = new Unit(unit_type);
 								
+								// en phase de placement, si les points de renforcement permettent l'ajout de l'unité 
+								// et si le clic n'était pas déjà destiné à un déplacement
 								if (game_phase != 2 && players_list.get(player_playing-1).getArmyPoints() >= selected_unit.getCost() && !action) {
+									// on vérifie que l'ajout ne forcera pas le joueur à se retrouver avec un ou plusieurs territoires sans unités
 									empty_territories = emptyTerritories();
 									if (empty_territories > players_list.get(player_playing-1).getArmyPoints()-unit_costs[unit_type-1]+1) {
+										// si ce n'est pas le cas on passe l'unité sur le soldat
 										unit_type = 1;
 										drawUnit(unit_type);
 										selected_unit = new Unit(unit_type);
 									}
 									
+									// s'il reste suffisamment de points on ajoute l'unité
 									if (ally_territory.getNbUnits() == 0 || empty_territories < players_list.get(player_playing-1).getArmyPoints()-selected_unit.getCost()+1) {
 										ally_territory.addUnit(selected_unit);
 										ally_territory.setOwner(players_list.get(player_playing-1));
@@ -271,10 +278,9 @@ public class Board {
 										drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
 										StdDraw.show();
 										StdDraw.disableDoubleBuffering();
-										//On permet à l'utilisateur de changer le placement de son unité tant qu'il ne l'a pas validé
-										//selected_unit.setThisTurnMove(999);
 									}
 								}
+								// on affiche les divers informations liées au territoire
 								StdDraw.enableDoubleBuffering();
 								drawTerritoryInformations(territory_id);				
 								drawButton(game_phase);
@@ -282,12 +288,19 @@ public class Board {
 								StdDraw.disableDoubleBuffering();
 								action = false;
 							}
+							// si le territoire n'appartient pas au joueur
 							else {
+								// il est déterminé comme territoire ennemi sélectionné
 								enemy_territory = chosen_territory;
 								
+								// si une armée est sélectionné et qu'on est en phase d'attaque 
+								// et que le territoire est adjacent à celui comprenant au préalable l'armée sélectionnée
 								if (army_selected && game_phase == 2 && ally_territory.canAttack(enemy_territory)) {
+									// on determine la défense (les deux unités ayant la plus grande priorité
 									enemy_army = enemy_territory.determineDefence();
+									// on lance le combat
 									battle();
+									// on déselectionne les armées
 									army_selected = false;
 									ally_army.removeAll(ally_army);
 									enemy_army.removeAll(enemy_army);
@@ -297,14 +310,10 @@ public class Board {
 								drawButton(game_phase);
 								StdDraw.show();
 								StdDraw.disableDoubleBuffering();
-							}
-							/* Display du territoire dans le bandeau à droite + territoires adjacents avec
-							 * nom, couleur de l'owner et unités présentes
-							 */
-							
-							
+							}				
 						}
 						
+						// si le clic ne correspond à rien en particulier on affiche les données des différents joueurs
 						else if (x1<1227 && y1 <628) {
 							StdDraw.enableDoubleBuffering();
 							drawPlayers(this);
@@ -313,34 +322,20 @@ public class Board {
 							StdDraw.disableDoubleBuffering();
 						}
 						
-						//If click sur les unités en haut ( + condition sur territoire allié selectionné)
-						//Fonction choix des unités (la même que pour le placement des renforts)
-						
-						//If liste des unités sélectionnées non vide, et que le territoire n'appartient pas au joueur
-						// -> battle()
-						
-						if (x1>1227) {
+						// potentiel clic de sélection d'unité
+						if (x1>1227 && y1 > 300) {
 							switchUnitButton(x1, y1);
 						}
 						
+						// on garde en tête qu'il y a une armée sélectionné pour un éventuel clic sur un autre territoire
 						if (ally_army.size() != 0) {
-							army_selected = true;
-							
+							army_selected = true;	
 						}
 						
-						
-						
-						//If click sur la mission -> affichage
-						
-						
-						if (x1<1542 && x1>1292 && y1<70 && y1>20 && Math.abs(x1-x2)<25 && Math.abs(y1-y2)<25) {
-							
-							endTurn();
-							
-						}
-						
-						
-	
+						// clic sur le bouton de fin de tour ou phase suivante
+						if (x1<1542 && x1>1292 && y1<70 && y1>20 && Math.abs(x1-x2)<25 && Math.abs(y1-y2)<25) {	
+							endTurn();		
+						}					
 					}
 				}
 			}
@@ -864,6 +859,26 @@ public class Board {
 		}
 		StdDraw.show();
 		StdDraw.disableDoubleBuffering();
+	}
+	
+	public int spacebar(int unit_type, int empty_territories, int[] unit_costs) {
+		if (unit_type == 3) {
+			unit_type = 1;
+		}
+		
+		else {
+			unit_type += 1;
+		}
+		
+		empty_territories = emptyTerritories();
+		
+		if (empty_territories > players_list.get(player_playing-1).getArmyPoints() - unit_costs[unit_type -1]+1) {
+			unit_type = 1;
+		}
+		
+		drawUnit(unit_type);
+		StdDraw.pause(150);
+		return unit_type;
 	}
 	
 	
