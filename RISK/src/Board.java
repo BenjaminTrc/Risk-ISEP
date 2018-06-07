@@ -65,13 +65,11 @@ public class Board {
 				
 			}
 			else {
-				System.out.println("test");
 				name = "Computer " + (i) + "";
 				unique_color = false;
 				int compteur = 0;
 				while (!unique_color) {
 					color = (int) (Math.random()*6+1);
-					System.out.println(color);
 					compteur = 0;
 					for (int k=1; k<i; k++) {
 						if (used_colors[k-1] == color) {
@@ -351,7 +349,6 @@ public class Board {
 	public void endTurn() {
 		if (game_phase == 0) {
 			end_turn = verifyPlacement();
-			System.out.println(end_turn);
 			if (end_turn) {
 				if (player_playing == nbr_players+nbr_AI) {
 					player_playing = 1;
@@ -551,16 +548,6 @@ public class Board {
 			else {
 				counter += 1;
 			}
-			
-			/*
-			for (int j=0; j<ally_army.size(); j++) {
-				if (ally_army.get(j).getType() == type_count && ally_army.size()>3) {
-					reserve.add(ally_army.get(j));
-					ally_army.remove(j);
-					System.out.println(ally_army.size());
-					
-				}
-				*/
 		}
 		
 		
@@ -700,6 +687,9 @@ public class Board {
 		return empty_territories;
 	}
 	
+	
+	// vérifie si tous les territoires sont remplis
+	
 	public boolean verifyPlacement() {
 		if (emptyTerritories() > 0) {
 			return false;
@@ -707,15 +697,22 @@ public class Board {
 		return true;
 	}
 	
+	/*
+	 * place automatiquement les points d'armées restants dans les territoires alliés
+	 */
+	
 	public void autoPlacement() {
 		StdDraw.enableDoubleBuffering();
 		List<Territory> neighbour = new ArrayList<Territory>();
 		ArrayList<Territory> used_territories = new ArrayList<Territory>();
 		ArrayList<Territory> targeted_territories = new ArrayList<Territory>();
+		ArrayList<Territory> territories_list;
 		int nb_enemy_territories = 0;
 		int points = players_list.get(player_playing-1).getArmyPoints();
+		
+		// on parcourt les régions
 		for (Region r : regions_list) {
-			ArrayList<Territory> territories_list = r.getTerritoryList();
+			territories_list = r.getTerritoryList();
 			for (Territory t : territories_list) {
 				if (t.getOwner() == player_playing) {
 					neighbour = t.getNeighbourTerritories();
