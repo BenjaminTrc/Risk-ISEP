@@ -25,6 +25,8 @@ public class Territory {
 	// ***** Methodes *****
 	
 	
+	
+	// cette méthode permet de dessiner un cercle d'un territoire sur la carte, elle prend en argument les coordonnées du centre du cercle ainsi que son rayon
 	public void drawCircle(int [] c) {
 		StdDraw.setPenRadius(0.004);
 		StdDraw.filledCircle(c[0], c[1], c[2]+5);
@@ -224,11 +226,8 @@ public class Territory {
 				return true;
 			}
 		}
-		
 		return false;
 	}
-	
-
 
 	public void addNeighbour(Territory T) {
 		neighbour_list.add(T);
