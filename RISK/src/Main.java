@@ -3,19 +3,21 @@ import edu.princeton.cs.introcs.StdDraw;
 public class Main {
 
 	
-	public static int nb_players = 2;
-	public static int nb_AI = 0;
+	public static int nb_players;
+	public static int nb_AI;
 	
 	public static void main(String[] args) {
 		
-		System.out.println("La première page est en train d'être chargée");
-		show_first_page();
-		configuration();
-		
-		Board Plateautest = new Board(1,nb_players,nb_AI);
-		Plateautest.initialization();		
-		//Plateautest.print();
-		launch_game(Plateautest);
+		while(true) {
+			System.out.println("La première page est en train d'être chargée");
+			show_first_page();
+			configuration();
+			
+			Board Plateautest = new Board(1,nb_players,nb_AI);
+			Plateautest.initialization();		
+			//Plateautest.print();
+			launch_game(Plateautest);
+		}
 		
 	}
 	
@@ -54,7 +56,10 @@ public class Main {
 	
 	// fonction qui affiche la page de configuration de la partie
 	public static void configuration() {
+		
 		System.out.println("La configuration a été lancée");
+		nb_players = 2;
+		nb_AI = 0;
 		boolean launch_game = false;
 		int width = 1227;
 		int height = 628;
@@ -198,6 +203,19 @@ public class Main {
 		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v6.png");
 		
 		B.play();
+		
+		while(true) {
+			if (StdDraw.isMousePressed()) {
+				double posX = StdDraw.mouseX();
+				double posY = StdDraw.mouseY();
+				
+				System.out.println("Position X : " + posX + " +++ Position Y : " + posY);
+				StdDraw.pause(150);
+				if (posX > 750 && posX < 850 && posY > 285 && posY < 315) {
+					break;
+				}
+			}
+		}
 
 	}
 	

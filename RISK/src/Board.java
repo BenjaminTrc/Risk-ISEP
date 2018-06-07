@@ -827,7 +827,7 @@ public class Board {
 							drawButton(game_phase);
 							StdDraw.show();
 							StdDraw.disableDoubleBuffering();
-							//StdDraw.pause(500);
+							//StdDraw.pause(200);
 							if (victory) {
 								return ;
 							}
@@ -1196,7 +1196,9 @@ public class Board {
 			}else {
 				StdDraw.text(1598/2, 744/2-25, "Il a conquis tous les territoires.");
 			}
-		}		
+		}	
+		
+		StdDraw.text(1598/2, 744/2-75, "Rejouer");
 		
 	}
 		
@@ -1950,7 +1952,6 @@ public class Board {
 		System.out.println("Le jeu est en train d'être lancé");
 		int extended_width = 1598;
 		int extended_height = 744;
-		double posX, posY;
 		
 		//Fenêtre
 		StdDraw.setCanvasSize(extended_width,extended_height);
@@ -1975,20 +1976,18 @@ public class Board {
 		
 		StdDraw.show();
 		
-		play();
-		
-		
+		//play();
 		while(true) {
 			if (StdDraw.isMousePressed()) {
-				posX = StdDraw.mouseX();
-				posY = StdDraw.mouseY();
+				double posX = StdDraw.mouseX();
+				double posY = StdDraw.mouseY();
 				System.out.println("Position X : " + posX + " +++ Position Y : " + posY);
+				if (posX > 750 && posX < 850 && posY > 285 && posY < 315) {
+					System.out.println("Grosse merde");
+				}
 				StdDraw.pause(150);
 			}
 		}
-		
-		
-		
 		
 	}
 	
