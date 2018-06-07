@@ -1007,8 +1007,6 @@ public class Board {
 			
 		//Territoire sélectionné			
 		Territory t = giveTerritory(territoryId);
-		String territory_name;
-		Player owner;
 			
 		StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
 				
@@ -1076,8 +1074,6 @@ public class Board {
 		
 	// cette méthode gère l'affichage des unités sélectionnées lors d'un déplacement / d'une attaque
 	public void drawAttackingArmies(int territoryId /*, ArrayList ally_army*/) {
-		Territory t = giveTerritory(territoryId);
-		
 		Font font = new Font("Arial", Font.BOLD, 20);
 		Font font2 = new Font("Arial", Font.BOLD, 40);
 			
