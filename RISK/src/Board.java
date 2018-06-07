@@ -64,7 +64,6 @@ public class Board {
 				// on trouve une couleur aléatoire pour l'IA
 				while (!unique_color) {
 					color = (int) (Math.random()*6+1);
-					System.out.println(color);
 					compteur = 0;
 					for (int k=1; k<i; k++) {
 						if (used_colors[k-1] == color) {
@@ -382,6 +381,7 @@ public class Board {
 				
 				StdDraw.enableDoubleBuffering();
 				drawTerritoryCount(nbTerritoriesFromPlayer());
+				mission_hidden = true;
 				drawMission(mission_hidden);
 				StdDraw.show();
 				StdDraw.disableDoubleBuffering();
@@ -436,6 +436,7 @@ public class Board {
 			drawPlayers(this);
 			drawButton(1);
 			drawUnit(1);
+			mission_hidden = true;
 			drawMission(mission_hidden);
 			StdDraw.show();
 			StdDraw.disableDoubleBuffering();
@@ -530,34 +531,20 @@ public class Board {
 		
 		ArrayList<Unit> reserve = new ArrayList<Unit>();
 		int type_count = 1;
-		System.out.println(ally_army.size());
+
 		int counter = 0;
 		while (ally_army.size()>3) {
 			if (counter == ally_army.size()) {
-				System.out.println("revenu à 0");
 				type_count +=1;
 				counter = 0;
 			}
 			if (ally_army.get(counter).getType() == type_count) {
-				System.out.println("ajout");
 				reserve.add(ally_army.get(counter));
 				ally_army.remove(counter);
 			}
 			else {
-				System.out.println("counter +1");
 				counter += 1;
 			}
-			
-			
-			/*
-			for (int j=0; j<ally_army.size(); j++) {
-				if (ally_army.get(j).getType() == type_count && ally_army.size()>3) {
-					reserve.add(ally_army.get(j));
-					ally_army.remove(j);
-					System.out.println(ally_army.size());
-					
-				}
-				*/
 		}
 		
 		
@@ -606,7 +593,6 @@ public class Board {
 				
 			else if (score_def[i] == score_def[higher_def]) {
 				if (enemy_army.get(i).getDEF()>enemy_army.get(higher_def).getDEF()) {
-					//second_def = higher_def;
 					higher_def = i;
 				}
 				else {
@@ -615,7 +601,6 @@ public class Board {
 			}
 			
 			else if (score_def[i] > score_def[higher_def]) {
-				//second_def = higher_def;
 				higher_def = i;
 			}
 			else {
@@ -630,7 +615,6 @@ public class Board {
 
 		int offset_att = 0;
 		int offset_def = 0;
-		System.out.println("bloqué attaque 6");
 		
 		if (enemy_army.size()>1 && ally_army.size()>1) {
 			if (score_att[second_att] > score_def[second_def]) {
@@ -676,7 +660,7 @@ public class Board {
 			enemy_territory.setOwner(players_list.get(enemy_territory.getOwner()-1));
 		}
 		
-		if (verifyMission(players_list.get(player_playing-1).getMission())) {
+		if (verifyMission(players_list.get(player_playing-1).getMission()) || verifyWorld()) {
 			drawWinner(players_list.get(player_playing-1).getPlayerName());
 			victory = true;
 			
@@ -700,6 +684,9 @@ public class Board {
 		return empty_territories;
 	}
 	
+	
+	// vérifie si tous les territoires sont remplis
+	
 	public boolean verifyPlacement() {
 		if (emptyTerritories() > 0) {
 			return false;
@@ -707,15 +694,22 @@ public class Board {
 		return true;
 	}
 	
+	/*
+	 * place automatiquement les points d'armées restants dans les territoires alliés
+	 */
+	
 	public void autoPlacement() {
 		StdDraw.enableDoubleBuffering();
 		List<Territory> neighbour = new ArrayList<Territory>();
 		ArrayList<Territory> used_territories = new ArrayList<Territory>();
 		ArrayList<Territory> targeted_territories = new ArrayList<Territory>();
+		ArrayList<Territory> territories_list;
 		int nb_enemy_territories = 0;
 		int points = players_list.get(player_playing-1).getArmyPoints();
+		
+		// on parcourt les régions
 		for (Region r : regions_list) {
-			ArrayList<Territory> territories_list = r.getTerritoryList();
+			territories_list = r.getTerritoryList();
 			for (Territory t : territories_list) {
 				if (t.getOwner() == player_playing) {
 					neighbour = t.getNeighbourTerritories();
@@ -804,17 +798,30 @@ public class Board {
 							
 							StdDraw.enableDoubleBuffering();
 							while (ally_army.size()>0 && enemy_territory.getOwner()!=ally_territory.getOwner()) {
+								
 								enemy_army = enemy_territory.determineDefence();
 								battle();
+								ally_army.removeAll(ally_army);
+								
+								for (int i=0; i<territory_units.size(); i++) {
+									if (territory_units.size()>1 && territory_units.get(i).getThisTurnMove()>0) {
+										ally_army.add(territory_units.get(i));
+										army_selected = true;
+										territory_units.remove(i);
+										i-=1;
+									}
+								}
+								
 							}
-							army_selected = false;
 							ally_army.removeAll(ally_army);
 							enemy_army.removeAll(enemy_army);
+							army_selected = false;
+							
 							drawTerritoryInformations(enemy_territory.getTerritoryId());
 							drawButton(game_phase);
 							StdDraw.show();
 							StdDraw.disableDoubleBuffering();
-							//StdDraw.pause(500);
+							//StdDraw.pause(200);
 							if (victory) {
 								return ;
 							}
@@ -827,8 +834,7 @@ public class Board {
 		return ;
 	}
 
-
-	
+	// cette méthode permet de reset les points de mouvement de chaque unité sur le plateau
 	public void resetUnitMoves() {
 		for (Region r : regions_list) {
 			ArrayList<Territory> territories_list = r.getTerritoryList();
@@ -841,6 +847,7 @@ public class Board {
 		}
 	}
 	
+	// cette méthode permet de remplir par un soldat chaque territoire au début de la partie
 	public void autoFill() {
 		for (Player P : players_list) {
 			StdDraw.enableDoubleBuffering();
@@ -881,7 +888,7 @@ public class Board {
 		return unit_type;
 	}
 	
-	
+	// cette méthode gère l'affichage des unités en blanc ou en noir
 	public void drawUnit(int type) {
 		switch(type) {
 			case 0:
@@ -952,7 +959,7 @@ public class Board {
 		}
 	}
 	
-	// cette méthode permet d'afficher le nombre de tours qui se sont déroulés dans la partie (dans la bande supérieure du jeu)
+	// cette méthode gère l'affichage du nombre de tours qui se sont déroulés dans la partie
 	public void drawTurn(int turn) {
 		StdDraw.setPenColor(StdDraw.WHITE);
 		StdDraw.filledCircle(63, 670, 25);
@@ -963,7 +970,7 @@ public class Board {
 		StdDraw.text(63,665, ""+turn);
 	}
 	
-	// cette méthode permet d'afficher le nombre de territoires que le joueur possède actuellement (dans la bande supérieure du jeu)
+	// cette méthode gère l'affichage du nombre de territoires que le joueur possède actuellement
 	public void drawTerritoryCount(int nb_territories) {
 		StdDraw.setPenColor(StdDraw.WHITE);
 		StdDraw.filledCircle(247, 667, 25);
@@ -974,7 +981,7 @@ public class Board {
 		StdDraw.text(247,662, ""+nb_territories);
 	}
 	
-	// cette méthode permet d'afficher le nom du joueur et sa couleur en haut à droite
+	// cette méthode gère l'affichage du nom du joueur et de sa couleur en haut à droite
 	public void drawName(String name) {
 		players_list.get(player_playing-1).changeColor();
 		StdDraw.filledRectangle(1418, 692, 180, 53);
@@ -985,7 +992,7 @@ public class Board {
 		StdDraw.text(1420,685, name);
 	}
 		
-	// cette méthode permet d'afficher les unités qu'il est possible de recruter
+	// cette méthode gère l'affichage des unités que l'on peut recruter
 	public void drawPossibleUnits(int points) {
 		
 		//Soldat
@@ -1012,13 +1019,11 @@ public class Board {
 		StdDraw.text(885,687, ""+points/7);
 	}	
 	
-	//Méthode permettant d'afficher les informations sur un territoire en sélectionné
+	// cette méthode gère l'affichage des informations d'un territoire sélectionné
 	public void drawTerritoryInformations(int territoryId) {
 			
 		//Territoire sélectionné			
 		Territory t = giveTerritory(territoryId);
-		String territory_name;
-		Player owner;
 			
 		StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
 				
@@ -1084,10 +1089,8 @@ public class Board {
 
 	}	
 		
-	//Méthode permettant d'afficher les informations sur un territoire en sélectionné
+	// cette méthode gère l'affichage des unités sélectionnées lors d'un déplacement / d'une attaque
 	public void drawAttackingArmies(int territoryId /*, ArrayList ally_army*/) {
-		Territory t = giveTerritory(territoryId);
-		
 		Font font = new Font("Arial", Font.BOLD, 20);
 		Font font2 = new Font("Arial", Font.BOLD, 40);
 			
@@ -1126,7 +1129,7 @@ public class Board {
 			
 		}
 		
-	//Méthode permettant d'afficher les informations sur un territoire en sélectionné
+	// cette méthode gère l'affichage des informations sur les joueurs lorsqu'il n'y a pas de territoire sélectionné
 	public void drawPlayers(Board b) {
 			
 		int height = 590;
@@ -1152,7 +1155,7 @@ public class Board {
 		}
 	}
 		
-	//Méthode permettant d'afficher le nom du vainqueur après la partie
+	// cette méthode gère l'affichage du nom du vainqueur après la partie
 	public void drawWinner(String name)	{
 		String message = "" + name;
 		
@@ -1184,7 +1187,8 @@ public class Board {
 		
 		if(verifyMission(players_list.get(player_playing-1).getMission())) { 
 			StdDraw.text(1598/2, 744/2-25, "Mission : "+players_list.get(player_playing-1).getMission().getDescription());
-		}else {
+		} 
+		else {
 			int rand = (int) (Math.random()*(5-1+1)+1);
 			if(rand == 1.0) {
 				StdDraw.text(1598/2, 744/2-25, "Il a détruit tout le monde.");
@@ -1203,10 +1207,13 @@ public class Board {
 			}else {
 				StdDraw.text(1598/2, 744/2-25, "Il a conquis tous les territoires.");
 			}
-		}		
+		}	
+		
+		StdDraw.text(1598/2, 744/2-75, "Rejouer");
 		
 	}
-		
+	
+	// cette méthode gère l'affichage de la mission
 	public void drawMission(boolean mission_hidden) {
 		StdDraw.setPenColor();
 		StdDraw.filledRectangle(1081, 690, 137, 15);
@@ -1235,11 +1242,11 @@ public class Board {
 		
 	}
 		
-	
 	public void addRegion(Region R) {
 		regions_list.add(R);
 	}
 	
+	// cette méthode prend en argument un id de territoire et renvoie le territoire correspondant à l'id  
 	public Territory giveTerritory(int id) {
 		for (Region r : regions_list ) {
 			ArrayList<Territory> territories_list = r.getTerritoryList();
@@ -1250,19 +1257,9 @@ public class Board {
 				}
 		}
 		return new Territory(0,"error");
-		
 	}
 	
-	public void printRegions() {
-		for (Region R : regions_list){
-			System.out.println(R.getRegionId() + " " + R.getRegionName());
-			for (Territory T : R.getTerritoryList()) {
-				System.out.println(T.getTerritoryId() + " " + T.getTerritoryName());
-			}
-		}
-	}
-	
-	//Instanciation des régions, territoires et leurs terrritoires voisins
+	//Instanciation des régions, territoires et leurs territoires voisins
 	public void initialization() {
 			
 		//Amérique du Nord et ses territoires
@@ -1547,22 +1544,16 @@ public class Board {
 		//this.printRegions();
 	}
 	
-	/*public int nbArmyAvailable(int army_points, int type_selected) {
-		switch(type_selected) {
-			case 1:
-				return army_points;
-				
-			case 2:
-				int nb_available = army_points/3;
-				return nb_available;
-				
-			case 3:
-				int nb_available_2 = army_points/7;
-				return nb_available_2;
+
+	public int[] getTypesNb(ArrayList<Unit> selected_army) {
+		int[] types = {0,0,0};
+		for (int i=0; i<selected_army.size(); i++) {
+			types[selected_army.get(i).getType()-1] += 1;
 		}
-		return 0;
-	}*/
+		return types;
+	}
 	
+	// cette méthode renvoie le nombre de territoire conquis par le joueur actuel
 	public int nbTerritoriesFromPlayer() {
 		int territories_player = 0;
 		//On parcourt les regions de la carte
@@ -1579,15 +1570,8 @@ public class Board {
 		return territories_player;
 	}
 	
-	public int[] getTypesNb(ArrayList<Unit> selected_army) {
-		int[] types = {0,0,0};
-		for (int i=0; i<selected_army.size(); i++) {
-			types[selected_army.get(i).getType()-1] += 1;
-			}
-		return types;
-		}
-		
-		public int nbTerritoriesFromPlayers(int player_nb) {
+	// cette méthode renvoie le nombre de territoire conquis par un joueur, à condition qu'on donne en argument le nombre associé au joueur
+	public int nbTerritoriesFromPlayers(int player_nb) {
 		int territories_player = 0;
 		for (Region r : regions_list) {
 			ArrayList<Territory> territories_list = r.getTerritoryList();
@@ -1602,6 +1586,7 @@ public class Board {
 		return territories_player;
 	}
 	
+	// cette méthode renvoie true si le joueur actuel a complété sa mission
 	public boolean verifyMission(Mission mission) {
 		
 		//Les conditions de victoire dépendent du type de mission
@@ -1640,6 +1625,7 @@ public class Board {
 				if (territories >= mission.getNbTerritories()) {
 					mission.setMissionComplete(true);
 				}
+				
 				break;
 				
 			//Détruire le joueur donné
@@ -1690,12 +1676,14 @@ public class Board {
 				int record = 0;
 				int count = 0;
 				nb_regions = 0;
+				int territories_region;
+				ArrayList<Territory> territories_list;
+				int max_territories_region_owned = 0;
 				for (Region r : regions_list) {
-					ArrayList<Territory> territories_list = r.getTerritoryList();
-					int max_territories = 0;
-					int territories_region = 0;
+					territories_list = r.getTerritoryList();
+					territories_region = 0;
 					for (Territory t : territories_list) {
-						max_territories+=1;
+						
 						if (t.getOwner() == mission.getPlayerNb()) {
 							territories+=1;
 							territories_region+=1;
@@ -1704,25 +1692,25 @@ public class Board {
 					}
 					if (territories_region == territories_list.size()) {
 						nb_regions+=1;
+						if (territories_list.size()>max_territories_region_owned) {
+							max_territories_region_owned = territories_region;
+						}
 					}
 					
-					if (max_territories> record) {
-						record = max_territories;
+					if (territories_list.size() > record) {
+						record = territories_list.size();
 						biggest_region = count;
 					}
 					count+=1;
 				}
-				ArrayList<Territory> territories_region = regions_list.get(biggest_region).getTerritoryList();
-				
-				territories = 0;
-				for (Territory t : territories_region) {
-					if (t.getOwner() == mission.getPlayerNb()) {
-						territories+=1;
-						if (nb_regions>1) {
-							mission.setMissionComplete(true);
-						}
+
+				if (max_territories_region_owned == regions_list.get(biggest_region).getTerritoryList().size()) {
+					if (nb_regions>1) {
+						mission.setMissionComplete(true);
 					}
 				}
+				
+				territories = 0;
 				
 				break;
 		}
@@ -1730,7 +1718,17 @@ public class Board {
 		return mission.getMissionComplete();
 	}
 	
-	// positif : on ajoute // négatif : on enlève // type d'unité 1 (soldat), 2 (cavalerie) et 3 (canon)
+	// cette méthode vérifie si un joueur a conquis tous les territoires, si c'est le cas, on renvoie true
+	public boolean verifyWorld() {
+		if (nbTerritoriesFromPlayer() == 42) {
+			drawWinner(players_list.get(player_playing-1).getPlayerName());
+			victory = true;
+			return true;
+		}
+		return false;
+	}
+	
+	// cette méthode permet de gérer l'ajout ou le retrait d'une unité lors des déplacements / attaques
 	public void switchUnitButton(double posX, double posY) {
 		
 		ArrayList<Unit> disposable_units = ally_territory.getUnits();
@@ -1780,6 +1778,7 @@ public class Board {
 				}
 			}
 		}
+		
 		if (type != 0) {
 			StdDraw.enableDoubleBuffering();
 			drawTerritoryInformations(ally_territory.getTerritoryId());
@@ -1788,7 +1787,6 @@ public class Board {
 			StdDraw.disableDoubleBuffering();
 			
 		}
-		return ;
 	}
 	
 	public ArrayList<Unit> resetUnits(Territory t, ArrayList<Unit> army_selected) {
@@ -1938,54 +1936,7 @@ public class Board {
 				
 		return 0;
 	}
-	
-	//Affichage des informations extérieur à la carte
-	public void print() {
-		System.out.println("Le jeu est en train d'être lancé");
-		int extended_width = 1598;
-		int extended_height = 744;
-		double posX, posY;
 		
-		//Fenêtre
-		StdDraw.setCanvasSize(extended_width,extended_height);
-		StdDraw.setXscale(0,extended_width);
-		StdDraw.setYscale(0,extended_height);
-		
-		//Carte
-		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v6.png");
-		
-		StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
-		
-		
-		//Affichage des informations
-		drawTurn(game_turn);
-		drawName(players_list.get(player_playing-1).getPlayerName());
-		drawTerritoryCount(players_list.get(player_playing-1).getLastTurnTerritories());
-		drawPossibleUnits(players_list.get(player_playing-1).getArmyPoints());
-		//drawTerritoryInformations(107);
-		//drawAttackingArmies(107);
-		drawPlayers(this);
-		drawWinner("Benjamin");
-		
-		StdDraw.show();
-		
-		play();
-		
-		
-		while(true) {
-			if (StdDraw.isMousePressed()) {
-				posX = StdDraw.mouseX();
-				posY = StdDraw.mouseY();
-				System.out.println("Position X : " + posX + " +++ Position Y : " + posY);
-				StdDraw.pause(150);
-			}
-		}
-		
-		
-		
-		
-	}
-	
 	
 	// ***** Getters / Setters *****
 	

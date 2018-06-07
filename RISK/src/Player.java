@@ -54,7 +54,7 @@ public class Player {
 	public void changeColor() {
 		
 		if (player_color == 1) {
-			StdDraw.setPenColor(StdDraw.BLUE);
+			StdDraw.setPenColor(0,122,229);
 		}
 		
 		if (player_color == 2) {
@@ -74,7 +74,7 @@ public class Player {
 		}
 		
 		if (player_color == 6) {
-			StdDraw.setPenColor(128, 0, 0);
+			StdDraw.setPenColor(112, 0, 0);
 		}
 	}
 	

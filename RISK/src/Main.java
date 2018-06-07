@@ -1,21 +1,30 @@
+/*
+ * 
+ * ***** PROJET RISK JAVA 2018 *****
+ * 
+ * Réalisé par : Clément COUSSIN, Damien DEREDEC et Benjamin TORCHUT
+ * 
+ */
+
+
 import edu.princeton.cs.introcs.StdDraw;
 
 public class Main {
 
-	
-	public static int nb_players = 2;
-	public static int nb_AI = 0;
+	public static int nb_players;
+	public static int nb_AI;
 	
 	public static void main(String[] args) {
 		
-		System.out.println("La première page est en train d'être chargée");
-		show_first_page();
-		configuration();
-		
-		Board Plateautest = new Board(1,nb_players,nb_AI);
-		Plateautest.initialization();		
-		//Plateautest.print();
-		launch_game(Plateautest);
+		while(true) {
+			show_first_page();
+			configuration();
+			
+			Board Plateau = new Board(1,nb_players,nb_AI);
+			Plateau.initialization();
+			
+			launch_game(Plateau);
+		}
 		
 	}
 	
@@ -30,7 +39,6 @@ public class Main {
 		StdDraw.setXscale(0,width);
 		StdDraw.setYscale(0,height);
 		StdDraw.clear(StdDraw.WHITE);
-		StdDraw.show();
 		
 		StdDraw.picture(width/2, height/2, "./src/ressources/risk_first_page.png");
 		
@@ -38,7 +46,6 @@ public class Main {
 			if (StdDraw.isMousePressed()) {
 				posX = StdDraw.mouseX();
 				posY = StdDraw.mouseY();
-				System.out.println("Position X : " + posX + " +++ Position Y : " + posY);
 				StdDraw.pause(150);
 				
 				
@@ -54,7 +61,8 @@ public class Main {
 	
 	// fonction qui affiche la page de configuration de la partie
 	public static void configuration() {
-		System.out.println("La configuration a été lancée");
+		nb_players = 2;
+		nb_AI = 0;
 		boolean launch_game = false;
 		int width = 1227;
 		int height = 628;
@@ -72,7 +80,6 @@ public class Main {
 			if (StdDraw.isMousePressed()) {
 				posX = StdDraw.mouseX();
 				posY = StdDraw.mouseY();
-				System.out.println("Position X : " + posX + " +++ Position Y : " + posY);
 				StdDraw.pause(150);
 				
 				/* ---------- CHOIX DU NOMBRE DE JOUEURS ---------- */
@@ -183,11 +190,8 @@ public class Main {
 		}
 	}
 	
-	
-	
-	
+		
 	public static void launch_game(Board B) {
-		System.out.println("Le jeu est en train d'être lancé");
 		int extended_width = 1598;
 		int extended_height = 744;
 		
@@ -198,12 +202,20 @@ public class Main {
 		StdDraw.picture(extended_width/2, extended_height/2, "./src/ressources/risk_game_map_v6.png");
 		
 		B.play();
+		
+		while(true) {
+			if (StdDraw.isMousePressed()) {
+				double posX = StdDraw.mouseX();
+				double posY = StdDraw.mouseY();
+				
+				StdDraw.pause(150);
+				if (posX > 750 && posX < 850 && posY > 285 && posY < 315) {
+					break;
+				}
+			}
+		}
 
 	}
-	
-	
-	
-	
 	
 	// cette fonction gère l'affichage du contour bleu pour le choix du nombre de joueurs
 	// on lui indique le nombre du joueur et il s'occupe de dessiner le contour bleu autour des bonnes coordonnées
@@ -427,31 +439,5 @@ public class Main {
 		}
 		
 	}
-	
-	
-	/* Changement sur la police */
-	/*	
-	 * 
-	 * public static int TAILLE = 100; // A mettre tout en haut
-	 * 
-	String messageVictoire = "Vainqueur: joueur ";
-	
-	StdDraw.setXscale(0.0,TAILLE);
-	StdDraw.setYscale(0.0,TAILLE);	
-	StdDraw.clear(StdDraw.WHITE);
-	StdDraw.setPenColor(StdDraw.BLACK);
-	   
-	StdDraw.text(TAILLE/2, TAILLE/2, messageVictoire);
-	StdDraw.pause(500);
-	
-	Font font = new Font("Arial", Font.PLAIN, 16);
-	StdDraw.setFont(font);
-
-	StdDraw.clear(StdDraw.WHITE);
-	StdDraw.text(TAILLE/2, TAILLE/2, messageVictoire);
-	StdDraw.pause(500);
-	
-	System.out.println(StdDraw.getFont());
-	*/
 
 }
