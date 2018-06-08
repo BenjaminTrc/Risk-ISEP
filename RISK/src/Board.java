@@ -327,7 +327,6 @@ public class Board {
 		// initialisation
 		if (game_phase == 0) {
 			end_turn = verifyPlacement();
-			System.out.println(end_turn);
 			if (end_turn) {
 				// si tout le monde a initialisé on passe au joueur 1 et au renforcement
 				if (player_playing == nbr_players + nbr_AI) {
@@ -826,7 +825,7 @@ public class Board {
 							drawButton(game_phase);
 							StdDraw.show();
 							StdDraw.disableDoubleBuffering();
-							// StdDraw.pause(200);
+							//StdDraw.pause(600);
 							if (victory) {
 								return;
 							}
