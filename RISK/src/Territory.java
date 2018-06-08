@@ -233,17 +233,19 @@ public class Territory {
 		neighbour_list.add(T);
 	}
 	
+	// ajoute une liste d'unités
 	public void addUnits(ArrayList<Unit> units) {
 		for (Unit u : units) {
 			this.units_list.add(u);
 		}
-		
 	}
 	
+	// ajoute une unité
 	public void addUnit(Unit unit) {
 		this.units_list.add(unit);
 	}
 	
+	// choisi les deux unités qui vont défendre si le territoire est attaqué
 	public ArrayList<Unit> determineDefence(){
 		int highest_priority = 0;
 		int second_priority = 0;
@@ -268,9 +270,6 @@ public class Territory {
 		}
 		return defence;
 	}
-	
-	// cette méthode permet d'afficher le nombre d'unités dans ce territoire
-
 	
 	// ***** Getters / Setters *****
 	

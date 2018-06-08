@@ -873,6 +873,7 @@ public class Board {
 		StdDraw.disableDoubleBuffering();
 	}
 
+	// clic sur le type d'unité
 	public void choseType(double x1, int empty_territories, int[] unit_costs) {
 		if (x1 < 542) {
 			unit_type = 1;
