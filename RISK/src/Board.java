@@ -888,7 +888,9 @@ public class Board {
 		return unit_type;
 	}
 	
-	// cette méthode gère l'affichage des unités en blanc ou en noir
+	/*
+	 * Affichage des unités en blanc ou en noir
+	 */
 	public void drawUnit(int type) {
 		switch(type) {
 			case 0:
@@ -959,7 +961,9 @@ public class Board {
 		}
 	}
 	
-	// cette méthode gère l'affichage du nombre de tours qui se sont déroulés dans la partie
+	/*
+	 * Affichage du nombre de tours qui se sont déroulés dans la partie
+	 */
 	public void drawTurn(int turn) {
 		StdDraw.setPenColor(StdDraw.WHITE);
 		StdDraw.filledCircle(63, 670, 25);
@@ -970,7 +974,9 @@ public class Board {
 		StdDraw.text(63,665, ""+turn);
 	}
 	
-	// cette méthode gère l'affichage du nombre de territoires que le joueur possède actuellement
+	/*
+	 * Affichage du nombre de territoires que le joueur possède actuellement
+	 */
 	public void drawTerritoryCount(int nb_territories) {
 		StdDraw.setPenColor(StdDraw.WHITE);
 		StdDraw.filledCircle(247, 667, 25);
@@ -981,7 +987,9 @@ public class Board {
 		StdDraw.text(247,662, ""+nb_territories);
 	}
 	
-	// cette méthode gère l'affichage du nom du joueur et de sa couleur en haut à droite
+	/*
+	 * Affichage du nom du joueur et de sa couleur en haut à droite
+	 */
 	public void drawName(String name) {
 		players_list.get(player_playing-1).changeColor();
 		StdDraw.filledRectangle(1418, 692, 180, 53);
@@ -992,7 +1000,9 @@ public class Board {
 		StdDraw.text(1420,685, name);
 	}
 		
-	// cette méthode gère l'affichage des unités que l'on peut recruter
+	/*
+	 * Affichage des unités qu'il est possible de recruter
+	 */
 	public void drawPossibleUnits(int points) {
 		
 		//Soldat
@@ -1019,7 +1029,9 @@ public class Board {
 		StdDraw.text(885,687, ""+points/7);
 	}	
 	
-	// cette méthode gère l'affichage des informations d'un territoire sélectionné
+	/*
+	 * Affichage des informations d'un territoire sélectionné
+	 */
 	public void drawTerritoryInformations(int territoryId) {
 			
 		//Territoire sélectionné			
@@ -1089,12 +1101,12 @@ public class Board {
 
 	}	
 		
-	// cette méthode gère l'affichage des unités sélectionnées lors d'un déplacement / d'une attaque
-	public void drawAttackingArmies(int territoryId /*, ArrayList ally_army*/) {
+	/*
+	 * Affichage des unités sélectionnées lors d'un déplacement/d'une attaque
+	 */
+	public void drawAttackingArmies(int territoryId) {
 		Font font = new Font("Arial", Font.BOLD, 20);
 		Font font2 = new Font("Arial", Font.BOLD, 40);
-			
-		//StdDraw.picture(1418, 313, "./src/ressources/bois_bandeau_droit.png");
 
 		int[] types_nb = getTypesNb(ally_army);
 			
@@ -1129,7 +1141,9 @@ public class Board {
 			
 		}
 		
-	// cette méthode gère l'affichage des informations sur les joueurs lorsqu'il n'y a pas de territoire sélectionné
+	/*
+	 * Affichage des informations sur les joueurs lorsqu'il n'y a pas de territoire sélectionné
+	 */
 	public void drawPlayers(Board b) {
 			
 		int height = 590;
@@ -1155,7 +1169,9 @@ public class Board {
 		}
 	}
 		
-	// cette méthode gère l'affichage du nom du vainqueur après la partie
+	/*
+	 * Affichage du nom du vainqueur à la fin de la partie
+	 */
 	public void drawWinner(String name)	{
 		String message = "" + name;
 		
@@ -1166,6 +1182,7 @@ public class Board {
 		StdDraw.setXscale(0.0,1598);
 		StdDraw.setYscale(0.0,744);	
 		
+		//Rectangle pour afficher le résultat
 		StdDraw.setPenColor(StdDraw.WHITE); 
 		StdDraw.filledRectangle(1598/2, 744/2, 250, 100);
 			
@@ -1178,6 +1195,7 @@ public class Board {
 		StdDraw.rectangle(1598/2, 744/2, 245, 95);
 		StdDraw.rectangle(1598/2, 744/2, 244, 94);
 		
+		//Vainqueur
 		StdDraw.text(1598/2-115, 744/2+25, "Vainqueur : ");
 		players_list.get(player_playing-1).changeColor();
 		StdDraw.text(1598/2+115, 744/2+25, message);
@@ -1185,6 +1203,7 @@ public class Board {
 		StdDraw.setFont(font2);
 		StdDraw.setPenColor(StdDraw.BLACK);
 		
+		//Cause de la victoire
 		if(verifyMission(players_list.get(player_playing-1).getMission())) { 
 			StdDraw.text(1598/2, 744/2-25, "Mission : "+players_list.get(player_playing-1).getMission().getDescription());
 		} 
@@ -1213,7 +1232,9 @@ public class Board {
 		
 	}
 	
-	// cette méthode gère l'affichage de la mission
+	/*
+	 * Affichage de la mission
+	 */
 	public void drawMission(boolean mission_hidden) {
 		StdDraw.setPenColor();
 		StdDraw.filledRectangle(1081, 690, 137, 15);
