@@ -25,6 +25,8 @@ public class Territory {
 	// ***** Methodes *****
 	
 	
+	
+	// cette méthode permet de dessiner un cercle d'un territoire sur la carte, elle prend en argument les coordonnées du centre du cercle ainsi que son rayon
 	public void drawCircle(int [] c) {
 		StdDraw.setPenRadius(0.004);
 		StdDraw.filledCircle(c[0], c[1], c[2]+5);
@@ -224,27 +226,26 @@ public class Territory {
 				return true;
 			}
 		}
-		
 		return false;
 	}
-	
-
 
 	public void addNeighbour(Territory T) {
 		neighbour_list.add(T);
 	}
 	
+	// ajoute une liste d'unités
 	public void addUnits(ArrayList<Unit> units) {
 		for (Unit u : units) {
 			this.units_list.add(u);
 		}
-		
 	}
 	
+	// ajoute une unité
 	public void addUnit(Unit unit) {
 		this.units_list.add(unit);
 	}
 	
+	// choisi les deux unités qui vont défendre si le territoire est attaqué
 	public ArrayList<Unit> determineDefence(){
 		int highest_priority = 0;
 		int second_priority = 0;
@@ -269,9 +270,6 @@ public class Territory {
 		}
 		return defence;
 	}
-	
-	// cette méthode permet d'afficher le nombre d'unités dans ce territoire
-
 	
 	// ***** Getters / Setters *****
 	

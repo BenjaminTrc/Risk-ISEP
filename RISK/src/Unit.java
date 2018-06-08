@@ -114,11 +114,11 @@ public class Unit {
 	}
 	
 	public int getThisTurnMove() {
-		return this.movement;
+		return this.this_turn_movement;
 	}
 	
 	public void setThisTurnMove(int m) {
-		this.movement = m;
+		this.this_turn_movement = m;
 	}
 		
 }
