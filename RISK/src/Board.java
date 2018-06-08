@@ -471,7 +471,7 @@ public class Board {
 	}
 
 	/*
-	 * Calcul les renforts pour le début du tour du joueur
+	 * Calcule les renforts pour le début du tour du joueur
 	 */
 	public void call_reinforcements() {
 
