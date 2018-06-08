@@ -342,11 +342,14 @@ public class Board {
 	}
 	
 	
+	// gère la fin de tour
 	public void endTurn() {
+		// initialisation
 		if (game_phase == 0) {
 			end_turn = verifyPlacement();
 			System.out.println(end_turn);
 			if (end_turn) {
+				// si tout le monde a initialisé on passe au joueur 1 et au renforcement
 				if (player_playing == nbr_players+nbr_AI) {
 					player_playing = 1;
 					game_turn++;
@@ -366,6 +369,7 @@ public class Board {
 						AI_playing = false;
 					}
 				}
+				// sinon on passe au joueur d'après
 				else {
 					player_playing += 1;
 					StdDraw.enableDoubleBuffering();
@@ -393,8 +397,10 @@ public class Board {
 			StdDraw.disableDoubleBuffering();
 		}
 		
+		// si on passe le renforcement
 		else if (game_phase == 1) {
 			end_turn = verifyPlacement();
+			// on passe à l'attaque
 			if (end_turn) {
 				game_phase = 2;
 				StdDraw.enableDoubleBuffering();
@@ -405,10 +411,12 @@ public class Board {
 			}
 		}
 		
+		// si on passe la phase d'attaque
 		else if (game_phase == 2) {
 			game_phase = 1;
 			unit_type = 1;
 			end_turn = true;
+			// si tout le monde à jouer on passe au tour suivant
 			if (player_playing == nbr_players + nbr_AI) {
 				player_playing = 1;
 				game_turn++;
@@ -421,13 +429,16 @@ public class Board {
 					AI_playing = false;
 				}
 			}
+			// sinon on passe au joueur humain suivant
 			else if (player_playing < nbr_players) {
 				player_playing += 1;
 			}
+			// s'il n'y a plus de joueurs humains on passe aux joueurs ordinateurs
 			else {
 				player_playing +=1;
 				AI_playing = true;
 			}
+			// on prépare les infos du joueur suivant
 			call_reinforcements();
 			StdDraw.enableDoubleBuffering();
 			drawTerritoryCount(nbTerritoriesFromPlayer());
@@ -526,13 +537,11 @@ public class Board {
 	
 	public void battle() {
 		
-		//Listes des résultats de lancés de dés
-		//Si l'armée est plus grande que 3 on choisit les 3 meilleures unités pour attaquer
-		
 		ArrayList<Unit> reserve = new ArrayList<Unit>();
-		int type_count = 1;
 
+		//Si l'armée est plus grande que 3 on choisit les 3 meilleures unités pour attaquer et les autres unités sont en attente
 		int counter = 0;
+		int type_count = 1; // on retire d'abord des soldats
 		while (ally_army.size()>3) {
 			if (counter == ally_army.size()) {
 				type_count +=1;
@@ -548,10 +557,10 @@ public class Board {
 		}
 		
 		
-		
+		// tableaux des résultats de lancés de dés pour les unités
 		int[] score_att = new int[ally_army.size()];
 		int[] score_def = new int[enemy_army.size()];
-	
+		// on garde en mémoire les places des meilleurs scores
 		int higher_att = 0;
 		int second_att = 0;
 		int higher_def = 0;
@@ -560,7 +569,9 @@ public class Board {
 		/*
 		 * Puissance de l'attaque et détermination priorité des unités dans chaque camp
 		 */
+		// attaque
 		for (int i=0; i<ally_army.size(); i++) {
+			// random sur le résultat de l'attaque en fonction des stats de l'unité
 			score_att[i] = (int) (Math.random()*(ally_army.get(i).getMaxPower()-ally_army.get(i).getMinPower()+1)+ally_army.get(i).getMinPower());
 			if (i == 1) {
 				second_att = i;
@@ -585,7 +596,9 @@ public class Board {
 			}
 		}
 			
+		// défense
 		for (int i=0; i<enemy_army.size(); i++) {
+			// random sur le résultat de la défense en fonction des stats de l'unité
 			score_def[i] = (int) (Math.random()*(enemy_army.get(i).getMaxPower()-enemy_army.get(i).getMinPower()+1)+enemy_army.get(i).getMinPower());
 			if (i == 0) {
 				
@@ -612,10 +625,11 @@ public class Board {
 		/*
 		 * Bataille entre les unités
 		 */
-
+		// si une unité perd, on la supprimera ce qui peut impacter la place des autres unités dans la liste
 		int offset_att = 0;
 		int offset_def = 0;
 		
+		// combat entre les unités ayant le second score de chaque côté le cas échéant
 		if (enemy_army.size()>1 && ally_army.size()>1) {
 			if (score_att[second_att] > score_def[second_def]) {
 				enemy_army.remove(second_def);
@@ -630,19 +644,19 @@ public class Board {
 				}
 			}
 		}
-		
+		// combat entre les unités de meilleur score
 		if (score_att[higher_att] > score_def[higher_def]) {
 			enemy_army.remove(higher_def+offset_def);
 		}
 		else {
 			ally_army.remove(higher_att+offset_att);
 		}
-		
-		
-		
+		// on remet la défense dans son territoire
 		enemy_territory.addUnits(enemy_army);
+		// on regroupe les unités attaquantes (s'il y avait plus de 3 unités pour l'attaque
 		ally_army.addAll(reserve);
 		
+		// si le territoire attaqué est vide ce qu'il a été vaincu
 		if (enemy_territory.getNbUnits() == 0) {
 			enemy_territory.addUnits(ally_army);
 			enemy_territory.setOwner(players_list.get(player_playing-1));
@@ -654,12 +668,14 @@ public class Board {
 				u.setThisTurnMove(u.getThisTurnMove()-1);
 			}
 		}
+		// sinon on renvoit les unités attaquantes dans leur territoire originaire et on met à jour les territoires (perte d'unités)
 		else {
 			ally_territory.addUnits(ally_army);
 			ally_territory.setOwner(players_list.get(player_playing-1));
 			enemy_territory.setOwner(players_list.get(enemy_territory.getOwner()-1));
 		}
 		
+		// on vérifie après chaque combat si le joueur a rempli sa mission
 		if (verifyMission(players_list.get(player_playing-1).getMission()) || verifyWorld()) {
 			drawWinner(players_list.get(player_playing-1).getPlayerName());
 			victory = true;
@@ -668,7 +684,7 @@ public class Board {
 		
 	}
 	
-	
+	// donne le nombre de territoires vides du joueur
 	public int emptyTerritories() {
 		int empty_territories = 0;
 		for (Region r : regions_list) {
@@ -686,7 +702,6 @@ public class Board {
 	
 	
 	// vérifie si tous les territoires sont remplis
-	
 	public boolean verifyPlacement() {
 		if (emptyTerritories() > 0) {
 			return false;
@@ -697,7 +712,6 @@ public class Board {
 	/*
 	 * place automatiquement les points d'armées restants dans les territoires alliés
 	 */
-	
 	public void autoPlacement() {
 		StdDraw.enableDoubleBuffering();
 		List<Territory> neighbour = new ArrayList<Territory>();
@@ -710,21 +724,27 @@ public class Board {
 		// on parcourt les régions
 		for (Region r : regions_list) {
 			territories_list = r.getTerritoryList();
+			// on parcourt les territoires
 			for (Territory t : territories_list) {
+				// si le trritoire appartient au joueur
 				if (t.getOwner() == player_playing) {
+					// on regarde les territoires adjacents
 					neighbour = t.getNeighbourTerritories();
 					for (Territory n : neighbour) {
+						// on garde en mémoire les territoires
 						if (n.getOwner() != player_playing && !targeted_territories.contains(n)) {
 							nb_enemy_territories += 1;
 							targeted_territories.add(n);
 						}
 					}
+					// s'il n'y a qu'un territoire et qu'il n'y a qu'une unité dans le territoire allié, on ajoute 2 soldats
 					if (nb_enemy_territories == 1 && points >=2 && t.getNbUnits()<2) {
 						t.addUnit(new Unit(1));
 						t.addUnit(new Unit(1));
 						used_territories.add(t);
 						players_list.get(player_playing-1).setArmyPoints(points - 2);
 					}
+					// s'il y a plusieurs territoires et moins de 3 unités dans le territoire allié, on ajoute 3 soldats
 					else if (nb_enemy_territories > 1 && points >=3 && t.getNbUnits()<3) {
 						t.addUnit(new Unit(1));
 						t.addUnit(new Unit(1));
@@ -732,6 +752,7 @@ public class Board {
 						used_territories.add(t);
 						players_list.get(player_playing-1).setArmyPoints(points - 3);				
 					}
+					// s'il n'y a plus assez de points ou qu'il y a déjà beaucoup d'unités dans le territoire allié
 					else if (nb_enemy_territories>=1 && points>0) {
 						if (t.getNbUnits()<4) {
 							t.addUnit(new Unit(1));
@@ -748,6 +769,7 @@ public class Board {
 				nb_enemy_territories = 0;
 			}
 		}
+		// s'il reste des points en les distribue entre les territoires retenus ci-dessus
 		int count = 0;
 		int limit = 3;
 		while (points > 0 && used_territories.size()>0) {
@@ -770,22 +792,29 @@ public class Board {
 	}
 	
 	
+	/*
+	 * gère l'attaque automatique pour l'IA
+	 */
 	public void autoAttack() {
 		List<Territory> neighbour = new ArrayList<Territory>();
 		ArrayList<Unit> territory_units = new ArrayList<Unit>();
-		//int count = 0;
+		// on parcourt les régions
 		for (Region r : regions_list) {
 			ArrayList<Territory> territories_list = r.getTerritoryList();
+			// on parcourt les territoires
 			for (Territory t : territories_list) {
+				// si le territoire est allié et qu'il possède + de 2 unités
 				if (t.getOwner() == player_playing && t.getNbUnits()>2) {
 					ally_territory = t;
 					territory_units = ally_territory.getUnits();
 					neighbour = ally_territory.getNeighbourTerritories();
+					// on parcourt les territoires adjacents
 					for (Territory n : neighbour) {
+						// si le territoire est ennemi et qu'il y a 2 unités de plus on determine les unités qui vont attaquer
 						if (n.getOwner() != player_playing && n.getNbUnits()+1<t.getNbUnits()) {
-							//count = 0;
 							enemy_territory = n;
 							for (int i=0; i<territory_units.size(); i++) {
+								// on vérifie que l'unité peut se déplacer et qu'on laisse une unité dans le territoire initial
 								if (territory_units.size()>1 && territory_units.get(i).getThisTurnMove()>0) {
 									ally_army.add(territory_units.get(i));
 									army_selected = true;
@@ -797,12 +826,13 @@ public class Board {
 							
 							
 							StdDraw.enableDoubleBuffering();
+							// si l'armée existe on attaque jusqu'à la victoire
 							while (ally_army.size()>0 && enemy_territory.getOwner()!=ally_territory.getOwner()) {
-								
+								// on choisit les unités qui vont défendre
 								enemy_army = enemy_territory.determineDefence();
 								battle();
 								ally_army.removeAll(ally_army);
-								
+								// on sélectionne de nouveau des unités pour attaquer de nouveau si besoin
 								for (int i=0; i<territory_units.size(); i++) {
 									if (territory_units.size()>1 && territory_units.get(i).getThisTurnMove()>0) {
 										ally_army.add(territory_units.get(i));
@@ -813,6 +843,7 @@ public class Board {
 								}
 								
 							}
+							// on réinitialise les données
 							ally_army.removeAll(ally_army);
 							enemy_army.removeAll(enemy_army);
 							army_selected = false;
@@ -868,6 +899,8 @@ public class Board {
 		StdDraw.disableDoubleBuffering();
 	}
 	
+	
+	// change le type d'unité (si possible) en appuyant sur la barre espace
 	public int spacebar(int unit_type, int empty_territories, int[] unit_costs) {
 		if (unit_type == 3) {
 			unit_type = 1;
